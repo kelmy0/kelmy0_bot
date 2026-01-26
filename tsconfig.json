@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2020", // versão de JS que será gerada
+    "module": "node16", // usar ES Modules (compatível com "type": "module")
+    "moduleResolution": "node16", // resolve imports como Node moderno
+    "strict": true, // ativa checagens fortes
+    "esModuleInterop": true, // permite importar libs CommonJS
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true, // ignora checagem de tipos em libs externas
+    "outDir": "dist", // pasta onde os .js compilados vão parar
+    "removeComments": true
+  },
+  "include": ["src"], // compilar apenas a pasta src
+  "exclude": ["node_modules"]
+}
