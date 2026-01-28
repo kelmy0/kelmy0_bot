@@ -1,23 +1,47 @@
 import { Client, GatewayIntentBits } from "discord.js";
-import dotenv from "dotenv";
 import { loadEvents } from "./config/load-events.js";
-
-dotenv.config();
-
-const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent,
-  ],
-});
+import { getPrismaClient, Database } from "./lib/database.js";
 
 async function main() {
-  // Carregar eventos
-  await loadEvents(client);
+  try {
+    const prisma = await getPrismaClient();
 
-  // Login
-  await client.login(process.env.TOKEN);
+    const client = new Client({
+      intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+      ],
+    });
+
+    await loadEvents(client);
+
+    await client.login(process.env.TOKEN);
+    console.log(`🤖 Bot online como ${client.user?.tag}`);
+
+    setupShutdownHandlers(client);
+  } catch (error) {
+    console.error("Erro ao iniciar bot: " + error);
+    process.exit(1);
+  }
+}
+function setupShutdownHandlers(client: Client) {
+  const shutdown = async () => {
+    console.log("\n🔻 Encerrando aplicação...");
+
+    if (client.isReady()) {
+      client.destroy();
+      console.log("✅ Discord desconectado");
+    }
+
+    await Database.disconnect();
+    console.log("✅ Banco desconectado");
+
+    process.exit(0);
+  };
+
+  process.on("SIGINT", shutdown);
+  process.on("SIGTERM", shutdown);
 }
 
 main();
