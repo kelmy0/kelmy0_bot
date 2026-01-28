@@ -28,7 +28,7 @@
     "type-check": "tsc --noEmit",
     "lint": "eslint src --ext .ts",
     "format": "prettier --write src/**/*.ts",
-    "deploy-commands": "tsx src/deploy-commands.ts",
+    "deploy-commands": "tsx src/config/deploy-commands.ts",
     "test": "jest"
   }
 }
