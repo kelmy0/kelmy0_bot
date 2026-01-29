@@ -29,7 +29,11 @@
     "type-check": "tsc --noEmit",
     "lint": "eslint src --ext .ts",
     "format": "prettier --write src/**/*.ts",
-    "deploy-commands": "tsx src/config/deploy-commands.ts",
+    "commands:deploy": "tsx src/scripts/deploy-commands.ts",
+    "commands:clear": "tsx src/scripts/clear-commands.ts",
+    "commands:global:manage": "tsx src/scripts/manage-global-commands.ts",
+    "commands:global:list": "tsx src/scripts/manage-global-commands.ts --list",
+    "commands:global:delete-all": "tsx src/scripts/manage-global-commands.ts --delete-all",
     "test": "jest"
   }
 }

@@ -1,8 +1,5 @@
 import { PrismaClient } from "../generated/prisma/client.js";
 import { PrismaMssql } from "@prisma/adapter-mssql";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 // Configuração específica para SQL Server
 const dbConfig = {

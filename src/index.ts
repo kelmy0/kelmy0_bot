@@ -3,6 +3,9 @@ import { validateEnvironment } from "./config/enviroment.js";
 import { createDiscordClient } from "./bot/client/index.js";
 import { setupShutdownHandlers } from "./utils/shutdown.js";
 import { loadEvents } from "./bot/events/loader.js";
+import { config } from "dotenv";
+
+config();
 
 async function bootstrap() {
   try {
