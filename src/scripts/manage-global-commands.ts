@@ -181,11 +181,11 @@ async function deleteAllGlobalCommands(appCommands: any) {
 // Timeout de segurança
 setTimeout(
   () => {
-    console.error("⏰ Timeout excedido (10 minutos)");
+    console.error("⏰ Timeout excedido (5 minutos)");
     rl.close();
     process.exit(1);
   },
-  10 * 60 * 1000,
+  5 * 60 * 1000,
 );
 
 manageGlobalCommands();
