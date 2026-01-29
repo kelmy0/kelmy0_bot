@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import path from "node:path";
 import fs from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { Command } from "../types/Command.js";
+import { Command } from "./types/Command.js";
 
 dotenv.config();
 
@@ -11,7 +11,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const commands: Command[] = [];
-const commandsPath = path.join(__dirname, "../commands");
+const commandsPath = path.join(__dirname, "./commands");
 const commandFiles = fs
   .readdirSync(commandsPath)
   .filter((file) => file.endsWith(".js") || file.endsWith(".ts"));

@@ -1,9 +1,10 @@
-import { Client, GatewayIntentBits } from "discord.js";
-import { loadEvents } from "./bot/events/loader.js";
-import { getPrismaClient, Database } from "./lib/database.js";
+import { getPrismaClient } from "./lib/database.js";
 import { validateEnvironment } from "./config/enviroment.js";
+import { createDiscordClient } from "./bot/client/index.js";
+import { setupShutdownHandlers } from "./utils/shutdown.js";
+import { loadEvents } from "./bot/events/loader.js";
 
-async function main() {
+async function bootstrap() {
   try {
     console.log("🚀 Inicializando bot Discord...");
 
@@ -11,44 +12,36 @@ async function main() {
     const env = validateEnvironment();
     console.log("✅ Ambiente validado");
 
+    // 2. Inicializar o banco de dados
     const prisma = await getPrismaClient();
+    console.log("✅ Banco de dados conectado");
 
-    const client = new Client({
-      intents: [
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent,
-      ],
-    });
+    // 3. Criar cliente Discord
+    const client = createDiscordClient();
+    console.log("✅ Cliente discord criado");
 
+    // 4. Carregar handlers de eventos
     await loadEvents(client, prisma);
+    console.log("✅ Eventos carregados");
 
+    // 5. Login
     await client.login(process.env.TOKEN);
-    console.log(`🤖 Bot online como ${client.user?.tag}`);
 
+    // 6. Configurar graceful shutdown
     setupShutdownHandlers(client);
   } catch (error) {
-    console.error("Erro ao iniciar bot: " + error);
+    console.error("❌ Falha crítica na inicialização:", error);
     process.exit(1);
   }
 }
-function setupShutdownHandlers(client: Client) {
-  const shutdown = async () => {
-    console.log("\n🔻 Encerrando aplicação...");
+// Handlers globais de erro
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("❌ Promise não tratada:", reason);
+});
 
-    if (client.isReady()) {
-      client.destroy();
-      console.log("✅ Discord desconectado");
-    }
+process.on("uncaughtException", (error) => {
+  console.error("❌ Exceção não capturada:", error);
+  process.exit(1);
+});
 
-    await Database.disconnect();
-    console.log("✅ Banco desconectado");
-
-    process.exit(0);
-  };
-
-  process.on("SIGINT", shutdown);
-  process.on("SIGTERM", shutdown);
-}
-
-main();
+bootstrap();

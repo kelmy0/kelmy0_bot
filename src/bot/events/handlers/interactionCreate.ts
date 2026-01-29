@@ -7,7 +7,6 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Carregar comandos (igual ao index/deploy)
 const commands: Map<string, Command> = new Map();
 const commandsPath = path.join(__dirname, "../../../commands");
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith(".js") || file.endsWith(".ts"));

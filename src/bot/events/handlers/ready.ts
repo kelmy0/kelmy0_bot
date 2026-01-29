@@ -1,13 +1,18 @@
 import { Client } from "discord.js";
+import { PrismaClient } from "../../../generated/prisma/client.js";
 
 export default {
   name: "clientReady",
   once: true,
-  async execute(client: Client) {
+  async execute(client: Client, prisma: PrismaClient) {
     if (!client.user) {
       console.error("No client");
       return;
     }
-    console.log(`✅ Bot online como ${client.user.tag}`);
+
+    console.log(`🤖 Bot online como ${client.user.tag}`);
+
+    const guilds = client.guilds.cache;
+    console.log(`📊 Conectado em ${guilds.size} servidores`);
   },
 };
