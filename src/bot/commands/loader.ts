@@ -1,4 +1,3 @@
-// src/bot/commands/loader.ts
 import { readdirSync, statSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath, pathToFileURL } from "url";
@@ -41,11 +40,9 @@ function findCommandFiles(
   return fileList;
 }
 
-export async function loadCommands(): Promise<
-  Map<string, Command>
-> {
+export async function loadCommands(): Promise<Map<string, Command>> {
   const commands = new Map<string, Command>();
-  const commandsPath = join(__dirname, "."); // Diretório ATUAL (commands/)
+  const commandsPath = join(__dirname, ".");
 
   console.log(`📁 Buscando comandos em: ${commandsPath}`);
 
@@ -72,8 +69,8 @@ export async function loadCommands(): Promise<
           );
           // Define metadata padrão
           command.metadata = {
-            category: "utility",
-            production: true, // Por padrão, vai para produção
+            category: "debug",
+            production: false, // Por segurança não vai para produção
           };
         }
 

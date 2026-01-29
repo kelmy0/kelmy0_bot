@@ -12,8 +12,6 @@ async function deployCommands() {
     const { token, clientId, guildTesterId, isProduction } =
       validateScriptEnv();
 
-    // Usa o MESMO loader que o bot usa
-    // Carrega comandos FILTRADOS por ambiente
     const commands = await getCommands({
       environment: isProduction ? "production" : "development",
     });
