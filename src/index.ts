@@ -1,5 +1,5 @@
 import { Client, GatewayIntentBits } from "discord.js";
-import { loadEvents } from "./config/load-events.js";
+import { loadEvents } from "./bot/events/loader.js";
 import { getPrismaClient, Database } from "./lib/database.js";
 import { validateEnvironment } from "./config/enviroment.js";
 
@@ -21,7 +21,7 @@ async function main() {
       ],
     });
 
-    await loadEvents(client);
+    await loadEvents(client, prisma);
 
     await client.login(process.env.TOKEN);
     console.log(`🤖 Bot online como ${client.user?.tag}`);
