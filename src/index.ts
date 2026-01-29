@@ -1,9 +1,16 @@
 import { Client, GatewayIntentBits } from "discord.js";
 import { loadEvents } from "./config/load-events.js";
 import { getPrismaClient, Database } from "./lib/database.js";
+import { validateEnvironment } from "./config/enviroment.js";
 
 async function main() {
   try {
+    console.log("🚀 Inicializando bot Discord...");
+
+    // 1. Validar ambiente
+    const env = validateEnvironment();
+    console.log("✅ Ambiente validado");
+
     const prisma = await getPrismaClient();
 
     const client = new Client({
