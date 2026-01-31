@@ -112,3 +112,20 @@ model BlockedChannelCommand {
   @@unique([command, channelId])
   @@map("blocked_channel_commands")
 }
+
+// ====== PICTURES ======
+model Pictures {
+  id         Int              @id @default(autoincrement())
+  url        String
+  addedAt    DateTime         @default(now())
+  categoryId Int
+  category   PicturesCategory @relation(fields: [categoryId], references: [id])
+
+  @@index([categoryId])
+}
+
+model PicturesCategory {
+  id      Int        @id @default(autoincrement())
+  name    String     @unique
+  picture Pictures[]
+}
