@@ -122,10 +122,13 @@ model Pictures {
   category   PicturesCategory @relation(fields: [categoryId], references: [id])
 
   @@index([categoryId])
+  @@map("pictures")
 }
 
 model PicturesCategory {
   id      Int        @id @default(autoincrement())
   name    String     @unique
   picture Pictures[]
+
+  @@map("pictures_category")
 }
