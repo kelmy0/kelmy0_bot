@@ -4,13 +4,14 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { getCommands } from "../../commands/loader.js";
-
-const commands = await getCommands();
+import { PrismaClient } from "../../../generated/prisma/client.js";
 
 export default {
   name: "interactionCreate",
 
-  async execute(interaction: Interaction) {
+  async execute(interaction: Interaction, prisma: PrismaClient) {
+    const commands = await getCommands();
+
     // 1. Verifica se é um comando slash
     if (!interaction.isChatInputCommand()) return;
 
@@ -26,7 +27,7 @@ export default {
       console.log(
         `▶️  Executando: /${interaction.commandName} por ${interaction.user.tag}`,
       );
-      await command.execute(interaction);
+      await command.execute(interaction, prisma);
     } catch (error) {
       console.error(`❌ Erro em /${interaction.commandName}:`, error);
 

@@ -1,7 +1,7 @@
 import { readdirSync, statSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath, pathToFileURL } from "url";
-import type { Command, CommandMetadata } from "../../types/Command.js";
+import type { Command } from "../../types/Command.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 

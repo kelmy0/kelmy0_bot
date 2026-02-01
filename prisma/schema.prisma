@@ -13,6 +13,25 @@ datasource db {
   provider = "sqlserver"
 }
 
+// ====== USER ======
+model User {
+  id            String   @id @map("discord_id")
+  username      String   @map("discord_username")
+  avatar        String?  @map("discord_avatar")
+  globalName    String?  @map("discord_global_name")
+  discriminator String?  @map("discord_discriminator")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // RELAÇÕES
+  addedImages    Image[]          @relation("AddedImages")
+  approvedImages Image[]          @relation("ApprovedImages")
+  categories     ImagesCategory[]
+  images         Image[]
+
+  @@map("users")
+}
+
 // ====== DISCORD SERVERS ======
 model GuildConfig {
   id            String    @id @unique @map("guild_id")
@@ -113,22 +132,44 @@ model BlockedChannelCommand {
   @@map("blocked_channel_commands")
 }
 
-// ====== PICTURES ======
-model Pictures {
-  id         Int              @id @default(autoincrement())
-  url        String
-  addedAt    DateTime         @default(now())
-  categoryId Int
-  category   PicturesCategory @relation(fields: [categoryId], references: [id])
+// ====== IMAGES ======
+model Image {
+  id          String  @id @default(cuid())
+  url         String  @unique
+  title       String?
+  description String?
+
+  categoryId Int            @map("category_id")
+  category   ImagesCategory @relation(fields: [categoryId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+
+  addedById String @map("added_by_id")
+  addedBy   User   @relation("AddedImages", fields: [addedById], references: [id], onUpdate: NoAction, onDelete: NoAction)
+
+  tags    String? // String separada por vírgulas: "meme,funny,game"
+  status  String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  addedAt DateTime @default(now()) @map("added_at")
+
+  approvedAt   DateTime? @map("approved_at")
+  approvedById String?   @map("approved_by_id")
+  approvedBy   User?     @relation("ApprovedImages", fields: [approvedById], references: [id], onUpdate: NoAction, onDelete: NoAction)
+
+  usageCount Int     @default(0) @map("usage_count")
+  user       User?   @relation(fields: [userId], references: [id])
+  userId     String?
 
   @@index([categoryId])
-  @@map("pictures")
+  @@index([addedById])
+  @@index([status])
+  @@map("images")
 }
 
-model PicturesCategory {
-  id      Int        @id @default(autoincrement())
-  name    String     @unique
-  picture Pictures[]
+model ImagesCategory {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  addedById String   @map("added_by_id")
+  addedBy   User     @relation(fields: [addedById], references: [id])
+  addedAt   DateTime @default(now()) @map("added_at")
+  images    Image[]
 
-  @@map("pictures_category")
+  @@map("images_category")
 }

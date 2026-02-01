@@ -1,4 +1,9 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction } from "discord.js";
+import {
+  SlashCommandBuilder,
+  ChatInputCommandInteraction,
+  SlashCommandOptionsOnlyBuilder,
+} from "discord.js";
+import { PrismaClient } from "../generated/prisma/client.ts";
 
 export interface CommandMetadata {
   category: "admin" | "utility" | "debug" | "config" | "fun";
@@ -10,7 +15,11 @@ export interface CommandMetadata {
 export interface Command {
   data:
     | SlashCommandBuilder
-    | Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup">;
-  execute: (interaction: ChatInputCommandInteraction) => Promise<void>;
+    | Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup">
+    | SlashCommandOptionsOnlyBuilder;
+  execute: (
+    interaction: ChatInputCommandInteraction,
+    prisma?: PrismaClient,
+  ) => Promise<void>;
   metadata: CommandMetadata;
 }

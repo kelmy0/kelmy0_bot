@@ -1,19 +1,21 @@
 {
   "compilerOptions": {
-    "target": "esnext", // versão de JS que será gerada
-    "module": "nodenext", // usar ES Modules (compatível com "type": "module")
-    "moduleResolution": "nodenext", // resolve imports como Node moderno
-    "strict": true, // ativa checagens fortes
-    "esModuleInterop": true, // permite importar libs CommonJS
+    "target": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "strict": true,
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true, // ignora checagem de tipos em libs externas
-    "outDir": "dist", // pasta onde os .js compilados vão parar
+    "skipLibCheck": true,
+    "outDir": "dist",
     "removeComments": true,
     "lib": ["esnext"],
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "incremental": true
+    "incremental": true,
+    "sourceMap": false,
+    "declaration": false,
+    "importHelpers": true,
+    "downlevelIteration": true
   },
-  "include": ["src"], // compilar apenas a pasta src
-  "exclude": ["node_modules"]
+  "include": ["src"],
+  "exclude": ["node_modules", "prisma"]
 }
