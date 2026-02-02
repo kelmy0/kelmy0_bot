@@ -30,10 +30,32 @@ export default class ImageService {
   }
 
   public async listCategories() {
-    return await this.prisma.imagesCategory.findMany({
+    const categorias = await this.prisma.imagesCategory.findMany({
       orderBy: { name: "asc" },
-      include: { addedBy: true },
+      select: {
+        id: true,
+        name: true,
+        addedAt: true,
+        addedBy: {
+          select: { username: true },
+        },
+      },
+      take: 20,
     });
+
+    if (categorias.length === 0) {
+      return "📭 Nenhuma categoria encontrada.";
+    }
+
+    const formattedList = categorias
+      .map((cat, index) => {
+        const userTag = cat.addedBy?.username || "Desconhecido";
+        const dateStr = cat.addedAt.toLocaleDateString("pt-BR");
+        return `${index + 1}. **${cat.name}** (ID: ${cat.id}) - Criada por: **${userTag}** - em: **${dateStr}**`;
+      })
+      .join("\n");
+
+    return `📂 **Categorias disponíveis:**\n${formattedList}`;
   }
 
   public async getCategoryById(id: number) {
