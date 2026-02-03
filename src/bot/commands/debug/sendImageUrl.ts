@@ -5,8 +5,7 @@ import {
 } from "discord.js";
 import { PrismaClient } from "../../../generated/prisma/client.js";
 import { Command } from "../../../types/Command.js";
-import { requirePrisma } from "../../../utils/prisma.js";
-import ImageService from "../../services/imageService.js";
+import { requirePrisma } from "../../../utils/prisma/prismaRequire.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -45,7 +44,7 @@ export default {
     prisma?: PrismaClient,
   ) {
     await interaction.deferReply();
-    const imgService = new ImageService(requirePrisma(prisma));
+    //const imgService = new ImageService(requirePrisma(prisma));
     const url = interaction.options.getString("url", true);
     const categoria = interaction.options.getString("categoria", true);
     const tags = interaction.options.getString("tags");

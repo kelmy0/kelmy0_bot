@@ -5,10 +5,12 @@ import {
 } from "discord.js";
 import { Command } from "../../../types/Command.js";
 import { PrismaClient } from "../../../generated/prisma/client.js";
-import ImageService from "../../services/imageService.js";
-import { requirePrisma } from "../../../utils/prisma.js";
-import { getOrRegisterUser } from "../../../utils/userHelpers.js";
-import { normalizeCategoryName } from "../../../utils/categoryHelper.js";
+import { requirePrisma } from "../../../utils/prisma/prismaRequire.js";
+import { getOrRegisterUser } from "../../../utils/services/userHelper.js";
+import { normalizeCategoryName } from "../../../utils/services/categoryHelper.js";
+import { handleServiceResponse } from "../../../utils/discord/responseHandler.js";
+import { handleCommandError } from "../../../utils/discord/commandHelpers.js";
+import CategoryService from "../../../services/categoryService.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -22,78 +24,80 @@ export default {
           { name: "Listar categorias", value: "list" },
           { name: "Criar categoria", value: "create" },
           { name: "Deletar categoria", value: "delete" },
-        ),
+        )
+        .setRequired(false),
     )
     .addStringOption((option) =>
-      option.setName("categoria").setDescription("Nome da categoria"),
+      option
+        .setName("name")
+        .setDescription("Nome da categoria")
+        .setRequired(false),
+    )
+    .addNumberOption((option) =>
+      option
+        .setName("limit")
+        .setDescription("Limite de categorias para listar")
+        .setRequired(false)
+        .setMinValue(1)
+        .setMaxValue(50),
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
+
   metadata: { category: "debug", production: false },
+
   async execute(
     interaction: ChatInputCommandInteraction,
     prisma?: PrismaClient,
   ) {
     await interaction.deferReply();
-    const action = interaction.options.getString("action");
-    switch (action) {
-      case "create":
-        const category = normalizeCategoryName(
-          interaction.options.getString("categoria"),
-        );
-        if (!category) {
-          await interaction.editReply(`Categoria não pode estar vazia!`);
-          return;
+
+    const action = interaction.options.getString("action") || "list";
+    const rawName = interaction.options.getString("name");
+    const limit = interaction.options.getNumber("limit");
+
+    const db = requirePrisma(prisma);
+    const categoryService = new CategoryService(db);
+
+    try {
+      const name = normalizeCategoryName(rawName);
+
+      switch (action) {
+        case "create": {
+          if (!name) {
+            await interaction.editReply("❌ Nome da categoria é obrigatório");
+            return;
+          }
+
+          const userId = await getOrRegisterUser(db, interaction);
+          const result = await categoryService.addCategory(name, userId);
+          await handleServiceResponse(interaction, result);
+          break;
         }
 
-        try {
-          const userId = await getOrRegisterUser(
-            requirePrisma(prisma),
-            interaction,
-          );
-          const rc = await registerCategory(
-            requirePrisma(prisma),
-            category,
-            userId,
-          );
-          await interaction.editReply(
-            `✅️ Categoria ${rc.name} registrada com sucesso por ${interaction.user.tag}`,
-          );
-        } catch (error) {
-          await interaction.editReply(
-            `❌ Falha crítica no registro: ${error instanceof Error ? error.message : "Erro desconhecido"}`,
-          );
-          return;
-        }
-        break;
+        case "delete": {
+          if (!name) {
+            await interaction.editReply("❌ Nome da categoria é obrigatório");
+            return;
+          }
 
-      case "list":
-      default:
-        const categorias = await listCategory(requirePrisma(prisma));
-        await interaction.editReply(`Categorias: ${categorias}`);
+          const result = await categoryService.deleteCategory(name);
+          await handleServiceResponse(interaction, result);
+          break;
+        }
+
+        case "list":
+        default: {
+          const result = await categoryService.listCategories({
+            limit: limit || undefined,
+          });
+          await handleServiceResponse(interaction, result, {
+            paginate: true,
+          });
+          break;
+        }
+      }
+    } catch (error) {
+      await handleCommandError(interaction, `image-category ${action}`, error);
     }
   },
 } satisfies Command;
-
-async function registerCategory(
-  prisma: PrismaClient,
-  name: string,
-  userId: string,
-) {
-  const imageService = new ImageService(prisma);
-  try {
-    return await imageService.addCategory(name, userId);
-  } catch (error) {
-    const msg = error instanceof Error ? error.message : "Erro desconhecido";
-    throw new Error(msg);
-  }
-}
-
-async function listCategory(prisma: PrismaClient) {
-  const imageService = new ImageService(prisma);
-  try {
-    return await imageService.listCategories();
-  } catch (error) {
-    const msg = error instanceof Error ? error.message : "Erro desconhecido";
-    throw new Error(msg);
-  }
-}

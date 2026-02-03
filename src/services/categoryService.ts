@@ -1,0 +1,117 @@
+import { ServiceResponse } from "../types/ServiceResponse.js";
+import { normalizeCategoryName } from "../utils/services/categoryHelper.js";
+import {
+  handlePrismaError,
+  PrismaErrorHandlers,
+} from "../utils/prisma/errorHandler.js";
+import { BaseService } from "./base/BaseService.js";
+
+export default class CategoryService extends BaseService {
+  public async addCategory(
+    name: string,
+    addedById: string,
+  ): Promise<ServiceResponse<{ id: number; name: string; addedById: string }>> {
+    try {
+      const normalizedName = normalizeCategoryName(name);
+
+      const newCategory = await this.prisma.imagesCategory.create({
+        data: { name: normalizedName, addedById },
+        include: { addedBy: { select: { username: true } } },
+      });
+
+      const addedByName = newCategory.addedBy?.username || "Desconhecido";
+
+      return this.success(
+        `Categoria **"${newCategory.name}"** criada com sucesso por **"${addedByName}"**`,
+        {
+          id: newCategory.id,
+          name: newCategory.name,
+          addedById: newCategory.addedById,
+        },
+      );
+    } catch (error) {
+      return handlePrismaError(error, {
+        P2002: PrismaErrorHandlers.duplicateEntry(
+          `A categoria "${name}" já existe!`,
+          "DUPLICATE_CATEGORY",
+        ),
+      });
+    }
+  }
+
+  public async deleteCategory(
+    name: string,
+  ): Promise<ServiceResponse<{ deletedName: string }>> {
+    try {
+      const normalizedName = normalizeCategoryName(name);
+      const deleted = await this.prisma.imagesCategory.delete({
+        where: { name: normalizedName },
+      });
+
+      return this.success(
+        `Categoria **"${deleted.name}"** deletada com sucesso`,
+        { deletedName: deleted.name },
+      );
+    } catch (error) {
+      return handlePrismaError(error, {
+        P2025: PrismaErrorHandlers.notFound(
+          `Categoria **"${name}"** não encontrada`,
+          "CATEGORY_NOT_FOUND",
+        ),
+      });
+    }
+  }
+
+  public async listCategories(options?: {
+    limit?: number;
+    orderBy?: "asc" | "desc";
+  }): Promise<
+    ServiceResponse<
+      Array<{
+        id: number;
+        name: string;
+        addedAt: Date;
+        addedByUsername: string;
+      }>
+    >
+  > {
+    try {
+      const { limit = 20, orderBy = "asc" } = options || {};
+
+      const categories = await this.prisma.imagesCategory.findMany({
+        orderBy: { name: orderBy },
+        select: {
+          id: true,
+          name: true,
+          addedAt: true,
+          addedBy: { select: { username: true } },
+        },
+        take: limit,
+      });
+
+      if (categories.length === 0) {
+        return this.success("📭 Nenhuma categoria encontrada.", []);
+      }
+
+      const formattedList = categories
+        .map((cat, index) => {
+          const userTag = cat.addedBy?.username || "Desconhecido";
+          const dateStr = cat.addedAt.toLocaleDateString("pt-BR");
+          return `${index + 1}. **${cat.name}** (ID: ${cat.id}) - Criada por: **${userTag}** - em: **${dateStr}**`;
+        })
+        .join("\n");
+
+      return this.success(
+        `📂 **Categorias disponíveis:**\n${formattedList}`,
+        categories.map((cat) => ({
+          id: cat.id,
+          name: cat.name,
+          addedAt: cat.addedAt,
+          addedByUsername: cat.addedBy?.username || "Desconhecido",
+        })),
+      );
+    } catch (error) {
+      return this.error("❌ Erro ao listar categorias", "DATABASE_ERROR");
+    }
+  }
+}
