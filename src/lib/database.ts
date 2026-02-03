@@ -37,9 +37,14 @@ class Database {
   }
 
   static async disconnect(): Promise<void> {
-    if (Database.instance) {
-      await Database.instance.$disconnect();
-      console.log("🔌 Conexão encerrada");
+    try {
+      if (Database.instance) {
+        console.log("⏳ Desconectando do banco de dados...");
+        await Database.instance.$disconnect();
+        console.log("🔌 Conexão do banco encerrada");
+      }
+    } catch (error) {
+      console.error("⚠️  Erro ao desconectar do banco:", error);
     }
   }
 }

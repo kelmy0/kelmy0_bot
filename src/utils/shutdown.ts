@@ -2,37 +2,25 @@ import { Client } from "discord.js";
 import { Database } from "../lib/database.js";
 
 export function setupShutdownHandlers(client: Client) {
-  let isShuttingDown = false;
+  let shutdownInitiated = false;
 
-  const shutdown = async (signal: string) => {
-    if (isShuttingDown) return;
-    isShuttingDown = true;
+  process.on("SIGINT", async () => {
+    if (shutdownInitiated) return;
+    shutdownInitiated = true;
 
-    console.log(`\n🔻 Recebido ${signal}, encerrando...`);
+    console.log("\n🔄 Encerrando (Ctrl+C)...");
 
     try {
-      if (client.isReady()) {
+      if (client?.isReady()) {
         client.destroy();
-        console.log("✅ Discord desconectado");
+        console.log("Discord: OK");
       }
-
-      await Promise.race([
-        Database.disconnect(),
-        new Promise((resolve) => setTimeout(resolve, 5000)), // Timeout de 5 segundos
-      ]);
-      console.log("✅ Banco desconectado");
-    } catch (error) {
-      console.error("❌ Erro durante shutdown:", error);
-    } finally {
-      setTimeout(() => {
-        process.exit(0);
-      }, 100);
+    } catch (err) {
+      console.log("Discord: Erro ignorado");
     }
-  };
+    Database.disconnect().catch(() => {});
 
-  process.removeAllListeners("SIGINT");
-  process.removeAllListeners("SIGTERM");
-
-  process.on("SIGINT", () => shutdown("SIGINT"));
-  process.on("SIGTERM", () => shutdown("SIGTERM"));
+    console.log("✅ Saindo...");
+    process.exit(0);
+  });
 }

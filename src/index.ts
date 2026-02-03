@@ -6,7 +6,6 @@ import { loadEvents } from "./bot/events/loader.js";
 import { config } from "dotenv";
 
 config();
-
 async function bootstrap() {
   try {
     console.log("🚀 Inicializando bot Discord...");
