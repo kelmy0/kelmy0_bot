@@ -24,10 +24,8 @@ model User {
   updatedAt     DateTime @updatedAt @map("updated_at")
 
   // RELAÇÕES
-  addedImages    Image[]          @relation("AddedImages")
-  approvedImages Image[]          @relation("ApprovedImages")
-  categories     ImagesCategory[]
-  images         Image[]
+  addedImages Image[]          @relation("AddedImages")
+  categories  ImagesCategory[]
 
   @@map("users")
 }
@@ -142,24 +140,15 @@ model Image {
   categoryId Int            @map("category_id")
   category   ImagesCategory @relation(fields: [categoryId], references: [id], onUpdate: NoAction, onDelete: NoAction)
 
-  addedById String @map("added_by_id")
-  addedBy   User   @relation("AddedImages", fields: [addedById], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  addedById  String @map("added_by_id")
+  addedBy    User   @relation("AddedImages", fields: [addedById], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  usageCount Int    @default(0) @map("usage_count")
 
   tags    String? // String separada por vírgulas: "meme,funny,game"
-  status  String   @default("PENDING") // PENDING, APPROVED, REJECTED
   addedAt DateTime @default(now()) @map("added_at")
-
-  approvedAt   DateTime? @map("approved_at")
-  approvedById String?   @map("approved_by_id")
-  approvedBy   User?     @relation("ApprovedImages", fields: [approvedById], references: [id], onUpdate: NoAction, onDelete: NoAction)
-
-  usageCount Int     @default(0) @map("usage_count")
-  user       User?   @relation(fields: [userId], references: [id])
-  userId     String?
 
   @@index([categoryId])
   @@index([addedById])
-  @@index([status])
   @@map("images")
 }
 
