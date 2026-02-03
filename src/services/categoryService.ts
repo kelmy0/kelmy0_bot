@@ -114,4 +114,22 @@ export default class CategoryService extends BaseService {
       return this.error("❌ Erro ao listar categorias", "DATABASE_ERROR");
     }
   }
+
+  public async categoryExists(id: number): Promise<Boolean> {
+    const category = await this.prisma.imagesCategory.findUnique({
+      where: { id: id },
+      select: { id: true },
+    });
+
+    return !!category;
+  }
+
+  public async getCategoryIdByName(name: string): Promise<number | undefined> {
+    const category = await this.prisma.imagesCategory.findUnique({
+      where: { name: name },
+      select: { id: true },
+    });
+
+    return category?.id;
+  }
 }

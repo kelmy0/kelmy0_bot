@@ -24,11 +24,9 @@ export async function getOrRegisterUser(
   prisma: PrismaClient,
   interaction: Interaction,
 ): Promise<string> {
-  const userService = new UserService(prisma);
-
   try {
     const discordInfo = extractDiscordUserInfo(interaction);
-
+    const userService = new UserService(prisma);
     const result = await userService.upsertUser(discordInfo);
 
     if (!result.success || !result.data) {

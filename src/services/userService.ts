@@ -9,17 +9,12 @@ import { BaseService } from "./base/BaseService.js";
 export interface DiscordUserInfo {
   id: string;
   username: string;
-  discriminator: string;
+  discriminator: string | null;
   avatar: string | null;
   globalName: string | null;
 }
 
-export interface UserResponse {
-  id: string;
-  username: string;
-  discriminator: string | null;
-  avatar: string | null;
-  globalName: string | null;
+export interface UserResponse extends DiscordUserInfo {
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -29,7 +24,6 @@ export default class UserService extends BaseService {
     super(prisma);
   }
 
-  // Método principal: cria OU atualiza
   public async upsertUser(
     userInfo: DiscordUserInfo,
   ): Promise<ServiceResponse<UserResponse>> {
@@ -156,7 +150,7 @@ export default class UserService extends BaseService {
 
   public async userExists(id: string): Promise<boolean> {
     const user = await this.prisma.user.findUnique({
-      where: { id },
+      where: { id: id },
       select: { id: true },
     });
     return !!user;
