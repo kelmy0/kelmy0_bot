@@ -34,7 +34,7 @@ export function normalizeString(
 
   if (replaceSpaces) {
     const replacement = typeof replaceSpaces === "string" ? replaceSpaces : "";
-    result = result.replace(/\s+/g, replacement === "" ? "" : " ");
+    result = result.replace(/\s+/g, replacement);
   }
 
   return result;

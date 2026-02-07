@@ -9,8 +9,6 @@ import {
   normalizeImageUrl,
   normalizeTags,
 } from "../utils/services/imagesHelper.js";
-import UserService from "./userService.js";
-import CategoryService from "./categoryService.js";
 import { PrismaClient } from "../generated/prisma/client.js";
 
 export interface ImageInfo {
@@ -47,7 +45,7 @@ export default class ImageService extends BaseService {
     try {
       const normalizedUrl = normalizeImageUrl(infos.url);
       if (!normalizedUrl) {
-        return this.error(`❌ URL inválida!`, "INVALID_URL");
+        return this.error(`URL inválida!`, "INVALID_URL");
       }
 
       const normalizedCategory = normalizeString(infos.category, {
@@ -92,7 +90,7 @@ export default class ImageService extends BaseService {
             toLowerCase: false,
             trim: true,
             normalizeDiacritics: true,
-            replaceSpaces: true,
+            replaceSpaces: " ",
           })
         : null;
 
@@ -101,7 +99,7 @@ export default class ImageService extends BaseService {
             toLowerCase: false,
             trim: true,
             normalizeDiacritics: true,
-            replaceSpaces: true,
+            replaceSpaces: " ",
           })
         : null;
 
@@ -121,7 +119,7 @@ export default class ImageService extends BaseService {
       });
 
       return this.success(
-        `✅ Imagem adicionada com sucesso!\n` +
+        `Imagem adicionada com sucesso!\n` +
           `**ID:** ${newImage.id}\n` +
           `**URL:** ${newImage.url}\n` +
           `**Categoria:** ${newImage.category.name}\n` +
@@ -132,12 +130,13 @@ export default class ImageService extends BaseService {
     } catch (error) {
       return handlePrismaError(error, {
         P2002: PrismaErrorHandlers.duplicateEntry(
-          `❌ Esta imagem já existe no banco de dados!`,
+          `Esta imagem já existe no banco de dados!\n` +
+            `use **/find-image-by** para informações dessa imagem.`,
           "DUPLICATE_IMAGE",
         ),
         P2003: () =>
           this.error(
-            `❌ Referência inválida (usuário ou categoria não existe)`,
+            `Referência inválida (usuário ou categoria não existe)`,
             "FOREIGN_KEY_CONSTRAINT",
           ),
       });
@@ -145,7 +144,8 @@ export default class ImageService extends BaseService {
   }
 
   public async deleteImage(
-    id: string,
+    id?: string,
+    url?: string,
   ): Promise<ServiceResponse<{ deletedUrl: string }>> {
     try {
       const deleted = await this.prisma.image.delete({
@@ -203,13 +203,13 @@ export default class ImageService extends BaseService {
     }
   }
 
-  public async listImages(options?: {
-    limit?: number;
-    orderBy?: "asc" | "desc";
-    category?: string;
+  public async listImages(options: {
+    limit: number;
+    category: string | null;
+    orderBy: "asc" | "desc";
   }): Promise<ServiceResponse<ImageResponse[]>> {
     try {
-      const { limit = 20, orderBy = "desc", category } = options || {};
+      const { limit = 1, category, orderBy } = options || {};
 
       const where = category ? { category: { name: category } } : {};
 
@@ -232,7 +232,11 @@ export default class ImageService extends BaseService {
         .map((img, index) => {
           const userTag = img.addedBy?.username || "Desconhecido";
           const dateStr = img.addedAt.toLocaleDateString("pt-BR");
-          return `${index + 1}. **${img.title || img.url}**\n   ID: ${img.id} | Cat: ${img.category.name} | Por: ${userTag} | Em: ${dateStr}`;
+          return (
+            `${index + 1}. <${img.url}>\n` +
+            `Titulo: **${img.title || "Nenhum"}**\n` +
+            `ID: ${img.id} | Categoria: ${img.category.name} | Por: ${userTag} | Em: ${dateStr}`
+          );
         })
         .join("\n\n");
 
