@@ -1,8 +1,4 @@
-import {
-  ChatInputCommandInteraction,
-  PermissionFlagsBits,
-  SlashCommandBuilder,
-} from "discord.js";
+import { ChatInputCommandInteraction, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { Command } from "../../../types/Command.js";
 import { PrismaClient } from "../../../generated/prisma/client.js";
 import { requirePrisma } from "../../../utils/prisma/prismaRequire.js";
@@ -11,6 +7,7 @@ import { normalizeCategoryName } from "../../../utils/services/categoryHelper.js
 import { handleServiceResponse } from "../../../utils/discord/responseHandler.js";
 import { handleCommandError } from "../../../utils/discord/commandHelpers.js";
 import CategoryService from "../../../services/categoryService.js";
+import { CategoryEmbedHelper } from "../../../utils/discord/categoryEmbedHelper.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -28,10 +25,7 @@ export default {
         .setRequired(false),
     )
     .addStringOption((option) =>
-      option
-        .setName("name")
-        .setDescription("Nome da categoria")
-        .setRequired(false),
+      option.setName("name").setDescription("Nome da categoria").setRequired(false),
     )
     .addNumberOption((option) =>
       option
@@ -45,10 +39,7 @@ export default {
 
   metadata: { category: "debug", production: false },
 
-  async execute(
-    interaction: ChatInputCommandInteraction,
-    prisma?: PrismaClient,
-  ) {
+  async execute(interaction: ChatInputCommandInteraction, prisma?: PrismaClient) {
     await interaction.deferReply();
 
     const action = interaction.options.getString("action") || "list";
@@ -90,9 +81,15 @@ export default {
           const result = await categoryService.listCategories({
             limit: limit || undefined,
           });
-          await handleServiceResponse(interaction, result, {
-            paginate: true,
-          });
+
+          if (!result.success || !result.data) {
+            await handleServiceResponse(interaction, result);
+            return;
+          }
+
+          console.log(result.data);
+
+          CategoryEmbedHelper.createPaginatedCategoryembed(interaction, result.data);
           break;
         }
       }

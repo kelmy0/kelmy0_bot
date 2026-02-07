@@ -8,9 +8,7 @@ export abstract class BaseService {
     this.prisma = prisma;
   }
 
-  protected async withTransaction<T>(
-    operation: () => Promise<T>
-  ): Promise<T> {
+  protected async withTransaction<T>(operation: () => Promise<T>): Promise<T> {
     return this.prisma.$transaction(operation);
   }
 
@@ -20,5 +18,26 @@ export abstract class BaseService {
 
   protected error(message: string, errorCode?: string): ServiceResponse {
     return ServiceResponse.error(message, errorCode);
+  }
+
+  protected mapToResponse<T extends object, R extends object>(
+    data: T,
+    extraData?: Partial<R>,
+  ): R {
+    const baseResponse = { ...data } as any;
+
+    const sensitiveKeys = ["password", "salt", "hash"];
+    sensitiveKeys.forEach((key) => {
+      if (key in baseResponse) {
+        delete baseResponse[key];
+      }
+    });
+
+    const finalResponse = {
+      ...baseResponse,
+      ...extraData,
+    };
+
+    return finalResponse as R;
   }
 }

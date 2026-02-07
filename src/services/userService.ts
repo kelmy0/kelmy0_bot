@@ -9,14 +9,14 @@ import { BaseService } from "./base/BaseService.js";
 export interface DiscordUserInfo {
   id: string;
   username: string;
-  avatar: string | null;
+  avatar: string;
   globalName: string | null;
 }
 
 export interface UserResponse {
   id: string;
   username: string;
-  avatar: string | null;
+  avatar: string;
   globalName: string | null;
 }
 
@@ -46,7 +46,7 @@ export default class UserService extends BaseService {
 
       return this.success(
         `Usuário **${user.username}** ${user.updatedAt.getTime() === user.createdAt.getTime() ? "registrado" : "atualizado"} com sucesso.`,
-        this.mapToResponse(user),
+        this.mapToResponse<User, UserResponse>(user),
       );
     } catch (error) {
       return handlePrismaError(error, {
@@ -73,7 +73,7 @@ export default class UserService extends BaseService {
 
       return this.success(
         `Usuario **${newUser.username}** registrado com sucesso.`,
-        this.mapToResponse(newUser),
+        this.mapToResponse<User, UserResponse>(newUser),
       );
     } catch (error) {
       return handlePrismaError(error, {
@@ -100,7 +100,7 @@ export default class UserService extends BaseService {
 
       return this.success(
         `Usuario **${userInfo.username}** atualizado com sucesso.`,
-        this.mapToResponse(updateUser),
+        this.mapToResponse<User, UserResponse>(updateUser),
       );
     } catch (error) {
       return handlePrismaError(error, {
@@ -127,7 +127,7 @@ export default class UserService extends BaseService {
 
       return this.success(
         `Usuario **${user.username}** encontrado!`,
-        this.mapToResponse(user),
+        this.mapToResponse<User, UserResponse>(user),
       );
     } catch (error) {
       return handlePrismaError(error, {
@@ -151,14 +151,5 @@ export default class UserService extends BaseService {
       select: { id: true },
     });
     return !!user;
-  }
-
-  private mapToResponse(user: User): UserResponse {
-    return {
-      id: user.id,
-      username: user.username,
-      avatar: user.avatar,
-      globalName: user.globalName,
-    };
   }
 }

@@ -1,15 +1,9 @@
 import { BaseService } from "./base/BaseService.js";
 import { ServiceResponse } from "../types/ServiceResponse.js";
-import {
-  handlePrismaError,
-  PrismaErrorHandlers,
-} from "../utils/prisma/errorHandler.js";
+import { handlePrismaError, PrismaErrorHandlers } from "../utils/prisma/errorHandler.js";
 import { normalizeString } from "../utils/string/normalizer.js";
-import {
-  normalizeImageUrl,
-  normalizeTags,
-} from "../utils/services/imagesHelper.js";
-import { PrismaClient } from "../generated/prisma/client.js";
+import { normalizeImageUrl, normalizeTags } from "../utils/services/imagesHelper.js";
+import { Image, PrismaClient } from "../generated/prisma/client.js";
 
 export interface ImageInfo {
   url: string;
@@ -26,11 +20,16 @@ export interface ImageResponse {
   title: string | null;
   description: string | null;
   categoryId: string;
-  categoryName: string;
   addedById: string;
-  addedByUsername: string | null;
   tags: string | null;
   addedAt: Date;
+  category?: {
+    name: string;
+  };
+  addedBy?: {
+    username: string;
+    avatar: string;
+  };
 }
 
 export default class ImageService extends BaseService {
@@ -38,9 +37,7 @@ export default class ImageService extends BaseService {
     super(prisma);
   }
 
-  public async addImageUrl(
-    infos: ImageInfo,
-  ): Promise<ServiceResponse<ImageResponse>> {
+  public async addImageUrl(infos: ImageInfo): Promise<ServiceResponse<ImageResponse>> {
     try {
       const normalizedUrl = normalizeImageUrl(infos.url);
       if (!normalizedUrl) {
@@ -55,10 +52,7 @@ export default class ImageService extends BaseService {
       });
 
       if (!normalizedCategory) {
-        return this.error(
-          `❌ Categoria não pode estar vazia!`,
-          "INVALID_CATEGORY",
-        );
+        return this.error(`❌ Categoria não pode estar vazia!`, "INVALID_CATEGORY");
       }
 
       const category = await this.prisma.imagesCategory.findUnique({
@@ -66,10 +60,7 @@ export default class ImageService extends BaseService {
       });
 
       if (!category) {
-        return this.error(
-          `❌ Categoria "${infos.category}" não existe!`,
-          "CATEGORY_NOT_FOUND",
-        );
+        return this.error(`❌ Categoria "${infos.category}" não existe!`, "CATEGORY_NOT_FOUND");
       }
 
       // Verificar se usuário existe
@@ -118,13 +109,8 @@ export default class ImageService extends BaseService {
       });
 
       return this.success(
-        `Imagem adicionada com sucesso!\n` +
-          `**ID:** ${newImage.id}\n` +
-          `**URL:** ${newImage.url}\n` +
-          `**Categoria:** ${newImage.category.name}\n` +
-          (normalizedTitle ? `**Título:** ${normalizedTitle}\n` : "") +
-          (normalizedTags ? `**Tags:** ${normalizedTags}` : ""),
-        this.mapToResponse(newImage),
+        "Imagem adicionada com sucesso!",
+        this.mapToResponse<Image, ImageResponse>(newImage),
       );
     } catch (error) {
       return handlePrismaError(error, {
@@ -182,7 +168,7 @@ export default class ImageService extends BaseService {
         take: limit,
         include: {
           category: { select: { name: true } },
-          addedBy: { select: { username: true } },
+          addedBy: { select: { username: true, avatar: true } },
         },
       });
 
@@ -196,20 +182,5 @@ export default class ImageService extends BaseService {
     } catch (error) {
       return this.error("❌ Erro ao listar imagens", "DATABASE_ERROR");
     }
-  }
-
-  private mapToResponse(img: any): ImageResponse {
-    return {
-      id: img.id,
-      url: img.url,
-      title: img.title,
-      description: img.description,
-      categoryId: img.categoryId,
-      categoryName: img.category?.name || "Desconhecida",
-      addedById: img.addedById,
-      addedByUsername: img.addedBy?.username || null,
-      tags: img.tags,
-      addedAt: img.addedAt,
-    };
   }
 }

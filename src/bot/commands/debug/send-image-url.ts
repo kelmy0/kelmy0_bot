@@ -79,6 +79,7 @@ export default {
         category: rawCategory,
         addedById: userId,
       });
+
       await handleServiceResponse(interaction, result);
     } catch (error) {
       await handleCommandError(interaction, "send-image-url", error);

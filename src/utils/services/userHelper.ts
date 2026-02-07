@@ -11,10 +11,14 @@ export function extractDiscordUserInfo(
     throw new Error("Não foi possível obter informações do usuário do Discord");
   }
 
+  const discordAvatarUrl =
+    user.avatarURL() ??
+    `https://cdn.discordapp.com/embed/avatars/${Number(user.id) % 5}.png`;
+
   return {
     id: user.id,
     username: user.username,
-    avatar: user.avatar,
+    avatar: discordAvatarUrl,
     globalName: user.globalName,
   };
 }

@@ -1,16 +1,27 @@
 import { ServiceResponse } from "../types/ServiceResponse.js";
 import { normalizeCategoryName } from "../utils/services/categoryHelper.js";
-import {
-  handlePrismaError,
-  PrismaErrorHandlers,
-} from "../utils/prisma/errorHandler.js";
+import { handlePrismaError, PrismaErrorHandlers } from "../utils/prisma/errorHandler.js";
 import { BaseService } from "./base/BaseService.js";
+import { ImagesCategory } from "../generated/prisma/client.js";
+
+export interface CategoryInfo {
+  name: string;
+  addedById: string;
+}
+
+export interface CategoryResponse {
+  id: string;
+  name: string;
+  addedById: string;
+  addedByName: string;
+  addedAt: Date;
+}
 
 export default class CategoryService extends BaseService {
   public async addCategory(
     name: string,
     addedById: string,
-  ): Promise<ServiceResponse<{ id: string; name: string; addedById: string }>> {
+  ): Promise<ServiceResponse<CategoryResponse>> {
     try {
       const normalizedName = normalizeCategoryName(name);
 
@@ -23,11 +34,9 @@ export default class CategoryService extends BaseService {
 
       return this.success(
         `Categoria **"${newCategory.name}"** criada com sucesso por **"${addedByName}"**`,
-        {
-          id: newCategory.id,
-          name: newCategory.name,
-          addedById: newCategory.addedById,
-        },
+        this.mapToResponse<ImagesCategory, CategoryResponse>(newCategory, {
+          addedByName: addedByName,
+        }),
       );
     } catch (error) {
       return handlePrismaError(error, {
@@ -39,19 +48,16 @@ export default class CategoryService extends BaseService {
     }
   }
 
-  public async deleteCategory(
-    name: string,
-  ): Promise<ServiceResponse<{ deletedName: string }>> {
+  public async deleteCategory(name: string): Promise<ServiceResponse<{ deletedName: string }>> {
     try {
       const normalizedName = normalizeCategoryName(name);
       const deleted = await this.prisma.imagesCategory.delete({
         where: { name: normalizedName },
       });
 
-      return this.success(
-        `Categoria **"${deleted.name}"** deletada com sucesso`,
-        { deletedName: deleted.name },
-      );
+      return this.success(`Categoria **"${deleted.name}"** deletada com sucesso`, {
+        deletedName: deleted.name,
+      });
     } catch (error) {
       return handlePrismaError(error, {
         P2025: PrismaErrorHandlers.notFound(
@@ -65,16 +71,7 @@ export default class CategoryService extends BaseService {
   public async listCategories(options?: {
     limit?: number;
     orderBy?: "asc" | "desc";
-  }): Promise<
-    ServiceResponse<
-      Array<{
-        id: string;
-        name: string;
-        addedAt: Date;
-        addedByUsername: string;
-      }>
-    >
-  > {
+  }): Promise<ServiceResponse<Array<CategoryResponse>>> {
     try {
       const { limit = 20, orderBy = "asc" } = options || {};
 
@@ -84,6 +81,7 @@ export default class CategoryService extends BaseService {
           id: true,
           name: true,
           addedAt: true,
+          addedById: true,
           addedBy: { select: { username: true } },
         },
         take: limit,
@@ -93,25 +91,12 @@ export default class CategoryService extends BaseService {
         return this.success("📭 Nenhuma categoria encontrada.", []);
       }
 
-      const formattedList = categories
-        .map((cat, index) => {
-          const userTag = cat.addedBy?.username || "Desconhecido";
-          const dateStr = cat.addedAt.toLocaleDateString("pt-BR");
-          return `${index + 1}. **${cat.name}** (ID: ${cat.id}) - Criada por: **${userTag}** - em: **${dateStr}**`;
-        })
-        .join("\n");
-
       return this.success(
-        `📂 **Categorias disponíveis:**\n${formattedList}`,
-        categories.map((cat) => ({
-          id: cat.id,
-          name: cat.name,
-          addedAt: cat.addedAt,
-          addedByUsername: cat.addedBy?.username || "Desconhecido",
-        })),
+        `Categorias encontradas: ${categories.length}`,
+        categories.map((cat) => this.mapToResponse<ImagesCategory, CategoryResponse>(cat)),
       );
     } catch (error) {
-      return this.error("❌ Erro ao listar categorias", "DATABASE_ERROR");
+      return this.error("Erro ao listar categorias", "DATABASE_ERROR");
     }
   }
 

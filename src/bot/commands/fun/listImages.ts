@@ -12,18 +12,13 @@ export default {
     .setName("list-images")
     .setDescription("Lista imagens aleatorias")
     .addStringOption((option) =>
-      option
-        .setName("categoria")
-        .setDescription("Buscar em uma categoria específica"),
+      option.setName("categoria").setDescription("Buscar em uma categoria específica"),
     )
     .addStringOption((option) =>
       option
         .setName("orderby")
         .setDescription("Qual a ordem de exibição")
-        .addChoices(
-          { name: "Crescente", value: "asc" },
-          { name: "Decrescente", value: "desc" },
-        ),
+        .addChoices({ name: "Crescente", value: "asc" }, { name: "Decrescente", value: "desc" }),
     )
     .addIntegerOption((option) =>
       option
@@ -38,10 +33,7 @@ export default {
     category: "fun",
   },
 
-  async execute(
-    interaction: ChatInputCommandInteraction,
-    prisma?: PrismaClient,
-  ) {
+  async execute(interaction: ChatInputCommandInteraction, prisma?: PrismaClient) {
     await interaction.deferReply();
     const rawCategory = interaction.options.getString("categoria");
     const limit = interaction.options.getInteger("limit") || 10;
@@ -51,9 +43,7 @@ export default {
 
     try {
       const orderBy =
-        (rawOrderby && rawOrderby === "asc") || rawOrderby === "desc"
-          ? rawOrderby
-          : "desc";
+        (rawOrderby && rawOrderby === "asc") || rawOrderby === "desc" ? rawOrderby : "desc";
 
       const result = await imageService.listImages({
         category: rawCategory || null,

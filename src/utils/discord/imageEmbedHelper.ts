@@ -9,6 +9,7 @@ import {
   resolveColor,
 } from "discord.js";
 import { ImageResponse } from "../../services/imageService.js";
+import { EmbedHelpers } from "./embedHelpers.js";
 
 export class imageEmbedHelper {
   static async createSingleImageEmbed(
@@ -25,10 +26,7 @@ export class imageEmbedHelper {
     images: ImageResponse[],
   ) {
     if (images.length === 0) {
-      const embed = this.createEmptyEmbed("Nenhuma imagem encontrada!");
-      await interaction.editReply({
-        embeds: [embed],
-      });
+      EmbedHelpers.createEmptyEmbed("Nenhuma imagem encontrada!", interaction);
       return;
     }
 
@@ -37,12 +35,7 @@ export class imageEmbedHelper {
     const totalPages = images.length; //todas as paginas
 
     // Primeiro embed
-    const embed = this.createImageEmbed(
-      interaction,
-      images[currentPage],
-      currentPage,
-      totalPages,
-    );
+    const embed = this.createImageEmbed(interaction, images[currentPage], currentPage, totalPages);
 
     // Cria os botoes
     const buttons = this.createImageEmbedButtons(currentPage, totalPages);
@@ -90,10 +83,7 @@ export class imageEmbedHelper {
         currentPage,
         totalPages,
       );
-      const updatedButtons = this.createImageEmbedButtons(
-        currentPage,
-        totalPages,
-      );
+      const updatedButtons = this.createImageEmbedButtons(currentPage, totalPages);
 
       await buttonInteraction.update({
         embeds: [updatedEmbed],
@@ -122,13 +112,12 @@ export class imageEmbedHelper {
       .setImage(image.url)
       //.setThumbnail("https://i.imgur.com/fVhQ89Q.png") // aqui vai ser a url da categoria
       .setAuthor({
-        name: `📤 Enviado por ${image.addedByUsername}`,
-        iconURL: `https://cdn.discordapp.com/embed/avatars/${Number(image.addedById) % 5}.png`, //aqui vai ser o avatar do autor
+        name: `📤 Enviado por ${image.addedBy?.username}`,
+        iconURL: `${image.addedBy?.avatar || "https://cdn.discordapp.com/embed/avatars/" + (Number(image.addedById) % 5) + ".png"}`,
       })
-
       .setColor("#80004f")
       .setFooter({
-        text: `${image.categoryName} • Por ${image.addedByUsername} • ${image.addedAt.toLocaleDateString("pt-BR")} • ${currentPage + 1} de ${totalPages}`,
+        text: `${image.category?.name} • Por ${image.addedBy?.username} • ${image.addedAt.toLocaleDateString("pt-BR")} • ${currentPage + 1} de ${totalPages}`,
         iconURL: interaction.guild?.iconURL() || undefined, // Ícone minimalista
       });
 
