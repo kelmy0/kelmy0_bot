@@ -14,7 +14,6 @@ export function extractDiscordUserInfo(
   return {
     id: user.id,
     username: user.username,
-    discriminator: user.discriminator,
     avatar: user.avatar,
     globalName: user.globalName,
   };

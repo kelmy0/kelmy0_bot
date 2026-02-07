@@ -19,7 +19,6 @@ model User {
   username      String   @map("discord_username")
   avatar        String?  @map("discord_avatar")
   globalName    String?  @map("discord_global_name")
-  discriminator String?  @map("discord_discriminator")
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
 

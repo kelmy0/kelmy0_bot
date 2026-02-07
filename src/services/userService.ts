@@ -9,14 +9,15 @@ import { BaseService } from "./base/BaseService.js";
 export interface DiscordUserInfo {
   id: string;
   username: string;
-  discriminator: string | null;
   avatar: string | null;
   globalName: string | null;
 }
 
-export interface UserResponse extends DiscordUserInfo {
-  createdAt?: Date;
-  updatedAt?: Date;
+export interface UserResponse {
+  id: string;
+  username: string;
+  avatar: string | null;
+  globalName: string | null;
 }
 
 export default class UserService extends BaseService {
@@ -32,14 +33,12 @@ export default class UserService extends BaseService {
         where: { id: userInfo.id },
         update: {
           username: userInfo.username,
-          discriminator: userInfo.discriminator,
           avatar: userInfo.avatar,
           globalName: userInfo.globalName,
         },
         create: {
           id: userInfo.id,
           username: userInfo.username,
-          discriminator: userInfo.discriminator,
           avatar: userInfo.avatar,
           globalName: userInfo.globalName,
         },
@@ -69,7 +68,6 @@ export default class UserService extends BaseService {
           username: userInfo.username,
           avatar: userInfo.avatar,
           globalName: userInfo.globalName,
-          discriminator: userInfo.discriminator,
         },
       });
 
@@ -97,7 +95,6 @@ export default class UserService extends BaseService {
           username: userInfo.username,
           avatar: userInfo.avatar,
           globalName: userInfo.globalName,
-          discriminator: userInfo.discriminator,
         },
       });
 
@@ -160,11 +157,8 @@ export default class UserService extends BaseService {
     return {
       id: user.id,
       username: user.username,
-      discriminator: user.discriminator,
       avatar: user.avatar,
       globalName: user.globalName,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
     };
   }
 }
