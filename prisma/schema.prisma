@@ -30,106 +30,6 @@ model User {
   @@map("users")
 }
 
-// ====== DISCORD SERVERS ======
-model GuildConfig {
-  id            String    @id @unique @map("guild_id")
-  name          String?   @map("guild_name")
-  enabled       Boolean   @default(true)
-  createdAt     DateTime  @default(now()) @map("created_at")
-  updatedAt     DateTime? @updatedAt @map("updated_at")
-  whitelistMode Boolean   @default(false) @map("whitelist_mode")
-
-  //====== RELATIONS ======
-  allowedRoles    GuildAllowedRoles[]
-  adminUsers      GuildAdminUser[]
-  allowedChannel  AllowedChannel[]
-  blockedChannels BlockedChannel[]
-
-  @@map("guilds")
-}
-
-// ====== ROLES PER GUILDS ======
-model GuildAllowedRoles {
-  id      String      @id @default(uuid()) @map("role_id")
-  guildId String      @map("guild_id")
-  guild   GuildConfig @relation(fields: [guildId], references: [id], onDelete: Cascade)
-
-  @@unique([guildId, id])
-  @@map("guild_allowed_roles")
-}
-
-// ====== ADMINS PER GUILDS ======
-model GuildAdminUser {
-  id      String      @id @default(uuid()) @map("user_id")
-  guildId String      @map("guild_id")
-  guild   GuildConfig @relation(fields: [guildId], references: [id], onDelete: Cascade)
-
-  @@unique([id, guildId])
-  @@map("guild_admin_users")
-}
-
-// ====== ALLOWEDS CHANNELS ======
-model AllowedChannel {
-  id        Int      @id @default(autoincrement())
-  guildId   String   @map("guild_id")
-  channelId String   @map("channel_id") // CHANNEL ID FROM DISCORD
-  name      String?  @map("channel_name")
-  type      String?  @map("channel_type")
-  addedAt   DateTime @default(now()) @map("added_at")
-  addedBy   String?  @map("added_by")
-  reason    String?
-
-  //====== RELATIONS ======
-  guild    GuildConfig             @relation(fields: [guildId], references: [id], onDelete: Cascade)
-  commands AllowedChannelCommand[] // SPECIFIC COMMANDS ALLOWED
-
-  @@unique([guildId, channelId])
-  @@map("allowed_channels")
-}
-
-// ====== ALLOWED COMMANDS PER CHANNELS ======
-model AllowedChannelCommand {
-  id        Int            @id @default(autoincrement())
-  command   String
-  channelId Int            @map("channel_id")
-  channel   AllowedChannel @relation(fields: [channelId], references: [id], onDelete: Cascade)
-
-  @@unique([command, channelId])
-  @@map("allowed_channel_commands")
-}
-
-// ====== BLOCKED CHANNELS ======
-model BlockedChannel {
-  id        Int      @id @default(autoincrement())
-  guildId   String   @map("guild_id")
-  channelId String   @map("channel_id")
-  name      String?  @map("channel_name")
-  type      String?  @map("channel_type")
-  blockedAt DateTime @default(now()) @map("blocked_at")
-  blockedBy String?  @map("blocked_by")
-  reason    String?
-  blockAll  Boolean  @default(false) @map("block_all_commands")
-
-  // ====== RELATIONS ======
-  guild GuildConfig @relation(fields: [guildId], references: [id], onDelete: Cascade)
-
-  commands BlockedChannelCommand[] // SPECIFIC COMMANDS ALLOWED
-
-  @@unique([guildId, channelId])
-  @@map("blocked_channels")
-}
-
-// ====== BLOCKED COMMANDS PER CHANNELS ======
-model BlockedChannelCommand {
-  id        Int            @id @default(autoincrement())
-  command   String
-  channelId Int            @map("channel_id")
-  channel   BlockedChannel @relation(fields: [channelId], references: [id], onDelete: Cascade)
-
-  @@unique([command, channelId])
-  @@map("blocked_channel_commands")
-}
-
 // ====== IMAGES ======
 model Image {
   id          String  @id @default(cuid())
@@ -137,14 +37,13 @@ model Image {
   title       String?
   description String?
 
-  categoryId Int            @map("category_id")
+  categoryId String            @map("category_id")
   category   ImagesCategory @relation(fields: [categoryId], references: [id], onUpdate: NoAction, onDelete: NoAction)
 
   addedById  String @map("added_by_id")
   addedBy    User   @relation("AddedImages", fields: [addedById], references: [id], onUpdate: NoAction, onDelete: NoAction)
-  usageCount Int    @default(0) @map("usage_count")
 
-  tags    String? // String separada por vírgulas: "meme,funny,game"
+  tags    String? // String normalizada separada por vírgulas: "meme,funny,game"
   addedAt DateTime @default(now()) @map("added_at")
 
   @@index([categoryId])
@@ -153,7 +52,7 @@ model Image {
 }
 
 model ImagesCategory {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   name      String   @unique
   addedById String   @map("added_by_id")
   addedBy   User     @relation(fields: [addedById], references: [id])
