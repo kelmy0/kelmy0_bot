@@ -24,6 +24,14 @@ export class imageEmbedHelper {
     interaction: ChatInputCommandInteraction,
     images: ImageResponse[],
   ) {
+    if (images.length === 0) {
+      const embed = this.createEmptyEmbed("Nenhuma imagem encontrada!");
+      await interaction.editReply({
+        embeds: [embed],
+      });
+      return;
+    }
+
     //Pagina atual do embed
     let currentPage = 0;
     const totalPages = images.length; //todas as paginas
@@ -120,7 +128,7 @@ export class imageEmbedHelper {
 
       .setColor("#80004f")
       .setFooter({
-        text: `${image.categoryName} • Por ${image.addedByUsername} • ${image.addedAt.toLocaleDateString("pt-BR")} `,
+        text: `${image.categoryName} • Por ${image.addedByUsername} • ${image.addedAt.toLocaleDateString("pt-BR")} • ${currentPage + 1} de ${totalPages}`,
         iconURL: interaction.guild?.iconURL() || undefined, // Ícone minimalista
       });
 
@@ -137,6 +145,10 @@ export class imageEmbedHelper {
     }
 
     return embed;
+  }
+
+  private static createEmptyEmbed(text: string): EmbedBuilder {
+    return new EmbedBuilder().setTitle(text).setColor("#0566b4");
   }
 
   private static createImageEmbedButtons(

@@ -25,12 +25,11 @@ export interface ImageResponse {
   url: string;
   title: string | null;
   description: string | null;
-  categoryId: number;
+  categoryId: string;
   categoryName: string;
   addedById: string;
   addedByUsername: string | null;
   tags: string | null;
-  usageCount: number;
   addedAt: Date;
 }
 
@@ -167,42 +166,6 @@ export default class ImageService extends BaseService {
     }
   }
 
-  public async getImageById(
-    id: string,
-  ): Promise<ServiceResponse<ImageResponse>> {
-    try {
-      const image = await this.prisma.image.update({
-        where: { id },
-        data: {
-          usageCount: { increment: 1 },
-        },
-        include: {
-          category: { select: { name: true } },
-          addedBy: { select: { username: true } },
-        },
-      });
-
-      if (!image) {
-        return this.error(
-          `❌ Imagem com ID "${id}" não encontrada!`,
-          "IMAGE_NOT_FOUND",
-        );
-      }
-
-      return this.success(
-        `✅ Imagem encontrada! (Usada ${image.usageCount} vezes)`,
-        this.mapToResponse(image),
-      );
-    } catch (error) {
-      return handlePrismaError(error, {
-        P2025: PrismaErrorHandlers.notFound(
-          `❌ Imagem com ID "${id}" não encontrada!`,
-          "IMAGE_NOT_FOUND",
-        ),
-      });
-    }
-  }
-
   public async listImages(options: {
     limit: number;
     category: string | null;
@@ -226,22 +189,8 @@ export default class ImageService extends BaseService {
       if (images.length === 0) {
         return this.success("📭 Nenhuma imagem encontrada.", []);
       }
-
-      // Formatar lista
-      const formattedList = images
-        .map((img, index) => {
-          const userTag = img.addedBy?.username || "Desconhecido";
-          const dateStr = img.addedAt.toLocaleDateString("pt-BR");
-          return (
-            `${index + 1}. <${img.url}>\n` +
-            `Titulo: **${img.title || "Nenhum"}**\n` +
-            `ID: ${img.id} | Categoria: ${img.category.name} | Por: ${userTag} | Em: ${dateStr}`
-          );
-        })
-        .join("\n\n");
-
       return this.success(
-        `📂 **Imagens disponíveis** (${images.length} de ${limit}):\n${formattedList}`,
+        `Encontradas: ${images.length} imagens.`,
         images.map((img) => this.mapToResponse(img)),
       );
     } catch (error) {
@@ -260,7 +209,6 @@ export default class ImageService extends BaseService {
       addedById: img.addedById,
       addedByUsername: img.addedBy?.username || null,
       tags: img.tags,
-      usageCount: img.usageCount,
       addedAt: img.addedAt,
     };
   }

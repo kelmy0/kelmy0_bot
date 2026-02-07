@@ -10,7 +10,7 @@ export default class CategoryService extends BaseService {
   public async addCategory(
     name: string,
     addedById: string,
-  ): Promise<ServiceResponse<{ id: number; name: string; addedById: string }>> {
+  ): Promise<ServiceResponse<{ id: string; name: string; addedById: string }>> {
     try {
       const normalizedName = normalizeCategoryName(name);
 
@@ -68,7 +68,7 @@ export default class CategoryService extends BaseService {
   }): Promise<
     ServiceResponse<
       Array<{
-        id: number;
+        id: string;
         name: string;
         addedAt: Date;
         addedByUsername: string;
@@ -115,7 +115,7 @@ export default class CategoryService extends BaseService {
     }
   }
 
-  public async categoryExists(id: number): Promise<Boolean> {
+  public async categoryExists(id: string): Promise<Boolean> {
     const category = await this.prisma.imagesCategory.findUnique({
       where: { id: id },
       select: { id: true },
@@ -124,7 +124,7 @@ export default class CategoryService extends BaseService {
     return !!category;
   }
 
-  public async getCategoryIdByName(name: string): Promise<number | undefined> {
+  public async getCategoryIdByName(name: string): Promise<string | undefined> {
     const category = await this.prisma.imagesCategory.findUnique({
       where: { name: name },
       select: { id: true },
