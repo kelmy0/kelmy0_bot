@@ -4,6 +4,6 @@ Em breve terão mais informações dele por aqui.
 
 De uma olhada na branch develop, la ficam os códigos testes do bot, na MAIN so ficará as versões que vao para produção.
 
-
+agora o projeto suporta os seguinter banco de dados: sqlserver, postgresql e mongodb
 
 meu discord: kelmy0
