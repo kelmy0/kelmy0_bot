@@ -6,13 +6,6 @@ export function validateEnvironment() {
     "GUILD_TESTER_ID",
     "DATABASE_URL",
     "DB_PROVIDER",
-    "DB_SERVER",
-    "DB_PORT",
-    "DB_NAME",
-    "DB_USER",
-    "DB_PASSWORD",
-    "DB_ENCRYPT",
-    "DB_TRUST_CERTIFICATE",
   ];
   const missing = required.filter((key) => !process.env[key]);
 

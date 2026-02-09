@@ -1,35 +1,39 @@
-import { PrismaClient } from "../generated/prisma/client.js";
-import { PrismaMssql } from "@prisma/adapter-mssql";
-import sql from "mssql";
+import { PrismaClient } from "../generated/prisma/index.js";
 
 class Database {
   private static instance: PrismaClient;
 
   static async getInstance(): Promise<PrismaClient> {
     if (!Database.instance) {
-      const dbConfig = {
-        server: process.env.DB_SERVER || "localhost",
-        port: parseInt(process.env.DB_PORT || "1433"),
-        database: process.env.DB_NAME,
-        user: process.env.DB_USER || "sa",
-        password: process.env.DB_PASSWORD || "",
-        options: {
-          encrypt: process.env.DB_ENCRYPT === "true",
-          trustServerCertificate: process.env.DB_TRUST_CERTIFICATE === "true",
-          enableArithAbort: true,
-        },
-      };
-
+      const provider = process.env.DB_PROVIDER?.toLowerCase()!;
+      const db_url = process.env.DATABASE_URL!;
       try {
-        const adapter = new PrismaMssql(dbConfig);
-        Database.instance = new PrismaClient({ adapter });
+        let options: any = {
+          log: ["info", "warn", "error"],
+        };
+
+        if (provider === "sqlserver") {
+          const { PrismaMssql } = await import("@prisma/adapter-mssql");
+          options.adapter = new PrismaMssql(db_url);
+          console.log("💾 Provedor definido: SQL Server");
+        } else if (provider === "postgresql") {
+          const { PrismaPg } = await import("@prisma/adapter-pg");
+          const { default: pg } = await import("pg"!);
+          const pool = new pg.Pool({ connectionString: db_url });
+          options.adapter = new PrismaPg(pool);
+          console.log("🐘 Provedor definido: PostgreSQL");
+        } else if (provider === "mongodb") {
+          console.log("🍃 Provedor definido: MongoDB");
+        }
+
+        Database.instance = new PrismaClient(options);
+        await Database.instance.$connect();
         console.log("✅ PrismaClient conectado com sucesso");
       } catch (error) {
-        if (error instanceof Error) {
-          console.error("❌ Falha na conexão:", error.message);
-        } else {
-          console.error("❌ Falha na conexão:", error);
-        }
+        console.error(
+          "❌ Falha na conexão com o banco de dados:",
+          error instanceof Error ? error.message : error,
+        );
         throw error;
       }
     }
@@ -37,20 +41,12 @@ class Database {
   }
 
   static async disconnect(): Promise<void> {
-    try {
-      if (Database.instance) {
-        console.log("⏳ Desconectando do banco de dados...");
-        await Database.instance.$disconnect();
-        console.log("🔌 Conexão do banco encerrada");
-      }
-    } catch (error) {
-      console.error("⚠️  Erro ao desconectar do banco:", error);
+    if (Database.instance) {
+      await Database.instance.$disconnect();
+      console.log("🔌 Conexão do banco encerrada");
     }
   }
 }
 
-export async function getPrismaClient(): Promise<PrismaClient> {
-  return await Database.getInstance();
-}
-
+export const getPrismaClient = () => Database.getInstance();
 export { Database };

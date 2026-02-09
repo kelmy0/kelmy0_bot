@@ -3,11 +3,14 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { PrismaClient } from "../../generated/prisma/client.js";
+import { Database } from "../../lib/database.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export async function loadEvents(client: Client, prisma: PrismaClient) {
+type PrismaInstance = Awaited<ReturnType<typeof Database.getInstance>>;
+
+export async function loadEvents(client: Client, prisma: PrismaInstance) {
   const eventsPath = path.join(__dirname, "handlers");
 
   if (!fs.existsSync(eventsPath)) {
