@@ -1,6 +1,5 @@
 import {
   ChatInputCommandInteraction,
-  CommandInteractionOptionResolver,
 } from "discord.js";
 
 export function getOptionalNumber(

@@ -3,7 +3,7 @@ import {
   ChatInputCommandInteraction,
   SlashCommandOptionsOnlyBuilder,
 } from "discord.js";
-import { PrismaClient } from "../generated/prisma/client.ts";
+import { PrismaClient } from "@prisma/client";
 
 export interface CommandMetadata {
   category: "admin" | "utility" | "debug" | "config" | "fun";

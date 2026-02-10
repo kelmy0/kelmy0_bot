@@ -2,7 +2,7 @@ import { ServiceResponse } from "../types/ServiceResponse.js";
 import { normalizeCategoryName } from "../utils/services/categoryHelper.js";
 import { handlePrismaError, PrismaErrorHandlers } from "../utils/prisma/errorHandler.js";
 import { BaseService } from "./base/BaseService.js";
-import { ImagesCategory } from "../../prisma/client/client.js";
+import { ImagesCategory, PrismaClient } from "@prisma/client";
 
 export interface CategoryInfo {
   name: string;
@@ -18,6 +18,10 @@ export interface CategoryResponse {
 }
 
 export default class CategoryService extends BaseService {
+  constructor(prisma: PrismaClient) {
+    super(prisma);
+  }
+
   public async addCategory(
     name: string,
     addedById: string,

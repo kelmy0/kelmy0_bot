@@ -3,7 +3,7 @@ import { ServiceResponse } from "../types/ServiceResponse.js";
 import { handlePrismaError, PrismaErrorHandlers } from "../utils/prisma/errorHandler.js";
 import { normalizeString } from "../utils/string/normalizer.js";
 import { normalizeImageUrl, normalizeTags } from "../utils/services/imagesHelper.js";
-import { Image, PrismaClient } from "../../prisma/client/client.js";
+import { Image, PrismaClient } from "@prisma/client";
 
 export interface ImageInfo {
   url: string;

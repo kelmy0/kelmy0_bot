@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { Command } from "../../../types/Command.js";
-import { PrismaClient } from "../../../../prisma/client/client.js";
+import { PrismaClient } from "@prisma/client";
 import { requirePrisma } from "../../../utils/prisma/prismaRequire.js";
 import { getOrRegisterUser } from "../../../utils/services/userHelper.js";
 import { normalizeCategoryName } from "../../../utils/services/categoryHelper.js";
@@ -86,8 +86,6 @@ export default {
             await handleServiceResponse(interaction, result);
             return;
           }
-
-          console.log(result.data);
 
           CategoryEmbedHelper.createPaginatedCategoryembed(interaction, result.data);
           break;

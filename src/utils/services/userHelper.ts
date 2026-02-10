@@ -1,10 +1,8 @@
 import { Interaction } from "discord.js";
-import { PrismaClient } from "../../../prisma/client/client.js";
+import { PrismaClient } from "@prisma/client";
 import UserService, { DiscordUserInfo } from "../../services/userService.js";
 
-export function extractDiscordUserInfo(
-  interaction: Interaction,
-): DiscordUserInfo {
+export function extractDiscordUserInfo(interaction: Interaction): DiscordUserInfo {
   const user = interaction.user || interaction.member?.user;
 
   if (!user) {
@@ -12,8 +10,7 @@ export function extractDiscordUserInfo(
   }
 
   const discordAvatarUrl =
-    user.avatarURL() ??
-    `https://cdn.discordapp.com/embed/avatars/${Number(user.id) % 5}.png`;
+    user.avatarURL() ?? `https://cdn.discordapp.com/embed/avatars/${Number(user.id) % 5}.png`;
 
   return {
     id: user.id,

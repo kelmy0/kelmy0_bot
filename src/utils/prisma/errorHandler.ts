@@ -1,9 +1,7 @@
-import { PrismaClientKnownRequestError } from "../../../prisma/client/internal/prismaNamespace.js";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import { ServiceResponse } from "../../types/ServiceResponse.js";
 
-export function isPrismaError(
-  error: unknown,
-): error is PrismaClientKnownRequestError {
+export function isPrismaError(error: unknown): error is PrismaClientKnownRequestError {
   return error instanceof Error && "code" in error;
 }
 
@@ -27,12 +25,10 @@ export function handlePrismaError(
 
 export const PrismaErrorHandlers = {
   duplicateEntry(message: string, errorCode: string = "DUPLICATE_ENTRY") {
-    return (error: PrismaClientKnownRequestError) =>
-      ServiceResponse.error(message, errorCode);
+    return (error: PrismaClientKnownRequestError) => ServiceResponse.error(message, errorCode);
   },
 
   notFound(message: string, errorCode: string = "NOT_FOUND") {
-    return (error: PrismaClientKnownRequestError) =>
-      ServiceResponse.error(message, errorCode);
+    return (error: PrismaClientKnownRequestError) => ServiceResponse.error(message, errorCode);
   },
 };

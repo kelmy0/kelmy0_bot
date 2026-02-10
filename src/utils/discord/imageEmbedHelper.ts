@@ -1,12 +1,10 @@
 import {
   ActionRowBuilder,
   ButtonBuilder,
-  ButtonInteraction,
   ButtonStyle,
   ChatInputCommandInteraction,
   ComponentType,
   EmbedBuilder,
-  resolveColor,
 } from "discord.js";
 import { ImageResponse } from "../../services/imageService.js";
 import { EmbedHelpers } from "./embedHelpers.js";
