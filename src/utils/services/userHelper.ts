@@ -1,5 +1,5 @@
 import { Interaction } from "discord.js";
-import { PrismaClient } from "../../generated/prisma/client.js";
+import { PrismaClient } from "../../../prisma/client/client.js";
 import UserService, { DiscordUserInfo } from "../../services/userService.js";
 
 export function extractDiscordUserInfo(

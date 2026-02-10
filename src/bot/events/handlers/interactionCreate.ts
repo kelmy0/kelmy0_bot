@@ -1,10 +1,6 @@
 import { Interaction } from "discord.js";
-import { Command } from "../../../types/Command.js";
-import fs from "node:fs";
-import path from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
 import { getCommands } from "../../commands/loader.js";
-import { PrismaClient } from "../../../generated/prisma/client.js";
+import { PrismaClient } from "../../../../prisma/client/client.js";
 
 export default {
   name: "interactionCreate",

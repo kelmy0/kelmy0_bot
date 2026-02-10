@@ -2,7 +2,6 @@ import { Client } from "discord.js";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { PrismaClient } from "../../generated/prisma/client.js";
 import { Database } from "../../lib/database.js";
 
 const __filename = fileURLToPath(import.meta.url);

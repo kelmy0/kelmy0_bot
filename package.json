@@ -16,11 +16,12 @@
     "@types/node": "^25.0.10",
     "@types/pg": "^8.16.0",
     "ts-node": "^10.9.2",
+    "tsup": "^8.5.1",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsup",
     "dev": "tsx watch src/index.ts",
     "start": "node dist/index.js",
     "db:sync": "tsx src/scripts/prisma/switch-db.ts && prisma generate",

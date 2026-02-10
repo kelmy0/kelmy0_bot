@@ -1,4 +1,4 @@
-import { PrismaClient, User } from "../generated/prisma/client.js";
+import { PrismaClient, User } from "../../prisma/client/client.js";
 import { ServiceResponse } from "../types/ServiceResponse.js";
 import {
   handlePrismaError,

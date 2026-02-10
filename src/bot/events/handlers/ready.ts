@@ -1,5 +1,5 @@
 import { Client } from "discord.js";
-import { PrismaClient } from "../../../generated/prisma/client.js";
+import { PrismaClient } from "../../../../prisma/client/client.js";
 
 export default {
   name: "clientReady",

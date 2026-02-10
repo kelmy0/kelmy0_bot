@@ -3,7 +3,7 @@ import {
   SlashCommandBuilder,
   ChatInputCommandInteraction,
 } from "discord.js";
-import { PrismaClient } from "../../../generated/prisma/client.js";
+import { PrismaClient } from "../../../../prisma/client/client.js";
 import { Command } from "../../../types/Command.js";
 import { requirePrisma } from "../../../utils/prisma/prismaRequire.js";
 import ImageService from "../../../services/imageService.js";

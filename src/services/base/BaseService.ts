@@ -1,4 +1,4 @@
-import { PrismaClient } from "../../generated/prisma/client.js";
+import { PrismaClient } from "../../../prisma/client/client.js";
 import { ServiceResponse } from "../../types/ServiceResponse.js";
 
 export abstract class BaseService {

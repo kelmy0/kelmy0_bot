@@ -1,4 +1,4 @@
-import { PrismaClientKnownRequestError } from "../../generated/prisma/internal/prismaNamespace.js";
+import { PrismaClientKnownRequestError } from "../../../prisma/client/internal/prismaNamespace.js";
 import { ServiceResponse } from "../../types/ServiceResponse.js";
 
 export function isPrismaError(

@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { Command } from "../../../types/Command.js";
-import { PrismaClient } from "../../../generated/prisma/client.js";
+import { PrismaClient } from "../../../../prisma/client/client.js";
 import { requirePrisma } from "../../../utils/prisma/prismaRequire.js";
 import { getOrRegisterUser } from "../../../utils/services/userHelper.js";
 import { normalizeCategoryName } from "../../../utils/services/categoryHelper.js";

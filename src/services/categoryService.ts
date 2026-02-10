@@ -2,7 +2,7 @@ import { ServiceResponse } from "../types/ServiceResponse.js";
 import { normalizeCategoryName } from "../utils/services/categoryHelper.js";
 import { handlePrismaError, PrismaErrorHandlers } from "../utils/prisma/errorHandler.js";
 import { BaseService } from "./base/BaseService.js";
-import { ImagesCategory } from "../generated/prisma/client.js";
+import { ImagesCategory } from "../../prisma/client/client.js";
 
 export interface CategoryInfo {
   name: string;
