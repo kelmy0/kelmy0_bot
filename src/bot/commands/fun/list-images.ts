@@ -5,7 +5,7 @@ import { PrismaClient } from "@prisma/client";
 import { requirePrisma } from "../../../utils/prisma/prismaRequire.js";
 import ImageService from "../../../services/imageService.js";
 import { handleServiceResponse } from "../../../utils/discord/responseHandler.js";
-import { ImageEmbedHelper } from "../../../utils/discord/imageEmbedHelper.js";
+import { ImageEmbedHelper } from "../../../utils/discord/embeds/imageEmbedHelper.js";
 
 export default {
   data: new SlashCommandBuilder()
