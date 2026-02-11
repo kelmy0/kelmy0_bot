@@ -6,7 +6,6 @@ export default {
   metadata: {
     category: "utility",
     production: true,
-    description: "Responde pong!",
     cooldown: 5,
   },
   async execute(interaction: ChatInputCommandInteraction) {

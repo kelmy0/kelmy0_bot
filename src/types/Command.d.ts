@@ -4,7 +4,6 @@ import { PrismaClient } from "@prisma/client";
 export interface CommandMetadata {
   category: "admin" | "utility" | "debug" | "config" | "fun";
   production: boolean;
-  description?: string;
   cooldown?: number;
 }
 
