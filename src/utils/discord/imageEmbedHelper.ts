@@ -9,12 +9,13 @@ import {
 import { ImageResponse } from "../../services/imageService.js";
 import { EmbedHelpers } from "./embedHelpers.js";
 
-export class imageEmbedHelper {
+export class ImageEmbedHelper {
   static async createSingleImageEmbed(
     interaction: ChatInputCommandInteraction,
     image: ImageResponse,
+    extraInfo?: string,
   ): Promise<void> {
-    const embed = this.createImageEmbed(interaction, image, 0, 1);
+    const embed = this.createImageEmbed(interaction, image, 0, 1, extraInfo);
 
     await interaction.editReply({ embeds: [embed] });
   }
@@ -103,6 +104,7 @@ export class imageEmbedHelper {
     image: ImageResponse,
     currentPage: number,
     totalPages: number,
+    extraTextInfo?: string,
   ): EmbedBuilder {
     const embed = new EmbedBuilder()
       .setTitle(`${image.title || "Imagem"}`)
@@ -121,6 +123,13 @@ export class imageEmbedHelper {
 
     if (image.description) {
       embed.setDescription(`*"${image.description}"*`);
+    }
+
+    if (extraTextInfo) {
+      embed.addFields({
+        name: "Informação extra:",
+        value: extraTextInfo,
+      });
     }
 
     if (image.tags) {

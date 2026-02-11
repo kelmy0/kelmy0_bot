@@ -2,7 +2,11 @@ import { BaseService } from "./base/BaseService.js";
 import { ServiceResponse } from "../types/ServiceResponse.js";
 import { handlePrismaError, PrismaErrorHandlers } from "../utils/prisma/errorHandler.js";
 import { normalizeString } from "../utils/string/normalizer.js";
-import { normalizeImageUrl, normalizeTags } from "../utils/services/imagesHelper.js";
+import {
+  normalizeIdOrUrl,
+  normalizeImageUrl,
+  normalizeTags,
+} from "../utils/services/imagesHelper.js";
 import { Image, PrismaClient } from "@prisma/client";
 
 export interface ImageInfo {
@@ -128,26 +132,36 @@ export default class ImageService extends BaseService {
     }
   }
 
-  public async deleteImage(
-    id?: string,
-    url?: string,
-  ): Promise<ServiceResponse<{ deletedUrl: string }>> {
+  public async deleteImage(rawIdOrUrl: string): Promise<ServiceResponse<ImageResponse>> {
     try {
+      const idOrUrl = normalizeIdOrUrl(rawIdOrUrl);
+
+      if (idOrUrl.type === "error") {
+        return this.error("Parametro inválido! Use uma URL válida ou id", "INVALID_PARAMETER");
+      }
+
+      let whereParam: { url: string } | { id: string };
+      if (idOrUrl.type === "url") {
+        whereParam = { url: idOrUrl.text };
+      } else {
+        whereParam = { id: idOrUrl.text };
+      }
+
       const deleted = await this.prisma.image.delete({
-        where: { id },
-        include: { category: { select: { name: true } } },
+        where: whereParam,
+        include: {
+          category: { select: { name: true } },
+          addedBy: { select: { username: true, avatar: true } },
+        },
       });
 
       return this.success(
-        `✅ Imagem **${deleted.url}** (Categoria: ${deleted.category.name}) deletada com sucesso!`,
-        { deletedUrl: deleted.url },
+        `Imagem **${deleted.url}** deletada com sucesso!`,
+        this.mapToResponse<Image, ImageResponse>(deleted),
       );
     } catch (error) {
       return handlePrismaError(error, {
-        P2025: PrismaErrorHandlers.notFound(
-          `❌ Imagem com ID "${id}" não encontrada!`,
-          "IMAGE_NOT_FOUND",
-        ),
+        P2025: PrismaErrorHandlers.notFound(`❌ Imagem com não encontrada!`, "IMAGE_NOT_FOUND"),
       });
     }
   }

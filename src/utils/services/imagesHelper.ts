@@ -33,9 +33,7 @@ export function normalizeImageUrl(url: string | null): string {
     const pathname = urlObj.pathname.toLowerCase();
     const hasImageExtension = imageExtensions.some(
       (ext) =>
-        pathname.endsWith(ext) ||
-        pathname.includes(`${ext}?`) ||
-        pathname.includes(`${ext}&`),
+        pathname.endsWith(ext) || pathname.includes(`${ext}?`) || pathname.includes(`${ext}&`),
     );
 
     const isImageFromService =
@@ -71,4 +69,22 @@ export function normalizeTags(tagsInput: string | null): string | null {
       }),
     )
     .join(",");
+}
+
+export interface idOrUrlResponse {
+  type: "id" | "error" | "url";
+  text: string;
+}
+
+export function normalizeIdOrUrl(text: string): idOrUrlResponse {
+  try {
+    const url = normalizeImageUrl(text);
+
+    return url ? { type: "url", text: url } : { type: "id", text: text };
+  } catch (error) {
+    return {
+      type: "error",
+      text: "",
+    };
+  }
 }

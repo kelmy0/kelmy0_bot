@@ -5,7 +5,7 @@ import { PrismaClient } from "@prisma/client";
 import { requirePrisma } from "../../../utils/prisma/prismaRequire.js";
 import ImageService from "../../../services/imageService.js";
 import { handleServiceResponse } from "../../../utils/discord/responseHandler.js";
-import { imageEmbedHelper } from "../../../utils/discord/imageEmbedHelper.js";
+import { ImageEmbedHelper } from "../../../utils/discord/imageEmbedHelper.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -56,7 +56,7 @@ export default {
         return;
       }
 
-      imageEmbedHelper.createPaginatedImageEmbed(interaction, result.data);
+      ImageEmbedHelper.createPaginatedImageEmbed(interaction, result.data);
     } catch (error) {
       await handleCommandError(interaction, "list-images", error);
     }
