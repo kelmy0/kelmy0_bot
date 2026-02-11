@@ -20,7 +20,7 @@ Currently focused on implementing **more commands**, with additional features pl
 
 ## 🛣️ Roadmap
 
-The project is in development yet, the first version is not ready!
+The project is still under development; the first stable release is not yet available.
 
 - [x] Core command system
 - [x] Database integration with Prisma
@@ -28,17 +28,17 @@ The project is in development yet, the first version is not ready!
 - [ ] Web dashboard for bot management
 - [ ] Official documentation site
 
-## 💻 Requisites
+## 💻 Requirements
 
-Antes de começar, verifique se você atendeu aos seguintes requisitos:
+Before starting, make sure you meet the following requirements:
 
-- You installed `<Nodejs>` v24+
-- You are on `<Windows>`. (Not tested in Linux or Mac)
-- You are using one of the follows Databases: `Microsoft SQL Server | Postgresql | MongoDb` (More databases supports will coming in future)
+- You have installed Node.js v24 or higher
+- You are on Windows (not yet tested on Linux or Mac)
+- You are using one of the following databases: Microsoft SQL Server, PostgreSQL, or MongoDB (more databases will be supported in the future)
 
 ## 🚀 Installing `<kelmy0_bot>`
 
-To install kelmy0_bot, follow theses steps:
+To install kelmy0_bot, follow these steps.
 
 Windows:
 
@@ -54,24 +54,24 @@ Linux: coming soon!
 
 To use kelmy0_bot, follow theses steps:
 
-1 - create an bot on discord clicking [here](https://discord.com/developers/applications).
+1 - Create a bot on Discord by clicking [here](https://discord.com/developers/applications).
 
-2 - Config the .env file with the credentials
+2 - Configure the `.env` file with your credentials.
 
-3 - run the follow commands
+3 - Run the following commands.
 
 ```
 npm run prisma:deploy
 npm run commands:deploy
 ```
 
-4 - finaly, run this command
+4 - Finally, run this command.
 
 ```
 npm run dev
 ```
 
-After all theses steps, you bot is online and you can use it!
+After completing these steps, your bot will be online and ready to use.
 
 ## 🌐 Website
 
@@ -80,7 +80,7 @@ Stay tuned for updates — Coming Soon
 
 ## 👨‍💻 Author
 
-this project was made by me.
+This project was created by me.
 
 <table>
   <tr>
@@ -97,4 +97,4 @@ this project was made by me.
 
 ## 📝 License
 
-This project use MIT license. More info [here](https://opensource.org/license/mit).
+This project uses the MIT license. More info [here](https://opensource.org/license/mit).
