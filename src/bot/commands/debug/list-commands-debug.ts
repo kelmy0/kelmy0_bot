@@ -9,6 +9,7 @@ export default {
     .setDescription("Lista todos os comandos por categoria (DEBUG)"),
 
   async execute(interaction: ChatInputCommandInteraction) {
+    await interaction.deferReply();
     const commands = await getCommands();
     CommandsEmbedHelper.createPaginatedCommandEmbed(interaction, commands);
   },
