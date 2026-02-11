@@ -20,7 +20,10 @@ export function extractDiscordUserInfo(interaction: Interaction): DiscordUserInf
   };
 }
 
-export async function getOrRegisterUser(prisma: PrismaClient, interaction: Interaction): Promise<string> {
+export async function getOrRegisterUser(
+  prisma: PrismaClient,
+  interaction: Interaction,
+): Promise<getOrRegisterUserResponse> {
   try {
     const discordInfo = extractDiscordUserInfo(interaction);
     const userService = new UserService(prisma);
@@ -28,13 +31,18 @@ export async function getOrRegisterUser(prisma: PrismaClient, interaction: Inter
 
     if (!result.success || !result.data) {
       console.warn(`Falha ao upsert usuário: ${result.message}`);
-      return discordInfo.id;
+      return { id: discordInfo.id, username: discordInfo.username };
     }
 
-    return result.data.id;
+    return { username: result.data.username, id: result.data.id };
   } catch (error) {
     console.error("Erro crítico em getOrRegisterUser:", error);
     const discordInfo = extractDiscordUserInfo(interaction);
-    return discordInfo.id;
+    return { id: discordInfo.id, username: discordInfo.username };
   }
+}
+
+interface getOrRegisterUserResponse {
+  username: string;
+  id: string;
 }
