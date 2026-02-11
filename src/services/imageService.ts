@@ -7,7 +7,7 @@ import { Image, PrismaClient } from "@prisma/client";
 
 export interface ImageInfo {
   url: string;
-  title?: string | null;
+  title: string;
   description?: string | null;
   category: string;
   addedById: string;
@@ -75,14 +75,12 @@ export default class ImageService extends BaseService {
 
       const normalizedTags = infos.tags ? normalizeTags(infos.tags) : null;
 
-      const normalizedTitle = infos.title
-        ? normalizeString(infos.title, {
-            toLowerCase: false,
-            trim: true,
-            normalizeDiacritics: true,
-            replaceSpaces: " ",
-          })
-        : null;
+      const normalizedTitle = normalizeString(infos.title, {
+        toLowerCase: false,
+        trim: true,
+        normalizeDiacritics: true,
+        replaceSpaces: " ",
+      });
 
       const normalizedDescription = infos.description
         ? normalizeString(infos.description, {

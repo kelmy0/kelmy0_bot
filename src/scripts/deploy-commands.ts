@@ -30,7 +30,7 @@ async function deployCommands() {
     // Criar cliente apenas para deploy
     const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
-    client.once("ready", async (readyClient) => {
+    client.once("clientReady", async (readyClient) => {
       console.log(`🤖 Conectado como ${readyClient.user.tag}`);
 
       if (isProduction) {

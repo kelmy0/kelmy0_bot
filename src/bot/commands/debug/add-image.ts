@@ -13,16 +13,13 @@ export default {
     .setDescription("Envia URL de uma imagem ao banco de dados do ambiente de desenvolvimento")
     .addStringOption((option) => option.setName("url").setDescription("Url da imagem").setRequired(true))
     .addStringOption((option) =>
+      option.setName("title").setDescription("Um titulo para a imagem").setRequired(true).setMaxLength(50),
+    )
+    .addStringOption((option) =>
       option.setName("category").setDescription("categoria da imagem").setRequired(true),
     )
     .addStringOption((option) =>
-      option
-        .setName("tags")
-        .setDescription("Tags separadas por vírgula")
-        .setRequired(false),
-    )
-    .addStringOption((option) =>
-      option.setName("title").setDescription("Um titulo para a imagem").setRequired(false).setMaxLength(50),
+      option.setName("tags").setDescription("Tags separadas por vírgula").setRequired(false),
     )
     .addStringOption((option) =>
       option
@@ -44,7 +41,7 @@ export default {
     const rawUrl = interaction.options.getString("url", true);
     const rawCategory = interaction.options.getString("category", true);
     const rawTags = interaction.options.getString("tags");
-    const rawTitle = interaction.options.getString("title");
+    const rawTitle = interaction.options.getString("title", true);
     const rawDescription = interaction.options.getString("description");
 
     const db = requirePrisma(prisma);

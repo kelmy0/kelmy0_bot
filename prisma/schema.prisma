@@ -26,7 +26,7 @@ model User {
 model Image {
   id          String  @id @default(cuid())
   url         String  @unique
-  title       String?
+  title       String  @default("Sem titulo")
   description String?
 
   categoryId String         @map("category_id")
@@ -35,7 +35,7 @@ model Image {
   addedById String @map("added_by_id")
   addedBy   User   @relation("AddedImages", fields: [addedById], references: [id], onUpdate: NoAction, onDelete: NoAction)
 
-  tags    String? // String normalizada separada por vírgulas: "meme,funny,game"
+  tags    String?
   addedAt DateTime @default(now()) @map("added_at")
 
   @@index([categoryId])
