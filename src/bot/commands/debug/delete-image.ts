@@ -6,7 +6,7 @@ import { requirePrisma } from "../../../utils/prisma/prismaRequire.js";
 import { handleCommandError } from "../../../utils/discord/commandHelpers.js";
 import { getOrRegisterUser } from "../../../utils/services/userHelper.js";
 import { handleServiceResponse } from "../../../utils/discord/responseHandler.js";
-import { ImageEmbedHelper } from "../../../utils/discord/imageEmbedHelper.js";
+import { ImageEmbedHelper } from "../../../utils/discord/embeds/imageEmbedHelper.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -29,7 +29,7 @@ export default {
     const imageService = new ImageService(db);
 
     try {
-      const userId = await getOrRegisterUser(db, interaction);
+      const user = await getOrRegisterUser(db, interaction);
 
       const result = await imageService.deleteImage(idOrUrl);
       if (!result.success || !result.data) {
@@ -37,7 +37,7 @@ export default {
         return;
       }
 
-      ImageEmbedHelper.createSingleImageEmbed(interaction, result.data, "🚫 Deleted");
+      ImageEmbedHelper.createSingleImageEmbed(interaction, result.data, "🚫 Deleted per: " + user.username);
     } catch (error) {
       await handleCommandError(interaction, "delete-image", error);
     }

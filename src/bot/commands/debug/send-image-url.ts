@@ -51,7 +51,7 @@ export default {
     const imageService = new ImageService(db);
 
     try {
-      const userId = await getOrRegisterUser(db, interaction);
+      const user = await getOrRegisterUser(db, interaction);
 
       const result = await imageService.addImageUrl({
         url: rawUrl,
@@ -59,7 +59,7 @@ export default {
         description: rawDescription,
         tags: rawTags,
         category: rawCategory,
-        addedById: userId,
+        addedById: user.id,
       });
 
       await handleServiceResponse(interaction, result);

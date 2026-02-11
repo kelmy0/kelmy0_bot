@@ -1,13 +1,13 @@
-import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
+import { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction } from "discord.js";
 import type { Command } from "../../../types/Command.js";
 import { getCommands } from "../loader.js";
 
 export default {
   data: new SlashCommandBuilder()
-    .setName("list-commands")
-    .setDescription("Lista todos os comandos por categoria"),
+    .setName("list-commands-debug")
+    .setDescription("Lista todos os comandos por categoria (DEBUG)"),
 
-  async execute(interaction) {
+  async execute(interaction: ChatInputCommandInteraction) {
     const commands = await getCommands();
 
     const categories: Record<string, string[]> = {};

@@ -7,7 +7,7 @@ import { normalizeCategoryName } from "../../../utils/services/categoryHelper.js
 import { handleServiceResponse } from "../../../utils/discord/responseHandler.js";
 import { handleCommandError } from "../../../utils/discord/commandHelpers.js";
 import CategoryService from "../../../services/categoryService.js";
-import { CategoryEmbedHelper } from "../../../utils/discord/categoryEmbedHelper.js";
+import { CategoryEmbedHelper } from "../../../utils/discord/embeds/categoryEmbedHelper.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -59,8 +59,8 @@ export default {
             return;
           }
 
-          const userId = await getOrRegisterUser(db, interaction);
-          const result = await categoryService.addCategory(name, userId);
+          const user = await getOrRegisterUser(db, interaction);
+          const result = await categoryService.addCategory(name, user.username);
           await handleServiceResponse(interaction, result);
           break;
         }
