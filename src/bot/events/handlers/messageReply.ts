@@ -7,13 +7,7 @@ export default {
 
     const chance = 0.1; // 10% de chance de responder
     if (Math.random() < chance) {
-      const respostas = [
-        "Oi 👋",
-        "Interessante isso 🤔",
-        "Haha",
-        "Boa ideia!",
-        "Ninguém liga",
-      ];
+      const respostas = ["Oi 👋", "Interessante isso 🤔", "Haha", "Boa ideia!", "Ninguém liga"];
       const resposta = respostas[Math.floor(Math.random() * respostas.length)];
       await message.reply(resposta);
     }

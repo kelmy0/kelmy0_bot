@@ -20,10 +20,7 @@ export class ImageEmbedHelper {
     await interaction.editReply({ embeds: [embed] });
   }
 
-  static async createPaginatedImageEmbed(
-    interaction: ChatInputCommandInteraction,
-    images: ImageResponse[],
-  ) {
+  static async createPaginatedImageEmbed(interaction: ChatInputCommandInteraction, images: ImageResponse[]) {
     if (images.length === 0) {
       EmbedHelpers.createEmptyEmbed("Nenhuma imagem encontrada!", interaction);
       return;
@@ -76,12 +73,7 @@ export class ImageEmbedHelper {
       }
 
       // Atualiza a mensagem e o embed
-      const updatedEmbed = this.createImageEmbed(
-        interaction,
-        images[currentPage],
-        currentPage,
-        totalPages,
-      );
+      const updatedEmbed = this.createImageEmbed(interaction, images[currentPage], currentPage, totalPages);
       const updatedButtons = this.createImageEmbedButtons(currentPage, totalPages);
 
       await buttonInteraction.update({

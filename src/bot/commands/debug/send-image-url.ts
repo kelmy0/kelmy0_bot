@@ -1,8 +1,4 @@
-import {
-  PermissionFlagsBits,
-  SlashCommandBuilder,
-  ChatInputCommandInteraction,
-} from "discord.js";
+import { PermissionFlagsBits, SlashCommandBuilder, ChatInputCommandInteraction } from "discord.js";
 import { PrismaClient } from "@prisma/client";
 import { Command } from "../../../types/Command.js";
 import { requirePrisma } from "../../../utils/prisma/prismaRequire.js";
@@ -14,17 +10,10 @@ import { handleServiceResponse } from "../../../utils/discord/responseHandler.js
 export default {
   data: new SlashCommandBuilder()
     .setName("send-image-url")
-    .setDescription(
-      "Envia URL de uma imagem ao banco de dados do ambiente de desenvolvimento",
-    )
+    .setDescription("Envia URL de uma imagem ao banco de dados do ambiente de desenvolvimento")
+    .addStringOption((option) => option.setName("url").setDescription("Url da imagem").setRequired(true))
     .addStringOption((option) =>
-      option.setName("url").setDescription("Url da imagem").setRequired(true),
-    )
-    .addStringOption((option) =>
-      option
-        .setName("categoria")
-        .setDescription("categoria da imagem")
-        .setRequired(true),
+      option.setName("categoria").setDescription("categoria da imagem").setRequired(true),
     )
     .addStringOption((option) =>
       option
@@ -33,11 +22,7 @@ export default {
         .setRequired(false),
     )
     .addStringOption((option) =>
-      option
-        .setName("title")
-        .setDescription("Um titulo para a imagem")
-        .setRequired(false)
-        .setMaxLength(50),
+      option.setName("title").setDescription("Um titulo para a imagem").setRequired(false).setMaxLength(50),
     )
     .addStringOption((option) =>
       option
@@ -53,10 +38,7 @@ export default {
     production: false,
   },
 
-  async execute(
-    interaction: ChatInputCommandInteraction,
-    prisma?: PrismaClient,
-  ) {
+  async execute(interaction: ChatInputCommandInteraction, prisma?: PrismaClient) {
     await interaction.deferReply();
 
     const rawUrl = interaction.options.getString("url", true);

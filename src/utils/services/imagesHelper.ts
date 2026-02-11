@@ -32,8 +32,7 @@ export function normalizeImageUrl(url: string | null): string {
 
     const pathname = urlObj.pathname.toLowerCase();
     const hasImageExtension = imageExtensions.some(
-      (ext) =>
-        pathname.endsWith(ext) || pathname.includes(`${ext}?`) || pathname.includes(`${ext}&`),
+      (ext) => pathname.endsWith(ext) || pathname.includes(`${ext}?`) || pathname.includes(`${ext}&`),
     );
 
     const isImageFromService =

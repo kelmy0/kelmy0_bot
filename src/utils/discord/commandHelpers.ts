@@ -8,8 +8,7 @@ export async function handleCommandError(
 ): Promise<void> {
   console.error(`Erro em ${action}:`, error);
 
-  const errorMessage =
-    error instanceof Error ? error.message : "Erro desconhecido";
+  const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
 
   await interaction.editReply({
     content: `❌ Erro interno ao processar comando: ${errorMessage}`,

@@ -20,10 +20,7 @@ export function extractDiscordUserInfo(interaction: Interaction): DiscordUserInf
   };
 }
 
-export async function getOrRegisterUser(
-  prisma: PrismaClient,
-  interaction: Interaction,
-): Promise<string> {
+export async function getOrRegisterUser(prisma: PrismaClient, interaction: Interaction): Promise<string> {
   try {
     const discordInfo = extractDiscordUserInfo(interaction);
     const userService = new UserService(prisma);

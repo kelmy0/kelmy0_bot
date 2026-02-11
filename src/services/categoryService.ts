@@ -22,10 +22,7 @@ export default class CategoryService extends BaseService {
     super(prisma);
   }
 
-  public async addCategory(
-    name: string,
-    addedById: string,
-  ): Promise<ServiceResponse<CategoryResponse>> {
+  public async addCategory(name: string, addedById: string): Promise<ServiceResponse<CategoryResponse>> {
     try {
       const normalizedName = normalizeCategoryName(name);
 
@@ -44,10 +41,7 @@ export default class CategoryService extends BaseService {
       );
     } catch (error) {
       return handlePrismaError(error, {
-        P2002: PrismaErrorHandlers.duplicateEntry(
-          `A categoria "${name}" já existe!`,
-          "DUPLICATE_CATEGORY",
-        ),
+        P2002: PrismaErrorHandlers.duplicateEntry(`A categoria "${name}" já existe!`, "DUPLICATE_CATEGORY"),
       });
     }
   }
@@ -64,10 +58,7 @@ export default class CategoryService extends BaseService {
       });
     } catch (error) {
       return handlePrismaError(error, {
-        P2025: PrismaErrorHandlers.notFound(
-          `Categoria **"${name}"** não encontrada`,
-          "CATEGORY_NOT_FOUND",
-        ),
+        P2025: PrismaErrorHandlers.notFound(`Categoria **"${name}"** não encontrada`, "CATEGORY_NOT_FOUND"),
       });
     }
   }

@@ -7,12 +7,7 @@ export function normalizeString(
     replaceSpaces?: boolean | string;
   },
 ): string {
-  const {
-    toLowerCase = true,
-    trim = true,
-    normalizeDiacritics = true,
-    replaceSpaces = " ",
-  } = options || {};
+  const { toLowerCase = true, trim = true, normalizeDiacritics = true, replaceSpaces = " " } = options || {};
 
   if (!input || input.trim().length === 0) {
     return "";

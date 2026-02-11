@@ -9,8 +9,7 @@ async function deployCommands() {
   try {
     console.log("🚀 Iniciando deploy de comandos...");
 
-    const { token, clientId, guildTesterId, isProduction } =
-      validateScriptEnv();
+    const { token, clientId, guildTesterId, isProduction } = validateScriptEnv();
 
     const commands = await getCommands({
       environment: isProduction ? "production" : "development",
@@ -26,9 +25,7 @@ async function deployCommands() {
     }
 
     // Converte Map para array para o Discord API
-    const commandData = Array.from(commands.values()).map((cmd) =>
-      cmd.data.toJSON(),
-    );
+    const commandData = Array.from(commands.values()).map((cmd) => cmd.data.toJSON());
 
     // Criar cliente apenas para deploy
     const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -39,16 +36,12 @@ async function deployCommands() {
       if (isProduction) {
         // PRODUÇÃO: Registra globalmente e limpa guild de teste
         await readyClient.application.commands.set(commandData);
-        console.log(
-          `✅ ${commandData.length} comandos registrados GLOBALMENTE`,
-        );
+        console.log(`✅ ${commandData.length} comandos registrados GLOBALMENTE`);
 
         if (guildTesterId) {
           // Limpa apenas comandos da guild de teste
           await readyClient.guilds.cache.get(guildTesterId)?.commands.set([]);
-          console.log(
-            `🧹 Comandos removidos da guild de teste (${guildTesterId})`,
-          );
+          console.log(`🧹 Comandos removidos da guild de teste (${guildTesterId})`);
         }
       } else {
         // DESENVOLVIMENTO: Registra apenas na guild de teste
@@ -62,9 +55,7 @@ async function deployCommands() {
         }
 
         await guild.commands.set(commandData);
-        console.log(
-          `✅ ${commandData.length} comandos registrados na guild de teste`,
-        );
+        console.log(`✅ ${commandData.length} comandos registrados na guild de teste`);
         console.log(`📌 Guild: ${guild.name} (${guild.id})`);
       }
 

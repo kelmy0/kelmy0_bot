@@ -20,10 +20,7 @@ export abstract class BaseService {
     return ServiceResponse.error(message, errorCode);
   }
 
-  protected mapToResponse<T extends object, R extends object>(
-    data: T,
-    extraData?: Partial<R>,
-  ): R {
+  protected mapToResponse<T extends object, R extends object>(data: T, extraData?: Partial<R>): R {
     const baseResponse = { ...data } as any;
 
     const sensitiveKeys = ["password", "salt", "hash"];

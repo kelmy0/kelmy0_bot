@@ -5,10 +5,7 @@ import type { Command } from "../../types/Command.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-function findCommandFiles(
-  directory: string,
-  fileList: string[] = [],
-): string[] {
+function findCommandFiles(directory: string, fileList: string[] = []): string[] {
   const files = readdirSync(directory);
 
   for (const file of files) {
@@ -64,9 +61,7 @@ export async function loadCommands(): Promise<Map<string, Command>> {
 
         // VALIDAÇÃO: Verifica se tem metadata
         if (!command.metadata) {
-          console.warn(
-            `⚠️  Comando sem metadata: ${commandName} (${filePath})`,
-          );
+          console.warn(`⚠️  Comando sem metadata: ${commandName} (${filePath})`);
           // Define metadata padrão
           command.metadata = {
             category: "debug",
@@ -98,9 +93,7 @@ export async function loadCommands(): Promise<Map<string, Command>> {
         const emoji = categoryColors[category] || "📄";
         const prodFlag = command.metadata.production ? "✅" : "🚫";
 
-        console.log(
-          `${emoji} ${prodFlag} ${commandName.padEnd(20)} [${category}]`,
-        );
+        console.log(`${emoji} ${prodFlag} ${commandName.padEnd(20)} [${category}]`);
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -117,13 +110,9 @@ export async function loadCommands(): Promise<Map<string, Command>> {
     console.log(`  ${category}: ${count} comando(s)`);
   });
 
-  const totalForProduction = Array.from(commands.values()).filter(
-    (cmd) => cmd.metadata.production,
-  ).length;
+  const totalForProduction = Array.from(commands.values()).filter((cmd) => cmd.metadata.production).length;
 
-  console.log(
-    `\n🎯 Total: ${commands.size} comandos (${totalForProduction} para produção)`,
-  );
+  console.log(`\n🎯 Total: ${commands.size} comandos (${totalForProduction} para produção)`);
 
   return commands;
 }
@@ -145,18 +134,12 @@ export function filterCommands(
     }
 
     // Filtro por categorias incluídas
-    if (
-      options.categories &&
-      !options.categories.includes(command.metadata.category)
-    ) {
+    if (options.categories && !options.categories.includes(command.metadata.category)) {
       continue;
     }
 
     // Filtro por categorias excluídas
-    if (
-      options.excludeCategories &&
-      options.excludeCategories.includes(command.metadata.category)
-    ) {
+    if (options.excludeCategories && options.excludeCategories.includes(command.metadata.category)) {
       continue;
     }
 

@@ -11,9 +11,7 @@ export function formatForDiscord(
   const { showEmoji = true, showTimestamp = false, embedColor } = options || {};
 
   const emoji = showEmoji ? (response.success ? "✅" : "❌") : "";
-  const timestamp = showTimestamp
-    ? `\n\n_<t:${Math.floor(response.timestamp.getTime() / 1000)}:R>_`
-    : "";
+  const timestamp = showTimestamp ? `\n\n_<t:${Math.floor(response.timestamp.getTime() / 1000)}:R>_` : "";
 
   const content = `${emoji} ${response.message}${timestamp}`;
 

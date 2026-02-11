@@ -20,9 +20,7 @@ export default {
 
     // 3. Executa com tratamento de erros
     try {
-      console.log(
-        `▶️  Executando: /${interaction.commandName} por ${interaction.user.tag}`,
-      );
+      console.log(`▶️  Executando: /${interaction.commandName} por ${interaction.user.tag}`);
       await command.execute(interaction, prisma);
     } catch (error) {
       console.error(`❌ Erro em /${interaction.commandName}:`, error);

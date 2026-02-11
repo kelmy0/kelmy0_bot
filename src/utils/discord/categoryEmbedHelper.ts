@@ -31,9 +31,7 @@ export class CategoryEmbedHelper {
     const embed = new EmbedBuilder()
       .setTitle("📚 **CATEGORIAS DISPONÍVEIS**")
       .setColor("#0f178d")
-      .setThumbnail(
-        interaction.guild?.iconURL() || "https://cdn.discordapp.com/embed/avatars/0.png",
-      )
+      .setThumbnail(interaction.guild?.iconURL() || "https://cdn.discordapp.com/embed/avatars/0.png")
       .setDescription(
         `**Total:** ${categories.length} categorias\nSelecione uma categoria para ver as imagens:`,
       )

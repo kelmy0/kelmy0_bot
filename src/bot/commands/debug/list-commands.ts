@@ -17,9 +17,7 @@ export default {
       if (!categories[category]) categories[category] = [];
 
       const prodFlag = cmd.metadata.production ? "✅" : "🚫";
-      categories[category].push(
-        `${prodFlag} **/${name}** - ${cmd.data.description}`,
-      );
+      categories[category].push(`${prodFlag} **/${name}** - ${cmd.data.description}`);
     }
 
     const embed = new EmbedBuilder()

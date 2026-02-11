@@ -2,11 +2,7 @@ import { BaseService } from "./base/BaseService.js";
 import { ServiceResponse } from "../types/ServiceResponse.js";
 import { handlePrismaError, PrismaErrorHandlers } from "../utils/prisma/errorHandler.js";
 import { normalizeString } from "../utils/string/normalizer.js";
-import {
-  normalizeIdOrUrl,
-  normalizeImageUrl,
-  normalizeTags,
-} from "../utils/services/imagesHelper.js";
+import { normalizeIdOrUrl, normalizeImageUrl, normalizeTags } from "../utils/services/imagesHelper.js";
 import { Image, PrismaClient } from "@prisma/client";
 
 export interface ImageInfo {
@@ -124,10 +120,7 @@ export default class ImageService extends BaseService {
           "DUPLICATE_IMAGE",
         ),
         P2003: () =>
-          this.error(
-            `Referência inválida (usuário ou categoria não existe)`,
-            "FOREIGN_KEY_CONSTRAINT",
-          ),
+          this.error(`Referência inválida (usuário ou categoria não existe)`, "FOREIGN_KEY_CONSTRAINT"),
       });
     }
   }

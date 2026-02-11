@@ -1,9 +1,6 @@
 import { PrismaClient, User } from "@prisma/client";
 import { ServiceResponse } from "../types/ServiceResponse.js";
-import {
-  handlePrismaError,
-  PrismaErrorHandlers,
-} from "../utils/prisma/errorHandler.js";
+import { handlePrismaError, PrismaErrorHandlers } from "../utils/prisma/errorHandler.js";
 import { BaseService } from "./base/BaseService.js";
 
 export interface DiscordUserInfo {
@@ -25,9 +22,7 @@ export default class UserService extends BaseService {
     super(prisma);
   }
 
-  public async upsertUser(
-    userInfo: DiscordUserInfo,
-  ): Promise<ServiceResponse<UserResponse>> {
+  public async upsertUser(userInfo: DiscordUserInfo): Promise<ServiceResponse<UserResponse>> {
     try {
       const user = await this.prisma.user.upsert({
         where: { id: userInfo.id },
@@ -58,9 +53,7 @@ export default class UserService extends BaseService {
     }
   }
 
-  public async createUser(
-    userInfo: DiscordUserInfo,
-  ): Promise<ServiceResponse<UserResponse>> {
+  public async createUser(userInfo: DiscordUserInfo): Promise<ServiceResponse<UserResponse>> {
     try {
       const newUser = await this.prisma.user.create({
         data: {
@@ -85,9 +78,7 @@ export default class UserService extends BaseService {
     }
   }
 
-  public async updateUserInfo(
-    userInfo: DiscordUserInfo,
-  ): Promise<ServiceResponse<UserResponse>> {
+  public async updateUserInfo(userInfo: DiscordUserInfo): Promise<ServiceResponse<UserResponse>> {
     try {
       const updateUser = await this.prisma.user.update({
         where: { id: userInfo.id },
@@ -119,10 +110,7 @@ export default class UserService extends BaseService {
       });
 
       if (!user) {
-        return this.error(
-          `❌ Usuário com ID **${id}** não encontrado!`,
-          "USER_NOT_FOUND",
-        );
+        return this.error(`❌ Usuário com ID **${id}** não encontrado!`, "USER_NOT_FOUND");
       }
 
       return this.success(
@@ -131,10 +119,7 @@ export default class UserService extends BaseService {
       );
     } catch (error) {
       return handlePrismaError(error, {
-        P2025: PrismaErrorHandlers.notFound(
-          `Usuario com ID **${id}** não encontrado!`,
-          "USER_NOT_FOUND",
-        ),
+        P2025: PrismaErrorHandlers.notFound(`Usuario com ID **${id}** não encontrado!`, "USER_NOT_FOUND"),
       });
     }
   }

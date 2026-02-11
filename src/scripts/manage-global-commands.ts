@@ -105,8 +105,7 @@ async function deleteSingleCommand(appCommands: any) {
 
   // Tenta encontrar por ID ou nome
   const commandToDelete = commands.find(
-    (cmd: ApplicationCommand) =>
-      cmd.id === choice || cmd.name.toLowerCase() === choice.toLowerCase(),
+    (cmd: ApplicationCommand) => cmd.id === choice || cmd.name.toLowerCase() === choice.toLowerCase(),
   );
 
   if (!commandToDelete) {
@@ -114,9 +113,7 @@ async function deleteSingleCommand(appCommands: any) {
     return;
   }
 
-  console.log(
-    `\n⚠️  Você está prestes a remover: ${commandToDelete.name} (${commandToDelete.id})`,
-  );
+  console.log(`\n⚠️  Você está prestes a remover: ${commandToDelete.name} (${commandToDelete.id})`);
   console.log("Este comando será removido de TODOS os servidores!");
 
   const confirm = await question('Digite "SIM" para confirmar: ');
@@ -138,9 +135,7 @@ async function deleteAllGlobalCommands(appCommands: any) {
   }
 
   console.log(`\n⚠️  ⚠️  ⚠️  ALERTA CRÍTICO! ⚠️  ⚠️  ⚠️`);
-  console.log(
-    `Você está prestes a remover ${commands.size} comando(s) GLOBALMENTE:`,
-  );
+  console.log(`Você está prestes a remover ${commands.size} comando(s) GLOBALMENTE:`);
 
   commands.forEach((cmd: ApplicationCommand) => {
     console.log(`  • ${cmd.name} (${cmd.id})`);

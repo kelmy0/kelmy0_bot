@@ -12,17 +12,13 @@ export async function handleServiceResponse(
   },
 ): Promise<void> {
   if (!response.success) {
-    await interaction.editReply(
-      formatForDiscord(response, options?.formatOptions),
-    );
+    await interaction.editReply(formatForDiscord(response, options?.formatOptions));
     return;
   }
 
   if (options?.paginate && response.message.length > 1900) {
     await sendPaginatedResponse(interaction, response.message);
   } else {
-    await interaction.editReply(
-      formatForDiscord(response, options?.formatOptions),
-    );
+    await interaction.editReply(formatForDiscord(response, options?.formatOptions));
   }
 }
