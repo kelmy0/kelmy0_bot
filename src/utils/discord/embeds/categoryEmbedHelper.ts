@@ -1,25 +1,21 @@
 import { ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
-import { CategoryResponse } from "../../services/categoryService.js";
+import { CategoryResponse } from "../../../services/categoryService.js";
 import { EmbedHelpers } from "./embedHelpers.js";
+import { PaginationHelper } from "./paginationHelper.js";
 
 export class CategoryEmbedHelper {
   static async createPaginatedCategoryembed(
     interaction: ChatInputCommandInteraction,
     categories: CategoryResponse[],
   ) {
-    if (categories.length === 0) {
-      EmbedHelpers.createEmptyEmbed("Nenhuma Categoria Encontrada!", interaction);
-      return;
-    }
-
-    let currentPage = 0;
-    const itemsPerPage = 10;
-    const totalPages = Math.ceil(categories.length / itemsPerPage);
-
-    //primeiro embed
-    const embed = this.createCategoryEmbed(interaction, categories, currentPage, totalPages);
-
-    await interaction.editReply({ embeds: [embed] });
+    await PaginationHelper.createPagination(
+      interaction,
+      categories,
+      (currentItems, page, total) => {
+        return this.createCategoryEmbed(interaction, currentItems, page, total, categories.length);
+      },
+      10, //10 categorias por pagina
+    );
   }
 
   private static createCategoryEmbed(
@@ -27,19 +23,19 @@ export class CategoryEmbedHelper {
     categories: CategoryResponse[],
     currentPage: number,
     totalPages: number,
+    totalCategories: number,
   ): EmbedBuilder {
-    const embed = new EmbedBuilder()
-      .setTitle("📚 **CATEGORIAS DISPONÍVEIS**")
-      .setColor("#0f178d")
-      .setThumbnail(interaction.guild?.iconURL() || "https://cdn.discordapp.com/embed/avatars/0.png")
-      .setDescription(
-        `**Total:** ${categories.length} categorias\nSelecione uma categoria para ver as imagens:`,
-      )
-      .setFooter({
+    const embed = EmbedHelpers.createEmbed({
+      title: "📚 **CATEGORIAS DISPONÍVEIS**",
+      color: "#0f178d",
+      thumbnail: `${interaction.guild?.iconURL() || "https://cdn.discordapp.com/embed/avatars/0.png"}`,
+      description: `**Total:** ${totalCategories} categorias\nSelecione uma categoria para ver as imagens:`,
+      footer: {
         text: `Página ${currentPage + 1}/${totalPages} • Use /list-images categoria <nome>`,
         iconURL: interaction.client.user?.displayAvatarURL(),
-      })
-      .setTimestamp();
+      },
+      timestamp: true,
+    });
 
     const categoryList = categories
       .map((cat) => {
