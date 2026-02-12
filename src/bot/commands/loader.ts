@@ -86,6 +86,7 @@ export async function loadCommands(): Promise<Map<string, Command>> {
           debug: "🛠️",
           admin: "👑",
           utility: "🔧",
+          moderation: "🛡️",
           config: "⚙️",
           fun: "🎮",
         };

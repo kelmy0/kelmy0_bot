@@ -1,5 +1,7 @@
 import { ChatInputCommandInteraction, PermissionFlagsBits, SlashCommandBuilder, User } from "discord.js";
 import { Command } from "../../../types/Command.js";
+import { handleCommandError } from "../../../utils/discord/commandHelpers.js";
+import { BanEmbedHelper } from "../../../utils/discord/embeds/banEmbedHelper.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -10,7 +12,7 @@ export default {
     .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers),
 
   metadata: {
-    category: "admin",
+    category: "moderation",
     production: true,
   },
 
@@ -20,25 +22,25 @@ export default {
     const memberKicked = interaction.options.getUser("user", true) as User;
     const reason = interaction.options.getString("reason", true);
 
-    const user = interaction.user;
-
-    if (!interaction.memberPermissions?.has(PermissionFlagsBits.KickMembers)) {
-      await interaction.editReply("❌Você não tem permissão para kickar membros.");
-    }
-
-    const member = await interaction.guild?.members.fetch(memberKicked.id).catch(() => null);
-    if (!member) {
-      await interaction.editReply("❌Não encontrei esse usuário no servidor.");
-      return;
-    }
-
     try {
+      if (!interaction.memberPermissions?.has(PermissionFlagsBits.KickMembers)) {
+        throw new Error("Você não tem permissão para kickar membros.");
+      }
+
+      if (!interaction.guild) {
+        throw new Error("Não foi possivel achar o servidor!");
+      }
+
+      const member = await interaction.guild.members.fetch(memberKicked.id).catch(() => null);
+
+      if (!member) {
+        throw new Error("Não encontrei esse usuário no servidor.");
+      }
+
       await member.kick(reason);
-      await interaction.editReply(`🚫✅ ${memberKicked.tag} foi kickado por ${user.tag}. Motivo: ${reason}`);
+      await BanEmbedHelper.createSingleBanEmbed(interaction, "👟Kick", reason, member.user.tag);
     } catch (error) {
-      await interaction.editReply(
-        "❌ Não consegui kickar esse usuário. Verifique se o bot tem permissão e se a hierarquia de cargos permite.",
-      );
+      await handleCommandError(interaction, "kick-member", error);
     }
   },
 } satisfies Command;
