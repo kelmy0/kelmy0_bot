@@ -7,6 +7,7 @@ import {
   EmbedBuilder,
 } from "discord.js";
 import { EmbedHelpers } from "./embedHelpers.js";
+import { registerCollector } from "../collectors.js";
 
 export class PaginationHelper {
   static async createPagination<T>(
@@ -59,6 +60,8 @@ export class PaginationHelper {
       componentType: ComponentType.Button,
       time: 300000, // 5 minutos
     });
+
+    registerCollector(collector);
 
     collector.on("collect", async (i) => {
       if (i.user.id !== interaction.user.id) {

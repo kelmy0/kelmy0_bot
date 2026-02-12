@@ -30,7 +30,7 @@ async function bootstrap() {
     await client.login(process.env.TOKEN);
 
     // 6. Configurar graceful shutdown
-    setupShutdownHandlers(client);
+    setupShutdownHandlers(client, prisma);
   } catch (error) {
     console.error("❌ Falha crítica na inicialização:", error);
     process.exit(1);

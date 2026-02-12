@@ -39,13 +39,6 @@ class Database {
     }
     return Database.instance;
   }
-
-  static async disconnect(): Promise<void> {
-    if (Database.instance) {
-      await Database.instance.$disconnect();
-      console.log("🔌 Conexão do banco encerrada");
-    }
-  }
 }
 
 export const getPrismaClient = () => Database.getInstance();
