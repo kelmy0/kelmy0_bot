@@ -2,7 +2,7 @@ import { SlashCommandBuilder, ChatInputCommandInteraction, SlashCommandOptionsOn
 import { PrismaClient } from "@prisma/client";
 
 export interface CommandMetadata {
-  category: "admin" | "utility" | "debug" | "config" | "fun";
+  category: "admin" | "moderation" | "utility" | "debug" | "config" | "fun";
   production: boolean;
   cooldown?: number;
 }
