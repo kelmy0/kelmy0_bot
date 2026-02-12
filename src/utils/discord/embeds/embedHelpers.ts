@@ -15,7 +15,7 @@ export class EmbedHelpers {
   }
 
   static createEmbed(options: EmbedInfo): EmbedBuilder {
-    const embed = new EmbedBuilder().setTitle(options.title || "Sem titulo");
+    const embed = new EmbedBuilder().setTitle(options.title);
 
     if (options.description) embed.setDescription(options.description);
 
@@ -36,7 +36,7 @@ export class EmbedHelpers {
 }
 
 interface EmbedInfo {
-  title?: string;
+  title: string;
   description?: string;
   url?: string;
   author?: { name: string; iconURL?: string };

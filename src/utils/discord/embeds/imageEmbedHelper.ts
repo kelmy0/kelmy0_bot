@@ -2,26 +2,33 @@ import { ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
 import { ImageResponse } from "../../../services/imageService.js";
 import { EmbedHelpers } from "./embedHelpers.js";
 import { PaginationHelper } from "./paginationHelper.js";
+import { Translator } from "../../../types/Command.js";
 
 export class ImageEmbedHelper {
   static async createSingleImageEmbed(
     interaction: ChatInputCommandInteraction,
     image: ImageResponse,
+    t: Translator,
     extraInfo?: string,
   ): Promise<void> {
-    const embed = this.createImageEmbed(interaction, image, 0, 1, extraInfo);
+    const embed = this.createImageEmbed(interaction, image, 0, 1, t, extraInfo);
 
     await interaction.editReply({ embeds: [embed] });
   }
 
-  static async createPaginatedImageEmbed(interaction: ChatInputCommandInteraction, images: ImageResponse[]) {
+  static async createPaginatedImageEmbed(
+    interaction: ChatInputCommandInteraction,
+    images: ImageResponse[],
+    t: Translator,
+  ) {
     await PaginationHelper.createPagination(
       interaction,
       images,
       (currentItems, page, total) => {
-        return this.createImageEmbed(interaction, currentItems[0], page, total);
+        return this.createImageEmbed(interaction, currentItems[0], page, total, t);
       },
       1, //1 imagem por pagina
+      t,
     );
   }
 
@@ -30,27 +37,37 @@ export class ImageEmbedHelper {
     image: ImageResponse,
     currentPage: number,
     totalPages: number,
+    t: Translator,
     extraTextInfo?: string,
   ): EmbedBuilder {
+    const category = image.category?.name || t("common.words.unknown");
+    const authorName = image.addedBy?.username || t("common.words.unknown");
+
     const embed = EmbedHelpers.createEmbed({
-      title: `${image.title || "Imagem"}`,
-      description: `*"${image.description || "sem descrição"}"*`,
+      title: image.title || t("common.placeholders.no_title"),
+      description: `*"${image.description || t("common.placeholders.no_description")}"*`,
       url: image.url,
       image: image.url,
       author: {
-        name: `📤 Enviado por ${image.addedBy?.username}`,
+        name: t("commands.fun.list-images.author_text", { user: authorName }),
         iconURL: image.addedBy?.avatar,
       },
       color: "#80004f",
       footer: {
-        text: `${image.category?.name} • Por ${image.addedBy?.username} • ${image.addedAt.toLocaleDateString("pt-BR")} • ${currentPage + 1} de ${totalPages}`,
+        text: t("commands.fun.list-images.footer_text", {
+          category: category,
+          user: authorName,
+          date: image.addedAt.toLocaleDateString(interaction.locale),
+          current: currentPage + 1,
+          total: totalPages,
+        }),
         iconURL: interaction.guild?.iconURL() || undefined,
       },
     });
 
     if (extraTextInfo) {
       embed.addFields({
-        name: "Informação extra:",
+        name: t("commands.fun.list-images.extra_info"),
         value: extraTextInfo,
       });
     }

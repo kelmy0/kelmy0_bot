@@ -1,12 +1,13 @@
 import { ChatInputCommandInteraction } from "discord.js";
 import { EmbedHelpers } from "./embedHelpers.js";
-import { Command } from "../../../types/Command.js";
+import { Command, Translator } from "../../../types/Command.js";
 import { PaginationHelper } from "./paginationHelper.js";
 
 export class CommandsEmbedHelper {
   static async createPaginatedCommandEmbed(
     interaction: ChatInputCommandInteraction,
     commands: Map<string, Command>,
+    t: Translator,
   ) {
     const commandArray = Array.from(commands.values());
 
@@ -18,6 +19,7 @@ export class CommandsEmbedHelper {
         return this.createCommandEmbed(interaction, currentItems, page, total, commandArray.length);
       },
       10, // Quantidade de comandos por página
+      t,
     );
   }
 

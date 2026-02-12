@@ -6,6 +6,7 @@ import ImageService from "../../../services/imageService.js";
 import { handleCommandError } from "../../../utils/discord/commandHelpers.js";
 import { getOrRegisterUser } from "../../../utils/services/userHelper.js";
 import { handleServiceResponse } from "../../../utils/discord/responseHandler.js";
+import { Translator } from "../../../types/Command.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -35,7 +36,7 @@ export default {
     production: false,
   },
 
-  async execute(interaction: ChatInputCommandInteraction, prisma?: PrismaClient) {
+  async execute(interaction: ChatInputCommandInteraction, t: Translator, prisma?: PrismaClient) {
     await interaction.deferReply();
 
     const rawUrl = interaction.options.getString("url", true);

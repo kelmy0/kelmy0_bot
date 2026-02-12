@@ -1,0 +1,32 @@
+{
+  "common": {
+    "words": {
+      "unknown": "Unknown",
+      "category": "Category",
+      "date": "Date"
+    },
+
+    "placeholders": {
+      "no_title": "No title",
+      "no_description": "No description",
+      "no_data": "No data found",
+      "no_reason": "No reason provided"
+    },
+
+    "errors": {
+      "interaction_not_author": "Only the person who used the command can interact with these buttons!",
+      "no_guild": "This command can only be used within a server.",
+      "generic": "An error occurred: {error}"
+    }
+  },
+
+  "commands": {
+    "fun": {
+      "list-images": {
+        "author_text": "📤 Send by {user}",
+        "footer_text": "{category} • By {user} • {date} • {current} of {total}",
+        "extra_info": "Extra info"
+      }
+    }
+  }
+}

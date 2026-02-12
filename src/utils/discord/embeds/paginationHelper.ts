@@ -8,6 +8,7 @@ import {
 } from "discord.js";
 import { EmbedHelpers } from "./embedHelpers.js";
 import { registerCollector } from "../collectors.js";
+import { Translator } from "../../../types/Command.js";
 
 export class PaginationHelper {
   static async createPagination<T>(
@@ -15,9 +16,10 @@ export class PaginationHelper {
     items: T[],
     renderPage: (items: T[], page: number, totalPages: number) => EmbedBuilder,
     itemsPerPage: number = 1,
+    t: Translator,
   ) {
     if (items.length === 0) {
-      return EmbedHelpers.createEmptyEmbed("Nenhum dado encontrado!", interaction);
+      return EmbedHelpers.createEmptyEmbed(t("common.placeholders.no_data"), interaction);
     }
 
     let currentPage = 0;
@@ -65,7 +67,7 @@ export class PaginationHelper {
 
     collector.on("collect", async (i) => {
       if (i.user.id !== interaction.user.id) {
-        return i.reply({ content: "Apenas quem usou o comando pode navegar!", ephemeral: true });
+        return i.reply({ content: t("common.errors.interaction_not_author"), ephemeral: true });
       }
 
       if (i.customId === "first") currentPage = 0;

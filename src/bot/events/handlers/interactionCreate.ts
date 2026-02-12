@@ -1,6 +1,8 @@
 import { Interaction } from "discord.js";
 import { getCommands } from "../../commands/loader.js";
 import { PrismaClient } from "@prisma/client";
+import { Translator } from "../../../types/Command.js";
+import { t } from "../../../utils/i18nHelper.js";
 
 export default {
   name: "interactionCreate",
@@ -14,14 +16,19 @@ export default {
     // 2. Busca o comando no cache
     const command = commands.get(interaction.commandName);
     if (!command) {
-      console.warn(`⚠️  Comando não encontrado: ${interaction.commandName}`);
+      console.warn(`⚠️ Comando não encontrado: ${interaction.commandName}`);
       return;
     }
 
     // 3. Executa com tratamento de erros
     try {
       console.log(`▶️  Executando: /${interaction.commandName} por ${interaction.user.tag}`);
-      await command.execute(interaction, prisma);
+
+      const tForInteraction: Translator = (key, vars) => {
+        return t.get(key, interaction.locale, vars);
+      };
+
+      await command.execute(interaction, tForInteraction, prisma);
     } catch (error) {
       console.error(`❌ Erro em /${interaction.commandName}:`, error);
 

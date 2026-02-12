@@ -1,5 +1,11 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, SlashCommandOptionsOnlyBuilder } from "discord.js";
 import { PrismaClient } from "@prisma/client";
+import { TranslationPath } from "../locales/index.ts";
+
+export type Translator = (
+  key: TranslationPath,
+  vars?: Record<string, string | number | null | undefined>,
+) => string;
 
 export interface CommandMetadata {
   category: "admin" | "moderation" | "utility" | "debug" | "config" | "fun";
@@ -12,6 +18,6 @@ export interface Command {
     | SlashCommandBuilder
     | Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup">
     | SlashCommandOptionsOnlyBuilder;
-  execute: (interaction: ChatInputCommandInteraction, prisma?: PrismaClient) => Promise<void>;
+  execute: (interaction: ChatInputCommandInteraction, t: Translator, prisma?: PrismaClient) => Promise<void>;
   metadata: CommandMetadata;
 }

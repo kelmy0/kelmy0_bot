@@ -1,5 +1,5 @@
 import { ChatInputCommandInteraction, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
-import { Command } from "../../../types/Command.js";
+import { Command, Translator } from "../../../types/Command.js";
 import { PrismaClient } from "@prisma/client";
 import { requirePrisma } from "../../../utils/prisma/prismaRequire.js";
 import { getOrRegisterUser } from "../../../utils/services/userHelper.js";
@@ -39,7 +39,7 @@ export default {
 
   metadata: { category: "debug", production: false },
 
-  async execute(interaction: ChatInputCommandInteraction, prisma?: PrismaClient) {
+  async execute(interaction: ChatInputCommandInteraction, t: Translator, prisma?: PrismaClient) {
     await interaction.deferReply();
 
     const action = interaction.options.getString("action") || "list";
@@ -87,7 +87,7 @@ export default {
             return;
           }
 
-          CategoryEmbedHelper.createPaginatedCategoryembed(interaction, result.data);
+          CategoryEmbedHelper.createPaginatedCategoryembed(interaction, result.data, t);
           break;
         }
       }

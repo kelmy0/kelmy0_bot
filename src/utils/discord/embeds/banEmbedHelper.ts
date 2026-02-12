@@ -1,6 +1,7 @@
 import { ChatInputCommandInteraction, EmbedBuilder, User } from "discord.js";
 import { EmbedHelpers } from "./embedHelpers.js";
 import { PaginationHelper } from "./paginationHelper.js";
+import { Translator } from "../../../types/Command.js";
 
 export class BanEmbedHelper {
   static async createSingleBanEmbed(
@@ -45,7 +46,11 @@ export class BanEmbedHelper {
     await interaction.editReply({ embeds: [embed] });
   }
 
-  static async createPaginatedBanEmbed(interaction: ChatInputCommandInteraction, users: User[]) {
+  static async createPaginatedBanEmbed(
+    interaction: ChatInputCommandInteraction,
+    users: User[],
+    t: Translator,
+  ) {
     return PaginationHelper.createPagination(
       interaction,
       users,
@@ -53,6 +58,7 @@ export class BanEmbedHelper {
         return this.createBanListEmbed(interaction, page, total, currentUsers);
       },
       20,
+      t,
     );
   }
 

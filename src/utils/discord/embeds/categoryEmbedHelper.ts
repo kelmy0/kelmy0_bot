@@ -2,11 +2,13 @@ import { ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
 import { CategoryResponse } from "../../../services/categoryService.js";
 import { EmbedHelpers } from "./embedHelpers.js";
 import { PaginationHelper } from "./paginationHelper.js";
+import { Translator } from "../../../types/Command.js";
 
 export class CategoryEmbedHelper {
   static async createPaginatedCategoryembed(
     interaction: ChatInputCommandInteraction,
     categories: CategoryResponse[],
+    t: Translator,
   ) {
     await PaginationHelper.createPagination(
       interaction,
@@ -15,6 +17,7 @@ export class CategoryEmbedHelper {
         return this.createCategoryEmbed(interaction, currentItems, page, total, categories.length);
       },
       10, //10 categorias por pagina
+      t,
     );
   }
 

@@ -2,6 +2,7 @@ import { SlashCommandBuilder, ChatInputCommandInteraction, PermissionFlagsBits }
 import { Command } from "../../../types/Command.js";
 import { BanEmbedHelper } from "../../../utils/discord/embeds/banEmbedHelper.js";
 import { handleCommandError } from "../../../utils/discord/commandHelpers.js";
+import { Translator } from "../../../types/Command.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -14,7 +15,7 @@ export default {
     production: true,
   },
 
-  async execute(interaction: ChatInputCommandInteraction): Promise<void> {
+  async execute(interaction: ChatInputCommandInteraction, t: Translator): Promise<void> {
     await interaction.deferReply();
     try {
       if (!interaction.memberPermissions?.has(PermissionFlagsBits.BanMembers)) {
@@ -27,7 +28,7 @@ export default {
 
       const fetched = await interaction.guild.bans.fetch({ limit: 20 });
       const users = fetched.map((u) => u.user);
-      BanEmbedHelper.createPaginatedBanEmbed(interaction, users);
+      BanEmbedHelper.createPaginatedBanEmbed(interaction, users, t);
     } catch (error) {
       await handleCommandError(interaction, "ban-list", error);
     }

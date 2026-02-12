@@ -1,0 +1,32 @@
+{
+  "common": {
+    "words": {
+      "unknown": "Desconhecido",
+      "category": "Categoria",
+      "date": "Data"
+    },
+
+    "placeholders": {
+      "no_title": "Sem titulo",
+      "no_description": "Sem descrição",
+      "no_data": "Nenhum dado encontrado",
+      "no_reason": "Nenhum motivo fornecido"
+    },
+
+    "errors": {
+      "interaction_not_author": "Apenas quem usou o comando pode interagir com estes botões!",
+      "no_guild": "Este comando só pode ser usado dentro de um servidor.",
+      "generic": "Ocorreu um erro: {error}"
+    }
+  },
+
+  "commands": {
+    "fun": {
+      "list-images": {
+        "author_text": "📤 Enviado por {user}",
+        "footer_text": "{category} • Por {user} • {date} • {current} de {total}",
+        "extra_info": "Informação extra"
+      }
+    }
+  }
+}

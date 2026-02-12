@@ -1,5 +1,5 @@
 import { ChatInputCommandInteraction, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
-import { Command } from "../../../types/Command.js";
+import { Command, Translator } from "../../../types/Command.js";
 import { PrismaClient } from "@prisma/client";
 import ImageService from "../../../services/imageService.js";
 import { requirePrisma } from "../../../utils/prisma/prismaRequire.js";
@@ -22,7 +22,11 @@ export default {
     production: false,
   },
 
-  async execute(interaction: ChatInputCommandInteraction, prisma?: PrismaClient): Promise<void> {
+  async execute(
+    interaction: ChatInputCommandInteraction,
+    t: Translator,
+    prisma?: PrismaClient,
+  ): Promise<void> {
     await interaction.deferReply();
     const idOrUrl = interaction.options.getString("id-or-url", true);
     const db = requirePrisma(prisma);
@@ -37,7 +41,12 @@ export default {
         return;
       }
 
-      ImageEmbedHelper.createSingleImageEmbed(interaction, result.data, "🚫 Deleted per: " + user.username);
+      ImageEmbedHelper.createSingleImageEmbed(
+        interaction,
+        result.data,
+        t,
+        "🚫 Deleted per: " + user.username,
+      );
     } catch (error) {
       await handleCommandError(interaction, "delete-image", error);
     }
