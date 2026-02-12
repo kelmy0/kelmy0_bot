@@ -8,8 +8,6 @@ export default {
   metadata: {
     category: "fun",
     production: true,
-    description: "Envia uma foto aleatória de Miside",
-    cooldown: 5,
   },
   async execute(interaction: ChatInputCommandInteraction) {
     await interaction.reply("https://youtu.be/LlXwe-TrLlY?si=8EAxXv2jqpAmVx1m");
