@@ -69,7 +69,7 @@ export class BanEmbedHelper {
       color: "#692904",
       footer: {
         text: `Página ${currentPage + 1}/${totalPages}`,
-        iconURL: interaction.client.user?.displayAvatarURL(),
+        iconURL: interaction.client.user.displayAvatarURL(),
       },
       timestamp: true,
     });

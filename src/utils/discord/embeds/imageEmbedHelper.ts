@@ -39,7 +39,7 @@ export class ImageEmbedHelper {
       image: image.url,
       author: {
         name: `📤 Enviado por ${image.addedBy?.username}`,
-        iconURL: `${image.addedBy?.avatar || "https://cdn.discordapp.com/embed/avatars/2.png"}`,
+        iconURL: image.addedBy?.avatar,
       },
       color: "#80004f",
       footer: {

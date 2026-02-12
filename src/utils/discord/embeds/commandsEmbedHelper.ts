@@ -15,13 +15,14 @@ export class CommandsEmbedHelper {
       commandArray,
       (currentItems, page, total) => {
         // Chamamos o renderizador passando apenas os comandos da página atual
-        return this.createCommandEmbed(currentItems, page, total, commandArray.length);
+        return this.createCommandEmbed(interaction, currentItems, page, total, commandArray.length);
       },
       10, // Quantidade de comandos por página
     );
   }
 
   private static createCommandEmbed(
+    interaction: ChatInputCommandInteraction,
     pageCommands: Command[],
     page: number,
     total: number,
@@ -33,7 +34,9 @@ export class CommandsEmbedHelper {
       description: `Exibindo comandos de **${page + 1}** de **${total}** (Total: ${totalTotal})`,
       footer: {
         text: `Use /help <comando> para detalhes • Página ${page + 1}/${total}`,
+        iconURL: interaction.user.displayAvatarURL(),
       },
+      timestamp: true,
     });
 
     const categoriesInPage = new Set(pageCommands.map((c) => c.metadata.category));

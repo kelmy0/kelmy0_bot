@@ -28,11 +28,11 @@ export class CategoryEmbedHelper {
     const embed = EmbedHelpers.createEmbed({
       title: "📚 **CATEGORIAS DISPONÍVEIS**",
       color: "#0f178d",
-      thumbnail: `${interaction.guild?.iconURL() || "https://cdn.discordapp.com/embed/avatars/0.png"}`,
+      thumbnail: interaction.guild?.iconURL() ?? interaction.client.user.displayAvatarURL(),
       description: `**Total:** ${totalCategories} categorias\nSelecione uma categoria para ver as imagens:`,
       footer: {
         text: `Página ${currentPage + 1}/${totalPages} • Use /list-images categoria <nome>`,
-        iconURL: interaction.client.user?.displayAvatarURL(),
+        iconURL: interaction.client.user.displayAvatarURL(),
       },
       timestamp: true,
     });
