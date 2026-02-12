@@ -37,11 +37,11 @@ export class EmbedHelpers {
 
 interface EmbedInfo {
   title?: string;
-  description: string;
+  description?: string;
   url?: string;
   author?: { name: string; iconURL?: string };
   color?: ColorResolvable;
-  thumbnail?: string;
+  thumbnail?: string | null;
   footer?: { text: string; iconURL?: string };
   timestamp?: boolean;
   image?: string;
