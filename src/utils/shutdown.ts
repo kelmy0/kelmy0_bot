@@ -7,26 +7,26 @@ export function setupShutdownHandlers(client: Client, prisma: PrismaClient) {
   async function shutdown(signal: string) {
     if (shutdownInitiated) return;
     shutdownInitiated = true;
-    console.log(`\n🔄 Encerrando (${signal})...`);
+    console.log(`\n🔄 Closing (${signal})...`);
 
     const timeout = setTimeout(() => {
-      console.log("⚠️ Shutdown demorou demais, forçando saída...");
+      console.log("⚠️ Shutdown took too long, forcing an exit...");
       process.exit(1);
     }, 3000);
 
     try {
       if (client?.isReady()) {
         await client.destroy();
-        console.log("Discord: OK");
+        console.log("Discord: disconnected");
       }
       stopAllCollectors();
       await prisma.$disconnect();
-      console.log("Banco: OK");
+      console.log("Database: disconnected");
     } catch (err) {
-      console.log("Erro durante shutdown:", err);
+      console.log("Error during shutdown:", err);
     } finally {
       clearTimeout(timeout);
-      console.log("✅ Saindo...");
+      console.log("✅ Exiting...");
       process.exit(0);
     }
   }

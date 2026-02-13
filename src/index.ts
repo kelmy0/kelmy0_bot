@@ -8,41 +8,41 @@ import { config } from "dotenv";
 config();
 async function bootstrap() {
   try {
-    console.log("🚀 Inicializando bot Discord...");
+    console.log("🚀 Initializing Discord bot...");
 
-    // 1. Validar ambiente
+    // Validate environment
     const env = validateEnvironment();
-    console.log("✅ Ambiente validado");
+    console.log("✅ Environment validated");
 
-    // 2. Inicializar o banco de dados
+    // Initialize database
     const prisma = await getPrismaClient();
-    console.log("✅ Banco de dados conectado");
+    console.log("✅ Database connected");
 
-    // 3. Criar cliente Discord
+    // Create discord client
     const client = createDiscordClient();
-    console.log("✅ Cliente discord criado");
+    console.log("✅ Discord client created");
 
-    // 4. Carregar handlers de eventos
+    // Load event handlers
     await loadEvents(client, prisma);
-    console.log("✅ Eventos carregados");
+    console.log("✅ Events loaded");
 
-    // 5. Login
+    // Login
     await client.login(process.env.TOKEN);
 
-    // 6. Configurar graceful shutdown
+    // Configure graceful shutdown
     setupShutdownHandlers(client, prisma);
   } catch (error) {
-    console.error("❌ Falha crítica na inicialização:", error);
+    console.error("❌ Critical failure during initialization:", error);
     process.exit(1);
   }
 }
-// Handlers globais de erro
-process.on("unhandledRejection", (reason, promise) => {
-  console.error("❌ Promise não tratada:", reason);
+// Global error handlers
+process.on("unhandledRejection", (reason) => {
+  console.error("❌ Promise not resolving:", reason);
 });
 
 process.on("uncaughtException", (error) => {
-  console.error("❌ Exceção não capturada:", error);
+  console.error("❌ Uncaught exception:", error);
   process.exit(1);
 });
 

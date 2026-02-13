@@ -15,23 +15,23 @@ class Database {
         if (provider === "sqlserver") {
           const { PrismaMssql } = await import("@prisma/adapter-mssql");
           options.adapter = new PrismaMssql(db_url);
-          console.log("💾 Provedor definido: SQL Server");
+          console.log("💾 Provider defined: SQL Server");
         } else if (provider === "postgresql") {
           const { PrismaPg } = await import("@prisma/adapter-pg");
           const { default: pg } = await import("pg"!);
           const pool = new pg.Pool({ connectionString: db_url });
           options.adapter = new PrismaPg(pool);
-          console.log("🐘 Provedor definido: PostgreSQL");
+          console.log("🐘 Provider defined: PostgreSQL");
         } else if (provider === "mongodb") {
-          console.log("🍃 Provedor definido: MongoDB");
+          console.log("🍃 Provider defined: MongoDB");
         }
 
         Database.instance = new PrismaClient(options);
         await Database.instance.$connect();
-        console.log("✅ PrismaClient conectado com sucesso");
+        console.log("✅ PrismaClient connected successfully");
       } catch (error) {
         console.error(
-          "❌ Falha na conexão com o banco de dados:",
+          "❌ Database connection failed:",
           error instanceof Error ? error.message : error,
         );
         throw error;

@@ -13,7 +13,7 @@ export async function loadEvents(client: Client, prisma: PrismaInstance) {
   const eventsPath = path.join(__dirname, "handlers");
 
   if (!fs.existsSync(eventsPath)) {
-    console.warn(`⚠️  Pasta de eventos não encontrada: ${eventsPath}`);
+    console.warn(`⚠️ Event folder not found: ${eventsPath}`);
     return;
   }
 
@@ -21,7 +21,7 @@ export async function loadEvents(client: Client, prisma: PrismaInstance) {
     .readdirSync(eventsPath)
     .filter((file) => file.endsWith(".js") || file.endsWith(".ts"));
 
-  console.log(`📁 Encontrados ${eventFiles.length} handlers de evento`);
+  console.log(`📁 Found ${eventFiles.length} events handlers`);
 
   for (const file of eventFiles) {
     try {
@@ -31,7 +31,7 @@ export async function loadEvents(client: Client, prisma: PrismaInstance) {
       const event = eventModule.default;
 
       if (!event || !event.name || typeof event.execute !== "function") {
-        console.warn(`⚠️  Handler inválido em ${file}`);
+        console.warn(`⚠️ Invalid handler in ${file}`);
         continue;
       }
 
@@ -41,9 +41,9 @@ export async function loadEvents(client: Client, prisma: PrismaInstance) {
         client.on(event.name, (...args) => event.execute(...args, prisma));
       }
 
-      console.log(`✅ Evento registrado: ${event.name} (${file})`);
+      console.log(`✅ Event registered: ${event.name} (${file})`);
     } catch (error) {
-      console.error(`❌ Erro ao carregar ${file}:`, error);
+      console.error(`❌ Error loading ${file}:`, error);
     }
   }
 }
