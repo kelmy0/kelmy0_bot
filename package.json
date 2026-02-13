@@ -38,6 +38,7 @@
     "commands:global:manage": "tsx src/scripts/manage-global-commands.ts",
     "commands:global:list": "tsx src/scripts/manage-global-commands.ts --list",
     "commands:global:delete-all": "tsx src/scripts/manage-global-commands.ts --delete-all",
-    "test": "jest"
+    "test": "jest",
+    "benchmark": "tsup && pm2 start dist/tests/benchmark.js -f --name 'bot-bench' --no-autorestart && pm2 monit"
   }
 }
