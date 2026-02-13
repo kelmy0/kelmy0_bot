@@ -11,9 +11,16 @@ import { ImageEmbedHelper } from "../../../utils/discord/embeds/imageEmbedHelper
 export default {
   data: new SlashCommandBuilder()
     .setName("delete-image")
-    .setDescription("deleta uma imagem pelo id ou url")
+    .setNameLocalization("pt-BR", "deletar-imagem")
+    .setDescription("Delete image by id or URL")
+    .setDescriptionLocalization("pt-BR", "Deletar imagem pelo id ou URL")
     .addStringOption((option) =>
-      option.setName("id-or-url").setDescription("Insira o ID ou URL da imagem").setRequired(true),
+      option
+        .setName("id-or-url")
+        .setNameLocalization("pt-BR", "id-ou-url")
+        .setDescription("Enter the image ID or URL")
+        .setDescriptionLocalization("pt-BR", "Insira o ID ou URL da imagem")
+        .setRequired(true),
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 

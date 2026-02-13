@@ -11,26 +11,39 @@ import { CategoryEmbedHelper } from "../../../utils/discord/embeds/categoryEmbed
 
 export default {
   data: new SlashCommandBuilder()
-    .setName("image-category")
-    .setDescription("Gerenciar as categorias das imagens")
+    .setName("image-category-debug")
+    .setNameLocalization("pt-BR", "categoria-imagem-debug")
+
+    .setDescription("Managing image categories in development environment.")
+    .setDescriptionLocalization("pt-BR", "Gerenciar as categorias das imagens em ambiente de desenvolvimento")
+
     .addStringOption((option) =>
       option
         .setName("action")
-        .setDescription("selecione o que você quer gerenciar nas categorias")
+        .setNameLocalization("pt-BR", "ação")
+        .setDescription("Select what you want to manage in the categories")
+        .setDescriptionLocalization("pt-BR", "Selecione o que você quer gerenciar nas categorias")
         .addChoices(
-          { name: "Listar categorias", value: "list" },
-          { name: "Criar categoria", value: "create" },
-          { name: "Deletar categoria", value: "delete" },
+          { name: "List categories", name_localizations: { "pt-BR": "Listar categorias" }, value: "list" },
+          { name: "Create category", name_localizations: { "pt-BR": "Criar categoria" }, value: "create" },
+          { name: "Delete category", name_localizations: { "pt-BR": "Deletar categoria" }, value: "delete" },
         )
         .setRequired(false),
     )
     .addStringOption((option) =>
-      option.setName("name").setDescription("Nome da categoria").setRequired(false),
+      option
+        .setName("name")
+        .setNameLocalization("pt-BR", "nome")
+        .setDescription("Category name")
+        .setDescriptionLocalization("pt-BR", "Nome da categoria")
+        .setRequired(false),
     )
     .addNumberOption((option) =>
       option
         .setName("limit")
-        .setDescription("Limite de categorias para listar")
+        .setNameLocalization("pt-BR", "limite")
+        .setDescription("Limit of number of categories listed")
+        .setDescriptionLocalization("pt-BR", "Limite do número de categorias listadas")
         .setRequired(false)
         .setMinValue(1)
         .setMaxValue(50),

@@ -6,9 +6,25 @@ import { BanEmbedHelper } from "../../../utils/discord/embeds/banEmbedHelper.js"
 export default {
   data: new SlashCommandBuilder()
     .setName("ban-member")
-    .setDescription("Ban a member from server")
-    .addUserOption((option) => option.setName("user").setDescription("User to be banned").setRequired(true))
-    .addStringOption((option) => option.setName("reason").setDescription("Ban reason").setRequired(true))
+    .setNameLocalization("pt-BR", "banir-membro")
+    .setDescription("Ban a member")
+    .setDescriptionLocalization("pt-BR", "Banir um membro")
+    .addUserOption((option) =>
+      option
+        .setName("user")
+        .setNameLocalization("pt-BR", "usuario")
+        .setDescription("User to be banned")
+        .setDescriptionLocalization("pt-BR", "Usuário a ser banido")
+        .setRequired(true),
+    )
+    .addStringOption((option) =>
+      option
+        .setName("reason")
+        .setNameLocalization("pt-BR", "motivo")
+        .setDescription("Ban reason")
+        .setDescriptionLocalization("pt-BR", "Motivo do banimento")
+        .setRequired(true),
+    )
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
 
   metadata: {

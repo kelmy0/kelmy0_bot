@@ -11,21 +11,51 @@ import { Translator } from "../../../types/Command.js";
 export default {
   data: new SlashCommandBuilder()
     .setName("add-image")
-    .setDescription("Envia URL de uma imagem ao banco de dados do ambiente de desenvolvimento")
-    .addStringOption((option) => option.setName("url").setDescription("Url da imagem").setRequired(true))
+    .setNameLocalization("pt-BR", "adicionar-imagem")
+
+    .setDescription("Send image URL to development environment database")
+    .setDescriptionLocalization(
+      "pt-BR",
+      "Envia URL de imagem ao banco de dados do ambiente de desenvolvimento",
+    )
+
     .addStringOption((option) =>
-      option.setName("title").setDescription("Um titulo para a imagem").setRequired(true).setMaxLength(50),
+      option
+        .setName("url")
+        .setDescription("Image URL")
+        .setDescriptionLocalization("pt-BR", "URL da imagem")
+        .setRequired(true),
     )
     .addStringOption((option) =>
-      option.setName("category").setDescription("categoria da imagem").setRequired(true),
+      option
+        .setName("title")
+        .setNameLocalization("pt-BR", "Título")
+        .setDescription("Image title")
+        .setDescriptionLocalization("pt-BR", "Titulo da imagem")
+        .setRequired(true)
+        .setMaxLength(50),
     )
     .addStringOption((option) =>
-      option.setName("tags").setDescription("Tags separadas por vírgula").setRequired(false),
+      option
+        .setName("category")
+        .setNameLocalization("pt-BR", "categoria")
+        .setDescription("Image category")
+        .setDescriptionLocalization("pt-BR", "Categoria da imagem")
+        .setRequired(true),
+    )
+    .addStringOption((option) =>
+      option
+        .setName("tags")
+        .setDescription("Tags to identify the image, separated by commas")
+        .setDescriptionLocalization("pt-BR", "Tags para identificar a imagem, separe por virgulas")
+        .setRequired(false),
     )
     .addStringOption((option) =>
       option
         .setName("description")
-        .setDescription("Uma descricao breve para a imagem")
+        .setNameLocalization("pt-BR", "descrição")
+        .setDescription("Image description")
+        .setDescriptionLocalization("pt-BR", "Descrição da imagem")
         .setMaxLength(255)
         .setRequired(false),
     )

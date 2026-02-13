@@ -3,7 +3,8 @@
     "words": {
       "unknown": "Desconhecido",
       "category": "Categoria",
-      "date": "Data"
+      "date": "Data",
+      "empty": "Vazio"
     },
 
     "placeholders": {
@@ -26,6 +27,14 @@
         "author_text": "📤 Enviado por {user}",
         "footer_text": "{category} • Por {user} • {date} • {current} de {total}",
         "extra_info": "Informação extra"
+      }
+    },
+
+    "utility": {
+      "list-commands": {
+        "title": "📋 Comandos Disponíveis",
+        "description": "Exibindo página **{page}** de **{total}** (Total: {totalComandos} comandos)",
+        "footer_text": "Use /help <comando> para mais detalhes • Página {page}/{total}"
       }
     }
   }

@@ -15,10 +15,9 @@ export class CommandsEmbedHelper {
       interaction,
       commandArray,
       (currentItems, page, total) => {
-        // Chamamos o renderizador passando apenas os comandos da página atual
-        return this.createCommandEmbed(interaction, currentItems, page, total, commandArray.length);
+        return this.createCommandEmbed(interaction, currentItems, page, total, commandArray.length, t);
       },
-      10, // Quantidade de comandos por página
+      10,
       t,
     );
   }
@@ -28,14 +27,19 @@ export class CommandsEmbedHelper {
     pageCommands: Command[],
     page: number,
     total: number,
-    totalTotal: number,
+    totalComandos: number,
+    t: Translator,
   ) {
     const embed = EmbedHelpers.createEmbed({
-      title: "📋 Comandos Disponíveis",
+      title: t("commands.utility.list-commands.title"),
       color: "#0099ff",
-      description: `Exibindo comandos de **${page + 1}** de **${total}** (Total: ${totalTotal})`,
+      description: t("commands.utility.list-commands.description", {
+        page: page + 1,
+        total: total,
+        totalComandos: totalComandos,
+      }),
       footer: {
-        text: `Use /help <comando> para detalhes • Página ${page + 1}/${total}`,
+        text: t("commands.utility.list-commands.footer_text", { page: page + 1, total: total }),
         iconURL: interaction.user.displayAvatarURL(),
       },
       timestamp: true,
@@ -51,7 +55,7 @@ export class CommandsEmbedHelper {
 
       embed.addFields({
         name: `⭐ ${cat.toUpperCase()}`,
-        value: catCommands || "Vazio",
+        value: catCommands || t("common.words.empty"),
         inline: false,
       });
     });

@@ -6,9 +6,25 @@ import { BanEmbedHelper } from "../../../utils/discord/embeds/banEmbedHelper.js"
 export default {
   data: new SlashCommandBuilder()
     .setName("kick-member")
-    .setDescription("Kick a member from server")
-    .addUserOption((option) => option.setName("user").setDescription("User to be kicked").setRequired(true))
-    .addStringOption((option) => option.setName("reason").setDescription("Kick reason").setRequired(true))
+    .setNameLocalization("pt-BR", "expulsar-membro")
+    .setDescription("Kick a member")
+    .setDescriptionLocalization("pt-BR", "Expulsa um membro")
+    .addUserOption((option) =>
+      option
+        .setName("user")
+        .setNameLocalization("pt-BR", "usuario")
+        .setDescription("User to be kicked")
+        .setDescriptionLocalization("pt-BR", "Usuário a ser expulso")
+        .setRequired(true),
+    )
+    .addStringOption((option) =>
+      option
+        .setName("reason")
+        .setNameLocalization("pt-BR", "motivo")
+        .setDescription("Kick reason")
+        .setDescriptionLocalization("pt-BR", "Motivo da expulsão")
+        .setRequired(true),
+    )
     .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers),
 
   metadata: {

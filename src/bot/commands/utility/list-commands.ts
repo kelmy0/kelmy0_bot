@@ -6,7 +6,10 @@ import { CommandsEmbedHelper } from "../../../utils/discord/embeds/commandsEmbed
 export default {
   data: new SlashCommandBuilder()
     .setName("list-commands")
-    .setDescription("Lista todos os comandos do bot por categoria."),
+    .setNameLocalization("pt-BR", "listar-comandos")
+
+    .setDescription("List all bot's commands per category")
+    .setDescriptionLocalization("pt-BR", "Lista todos os comandos do bot por categoria"),
 
   metadata: {
     category: "utility",

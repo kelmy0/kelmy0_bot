@@ -3,7 +3,8 @@
     "words": {
       "unknown": "Unknown",
       "category": "Category",
-      "date": "Date"
+      "date": "Date",
+      "empty": "Empty"
     },
 
     "placeholders": {
@@ -26,6 +27,14 @@
         "author_text": "📤 Send by {user}",
         "footer_text": "{category} • By {user} • {date} • {current} of {total}",
         "extra_info": "Extra info"
+      }
+    },
+
+    "utility": {
+      "list-commands": {
+        "title": "📋 Available commands",
+        "description": "Displaying page **{page}** of **{total}** (Total: {totalComandos} commands)",
+        "footer_text": "Use /help <comando> to more details • Page {page}/{total}"
       }
     }
   }

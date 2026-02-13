@@ -6,8 +6,10 @@ import { Translator } from "../../../types/Command.js";
 
 export default {
   data: new SlashCommandBuilder()
-    .setName("ban-list")
-    .setDescription("Lista todos os usuários banidos do servidor")
+    .setName("list-ban")
+    .setNameLocalization("pt-BR", "listar-banimentos")
+    .setDescription("List all banned members")
+    .setDescriptionLocalization("pt-BR", "Lista todos os membros banidos")
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
 
   metadata: {
