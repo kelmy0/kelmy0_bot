@@ -1,12 +1,13 @@
 import { PermissionFlagsBits, SlashCommandBuilder, ChatInputCommandInteraction } from "discord.js";
 import { PrismaClient } from "@prisma/client";
-import { Command } from "../../../types/Command.js";
-import { requirePrisma } from "../../../utils/prisma/prismaRequire.js";
+import { Command, Translator } from "../../../types/index.js";
 import ImageService from "../../../services/imageService.js";
-import { handleCommandError } from "../../../utils/discord/commandHelpers.js";
-import { getOrRegisterUser } from "../../../utils/services/userHelper.js";
-import { handleServiceResponse } from "../../../utils/discord/responseHandler.js";
-import { Translator } from "../../../types/Command.js";
+import {
+  requirePrisma,
+  handleCommandError,
+  getOrRegisterUser,
+  handleServiceResponse,
+} from "../../../utils/index.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -75,24 +76,27 @@ export default {
     const rawTitle = interaction.options.getString("title", true);
     const rawDescription = interaction.options.getString("description");
 
-    const db = requirePrisma(prisma);
-    const imageService = new ImageService(db);
-
     try {
+      const db = requirePrisma(prisma);
+      const imageService = new ImageService(db);
+
       const user = await getOrRegisterUser(db, interaction);
 
-      const result = await imageService.addImageUrl({
-        url: rawUrl,
-        title: rawTitle,
-        description: rawDescription,
-        tags: rawTags,
-        category: rawCategory,
-        addedById: user.id,
-      });
+      const result = await imageService.addImageUrl(
+        {
+          url: rawUrl,
+          title: rawTitle,
+          description: rawDescription,
+          tags: rawTags,
+          category: rawCategory,
+          addedById: user.id,
+        },
+        t,
+      );
 
       await handleServiceResponse(interaction, result);
     } catch (error) {
-      await handleCommandError(interaction, "add-image", error);
+      await handleCommandError(interaction, "add-image", error, t);
     }
   },
 } satisfies Command;

@@ -1,7 +1,6 @@
 import { ChatInputCommandInteraction, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
-import { Command } from "../../../types/Command.js";
-import { BanEmbedHelper } from "../../../utils/discord/embeds/banEmbedHelper.js";
-import { handleCommandError } from "../../../utils/discord/commandHelpers.js";
+import { Command, Translator } from "../../../types/Command.js";
+import { handleCommandError, BanEmbedHelper } from "../../../utils/index.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -32,27 +31,33 @@ export default {
     production: true,
   },
 
-  async execute(interaction: ChatInputCommandInteraction) {
+  async execute(interaction: ChatInputCommandInteraction, t: Translator) {
     await interaction.deferReply();
 
     const unbanId = interaction.options.getString("userid", true);
     const reason = interaction.options.getString("reason", true);
     try {
       if (!interaction.memberPermissions?.has(PermissionFlagsBits.BanMembers)) {
-        throw new Error("Você não tem permissão para desbanir membros.");
+        throw new Error(t("common.errors.no_permission"));
       }
 
       if (!interaction.guild) {
-        throw new Error("Não foi possivel achar o servidor!");
+        throw new Error(t("common.errors.no_guild"));
       }
 
       const unbanMember = (await interaction.guild.bans.fetch(unbanId)).user.tag;
 
       await interaction.guild.members.unban(unbanId, reason);
 
-      await BanEmbedHelper.createSingleBanEmbed(interaction, "🔓Unban", reason, unbanMember);
+      await BanEmbedHelper.createSingleBanEmbed(
+        interaction,
+        t("commands.moderation.unban-member.title"),
+        reason,
+        unbanMember,
+        t,
+      );
     } catch (error) {
-      await handleCommandError(interaction, "unban-member", error);
+      await handleCommandError(interaction, "unban-member", error, t);
     }
   },
 } satisfies Command;

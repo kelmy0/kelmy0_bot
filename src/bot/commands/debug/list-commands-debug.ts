@@ -1,8 +1,9 @@
-import { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction } from "discord.js";
+import { SlashCommandBuilder, ChatInputCommandInteraction } from "discord.js";
 import type { Command } from "../../../types/Command.js";
 import { getCommands } from "../loader.js";
-import { CommandsEmbedHelper } from "../../../utils/discord/embeds/commandsEmbedHelper.js";
+import { CommandsEmbedHelper } from "../../../utils/index.js";
 import { Translator } from "../../../types/Command.js";
+
 export default {
   data: new SlashCommandBuilder()
     .setName("list-commands-debug")

@@ -1,17 +1,19 @@
 import { ChatInputCommandInteraction } from "discord.js";
-import { splitMessage } from "../string/splitter.js";
+import { splitMessage } from "../index.js";
+import { Translator } from "../../types/Command.js";
 
 export async function handleCommandError(
   interaction: ChatInputCommandInteraction,
   action: string,
   error: unknown,
+  t: Translator,
 ): Promise<void> {
-  console.error(`Erro em ${action}:`, error);
+  console.error(`Error in ${action}:`, error);
 
-  const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
+  const errorMessage = error instanceof Error ? error.message : t("common.words.unknown");
 
   await interaction.editReply({
-    content: `❌ Erro interno ao processar comando: ${errorMessage}`,
+    content: t("common.errors.generic", { error: errorMessage }),
   });
 }
 

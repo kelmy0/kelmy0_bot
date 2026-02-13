@@ -4,7 +4,10 @@
       "unknown": "Desconhecido",
       "category": "Categoria",
       "date": "Data",
-      "empty": "Vazio"
+      "empty": "Vazio",
+      "user_target": "👤 Usuário alvo",
+      "reason": "📝 Motivo",
+      "moderator": "🛡️ Moderador"
     },
 
     "placeholders": {
@@ -15,13 +18,32 @@
     },
 
     "errors": {
+      "no_permission": "Você não tem permissão para usar esse comando.",
       "interaction_not_author": "Apenas quem usou o comando pode interagir com estes botões!",
       "no_guild": "Este comando só pode ser usado dentro de um servidor.",
+      "user_not_found": "Não foi possivel achar o usuário.",
+      "invalid_parameter": "Parametro inválido.",
       "generic": "Ocorreu um erro: {error}"
     }
   },
 
   "commands": {
+    "debug": {
+      "common": {
+        "invalid_url": "URL inválida!",
+        "empty_category": "Categoria é obrigatória!",
+        "category_not_found": "Categoria **{category}** não encontrada!",
+        "image_not_found": "Imagem não encontrada!"
+      },
+      "add-image": {
+        "success": "Imagem adicionada!",
+        "duplicate_image": "Essa imagem já existe no banco de dados!\nuse **/buscar-imagem-por** para achá-la!"
+      },
+      "delete-image": {
+        "success": "Imagem deletada!",
+        "deleted_per": "🚫Deletada por: {user}"
+      }
+    },
     "fun": {
       "list-images": {
         "author_text": "📤 Enviado por {user}",
@@ -36,6 +58,32 @@
         "description": "Exibindo página **{page}** de **{total}** (Total: {totalComandos} comandos)",
         "footer_text": "Use /help <comando> para mais detalhes • Página {page}/{total}"
       }
+    },
+
+    "moderation": {
+      "common": {
+        "action_name": "Ação de Moderação",
+        "moderator_id": "ID do Moderador: {id}"
+      },
+      "ban-member": {
+        "title": "🚫Banimento"
+      },
+      "unban-member": {
+        "title": "🔓Desbanimento"
+      },
+      "kick-member": {
+        "title": "👟Expulsão"
+      },
+      "list-bans": {
+        "title": "👥 Usuários banidos",
+        "footer_text": "Página {currentPage}/{totalPages}"
+      }
+    }
+  },
+
+  "prisma": {
+    "errors": {
+      "invalid_reference": "Referência inválida passada!"
     }
   }
 }

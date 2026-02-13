@@ -1,7 +1,7 @@
-import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { Command, Translator } from "../../../types/Command.js";
 import { getCommands } from "../loader.js";
-import { CommandsEmbedHelper } from "../../../utils/discord/embeds/commandsEmbedHelper.js";
+import { CommandsEmbedHelper } from "../../../utils/index.js";
 
 export default {
   data: new SlashCommandBuilder()

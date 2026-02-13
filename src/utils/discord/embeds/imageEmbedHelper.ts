@@ -27,7 +27,7 @@ export class ImageEmbedHelper {
       (currentItems, page, total) => {
         return this.createImageEmbed(interaction, currentItems[0], page, total, t);
       },
-      1, //1 imagem por pagina
+      1, //1 image per page
       t,
     );
   }

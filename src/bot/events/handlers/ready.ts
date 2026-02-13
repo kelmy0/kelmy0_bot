@@ -10,9 +10,9 @@ export default {
       return;
     }
 
-    console.log(`🤖 Bot online como ${client.user.tag}`);
+    console.log(`🤖 Bot online like ${client.user.tag}`);
 
     const guilds = client.guilds.cache;
-    console.log(`📊 Conectado em ${guilds.size} servidores`);
+    console.log(`📊 Conected in ${guilds.size} guilds`);
   },
 };

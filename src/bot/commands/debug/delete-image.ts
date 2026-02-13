@@ -2,11 +2,13 @@ import { ChatInputCommandInteraction, PermissionFlagsBits, SlashCommandBuilder }
 import { Command, Translator } from "../../../types/Command.js";
 import { PrismaClient } from "@prisma/client";
 import ImageService from "../../../services/imageService.js";
-import { requirePrisma } from "../../../utils/prisma/prismaRequire.js";
-import { handleCommandError } from "../../../utils/discord/commandHelpers.js";
-import { getOrRegisterUser } from "../../../utils/services/userHelper.js";
-import { handleServiceResponse } from "../../../utils/discord/responseHandler.js";
-import { ImageEmbedHelper } from "../../../utils/discord/embeds/imageEmbedHelper.js";
+import {
+  requirePrisma,
+  handleCommandError,
+  getOrRegisterUser,
+  handleServiceResponse,
+  ImageEmbedHelper,
+} from "../../../utils/index.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -36,13 +38,15 @@ export default {
   ): Promise<void> {
     await interaction.deferReply();
     const idOrUrl = interaction.options.getString("id-or-url", true);
-    const db = requirePrisma(prisma);
-    const imageService = new ImageService(db);
 
     try {
+      const db = requirePrisma(prisma);
+      const imageService = new ImageService(db);
+
       const user = await getOrRegisterUser(db, interaction);
 
-      const result = await imageService.deleteImage(idOrUrl);
+      const result = await imageService.deleteImage(idOrUrl, t);
+
       if (!result.success || !result.data) {
         await handleServiceResponse(interaction, result);
         return;
@@ -52,10 +56,10 @@ export default {
         interaction,
         result.data,
         t,
-        "🚫 Deleted per: " + user.username,
+        t("commands.debug.delete-image.deleted_per", { user: user.username }),
       );
     } catch (error) {
-      await handleCommandError(interaction, "delete-image", error);
+      await handleCommandError(interaction, "delete-image", error, t);
     }
   },
 } satisfies Command;

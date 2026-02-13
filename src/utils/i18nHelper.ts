@@ -9,7 +9,7 @@ export class t {
   static get(
     key: TranslationPath,
     locale: string,
-    vars: Record<string, string | number> = {},
+    vars: Record<string, string | number | null | undefined> = {},
   ): string {
     const translations = locales[locale as keyof typeof locales] || locales["en-US"];
 

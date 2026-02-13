@@ -1,8 +1,6 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, PermissionFlagsBits } from "discord.js";
-import { Command } from "../../../types/Command.js";
-import { BanEmbedHelper } from "../../../utils/discord/embeds/banEmbedHelper.js";
-import { handleCommandError } from "../../../utils/discord/commandHelpers.js";
-import { Translator } from "../../../types/Command.js";
+import { Command, Translator } from "../../../types/Command.js";
+import { handleCommandError, BanEmbedHelper } from "../../../utils/index.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -21,18 +19,18 @@ export default {
     await interaction.deferReply();
     try {
       if (!interaction.memberPermissions?.has(PermissionFlagsBits.BanMembers)) {
-        throw new Error("Você não tem permissão para ver a lista de banidos.");
+        throw new Error(t("common.errors.no_permission"));
       }
 
       if (!interaction.guild) {
-        throw new Error("Não foi possivel requisitar a guild");
+        throw new Error(t("common.errors.no_guild"));
       }
 
       const fetched = await interaction.guild.bans.fetch({ limit: 20 });
       const users = fetched.map((u) => u.user);
       BanEmbedHelper.createPaginatedBanEmbed(interaction, users, t);
     } catch (error) {
-      await handleCommandError(interaction, "ban-list", error);
+      await handleCommandError(interaction, "ban-list", error, t);
     }
   },
 } satisfies Command;

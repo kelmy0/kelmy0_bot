@@ -1,11 +1,13 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { Command, Translator } from "../../../types/Command.js";
-import { handleCommandError } from "../../../utils/discord/commandHelpers.js";
 import { PrismaClient } from "@prisma/client";
-import { requirePrisma } from "../../../utils/prisma/prismaRequire.js";
 import ImageService from "../../../services/imageService.js";
-import { handleServiceResponse } from "../../../utils/discord/responseHandler.js";
-import { ImageEmbedHelper } from "../../../utils/discord/embeds/imageEmbedHelper.js";
+import {
+  ImageEmbedHelper,
+  handleServiceResponse,
+  requirePrisma,
+  handleCommandError,
+} from "../../../utils/index.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -76,7 +78,7 @@ export default {
 
       ImageEmbedHelper.createPaginatedImageEmbed(interaction, result.data, t);
     } catch (error) {
-      await handleCommandError(interaction, "list-images", error);
+      await handleCommandError(interaction, "list-images", error, t);
     }
   },
 } satisfies Command;

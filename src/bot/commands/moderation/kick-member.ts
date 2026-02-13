@@ -1,7 +1,6 @@
 import { ChatInputCommandInteraction, PermissionFlagsBits, SlashCommandBuilder, User } from "discord.js";
-import { Command } from "../../../types/Command.js";
-import { handleCommandError } from "../../../utils/discord/commandHelpers.js";
-import { BanEmbedHelper } from "../../../utils/discord/embeds/banEmbedHelper.js";
+import { Command, Translator } from "../../../types/Command.js";
+import { handleCommandError, BanEmbedHelper } from "../../../utils/index.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -32,7 +31,7 @@ export default {
     production: true,
   },
 
-  async execute(interaction: ChatInputCommandInteraction): Promise<void> {
+  async execute(interaction: ChatInputCommandInteraction, t: Translator): Promise<void> {
     await interaction.deferReply();
 
     const memberKicked = interaction.options.getUser("user", true) as User;
@@ -40,23 +39,29 @@ export default {
 
     try {
       if (!interaction.memberPermissions?.has(PermissionFlagsBits.KickMembers)) {
-        throw new Error("Você não tem permissão para kickar membros.");
+        throw new Error(t("common.errors.no_permission"));
       }
 
       if (!interaction.guild) {
-        throw new Error("Não foi possivel achar o servidor!");
+        throw new Error(t("common.errors.no_guild"));
       }
 
       const member = await interaction.guild.members.fetch(memberKicked.id).catch(() => null);
 
       if (!member) {
-        throw new Error("Não encontrei esse usuário no servidor.");
+        throw new Error(t("common.errors.user_not_found"));
       }
 
       await member.kick(reason);
-      await BanEmbedHelper.createSingleBanEmbed(interaction, "👟Kick", reason, member.user.tag);
+      await BanEmbedHelper.createSingleBanEmbed(
+        interaction,
+        t("commands.moderation.kick-member.title"),
+        reason,
+        member.user.tag,
+        t,
+      );
     } catch (error) {
-      await handleCommandError(interaction, "kick-member", error);
+      await handleCommandError(interaction, "kick-member", error, t);
     }
   },
 } satisfies Command;

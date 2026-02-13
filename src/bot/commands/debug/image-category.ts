@@ -1,13 +1,15 @@
 import { ChatInputCommandInteraction, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { Command, Translator } from "../../../types/Command.js";
 import { PrismaClient } from "@prisma/client";
-import { requirePrisma } from "../../../utils/prisma/prismaRequire.js";
-import { getOrRegisterUser } from "../../../utils/services/userHelper.js";
-import { normalizeCategoryName } from "../../../utils/services/categoryHelper.js";
-import { handleServiceResponse } from "../../../utils/discord/responseHandler.js";
-import { handleCommandError } from "../../../utils/discord/commandHelpers.js";
 import CategoryService from "../../../services/categoryService.js";
-import { CategoryEmbedHelper } from "../../../utils/discord/embeds/categoryEmbedHelper.js";
+import {
+  CategoryEmbedHelper,
+  handleCommandError,
+  handleServiceResponse,
+  normalizeCategoryName,
+  getOrRegisterUser,
+  requirePrisma,
+} from "../../../utils/index.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -105,7 +107,7 @@ export default {
         }
       }
     } catch (error) {
-      await handleCommandError(interaction, `image-category ${action}`, error);
+      await handleCommandError(interaction, `image-category ${action}`, error, t);
     }
   },
 } satisfies Command;

@@ -1,9 +1,14 @@
 import { BaseService } from "./base/BaseService.js";
-import { ServiceResponse } from "../types/ServiceResponse.js";
-import { handlePrismaError, PrismaErrorHandlers } from "../utils/prisma/errorHandler.js";
-import { normalizeString } from "../utils/string/normalizer.js";
-import { normalizeIdOrUrl, normalizeImageUrl, normalizeTags } from "../utils/services/imagesHelper.js";
+import { ServiceResponse, Translator } from "../types/index.js";
 import { Image, PrismaClient } from "@prisma/client";
+import {
+  normalizeIdOrUrl,
+  normalizeImageUrl,
+  normalizeTags,
+  normalizeString,
+  handlePrismaError,
+  PrismaErrorHandlers,
+} from "../utils/index.js";
 
 export interface ImageInfo {
   url: string;
@@ -37,11 +42,11 @@ export default class ImageService extends BaseService {
     super(prisma);
   }
 
-  public async addImageUrl(infos: ImageInfo): Promise<ServiceResponse<ImageResponse>> {
+  public async addImageUrl(infos: ImageInfo, t: Translator): Promise<ServiceResponse<ImageResponse>> {
     try {
       const normalizedUrl = normalizeImageUrl(infos.url);
       if (!normalizedUrl) {
-        return this.error(`URL inválida!`, "INVALID_URL");
+        return this.error(t("commands.debug.common.invalid_url"), "INVALID_URL");
       }
 
       const normalizedCategory = normalizeString(infos.category, {
@@ -52,7 +57,7 @@ export default class ImageService extends BaseService {
       });
 
       if (!normalizedCategory) {
-        return this.error(`❌ Categoria não pode estar vazia!`, "INVALID_CATEGORY");
+        return this.error(t("commands.debug.common.empty_category"), "INVALID_CATEGORY");
       }
 
       const category = await this.prisma.imagesCategory.findUnique({
@@ -60,7 +65,10 @@ export default class ImageService extends BaseService {
       });
 
       if (!category) {
-        return this.error(`❌ Categoria "${infos.category}" não existe!`, "CATEGORY_NOT_FOUND");
+        return this.error(
+          t("commands.debug.common.category_not_found", { category: infos.category }),
+          "CATEGORY_NOT_FOUND",
+        );
       }
 
       // Verificar se usuário existe
@@ -70,7 +78,7 @@ export default class ImageService extends BaseService {
       });
 
       if (!userExists) {
-        return this.error(`❌ Usuário não cadastrado!`, "USER_NOT_FOUND");
+        return this.error(t("common.errors.user_not_found"), "USER_NOT_FOUND");
       }
 
       const normalizedTags = infos.tags ? normalizeTags(infos.tags) : null;
@@ -107,28 +115,26 @@ export default class ImageService extends BaseService {
       });
 
       return this.success(
-        "Imagem adicionada com sucesso!",
+        t("commands.debug.add-image.success"),
         this.mapToResponse<Image, ImageResponse>(newImage),
       );
     } catch (error) {
       return handlePrismaError(error, {
         P2002: PrismaErrorHandlers.duplicateEntry(
-          `Esta imagem já existe no banco de dados!\n` +
-            `use **/find-image-by** para informações dessa imagem.`,
+          t("commands.debug.add-image.duplicate_image"),
           "DUPLICATE_IMAGE",
         ),
-        P2003: () =>
-          this.error(`Referência inválida (usuário ou categoria não existe)`, "FOREIGN_KEY_CONSTRAINT"),
+        P2003: () => this.error(t("prisma.errors.invalid_reference"), "FOREIGN_KEY_CONSTRAINT"),
       });
     }
   }
 
-  public async deleteImage(rawIdOrUrl: string): Promise<ServiceResponse<ImageResponse>> {
+  public async deleteImage(rawIdOrUrl: string, t: Translator): Promise<ServiceResponse<ImageResponse>> {
     try {
       const idOrUrl = normalizeIdOrUrl(rawIdOrUrl);
 
       if (idOrUrl.type === "error") {
-        return this.error("Parametro inválido! Use uma URL válida ou id", "INVALID_PARAMETER");
+        return this.error(t("common.errors.invalid_parameter"), "INVALID_PARAMETER");
       }
 
       let whereParam: { url: string } | { id: string };
@@ -147,12 +153,12 @@ export default class ImageService extends BaseService {
       });
 
       return this.success(
-        `Imagem **${deleted.url}** deletada com sucesso!`,
+        t("commands.debug.delete-image.success"),
         this.mapToResponse<Image, ImageResponse>(deleted),
       );
     } catch (error) {
       return handlePrismaError(error, {
-        P2025: PrismaErrorHandlers.notFound(`❌ Imagem com não encontrada!`, "IMAGE_NOT_FOUND"),
+        P2025: PrismaErrorHandlers.notFound(t("commands.debug.common.image_not_found"), "IMAGE_NOT_FOUND"),
       });
     }
   }

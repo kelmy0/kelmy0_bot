@@ -4,7 +4,10 @@
       "unknown": "Unknown",
       "category": "Category",
       "date": "Date",
-      "empty": "Empty"
+      "empty": "Empty",
+      "user_target": "👤 User target",
+      "reason": "📝 Reason",
+      "moderator": "🛡️ Moderator"
     },
 
     "placeholders": {
@@ -15,13 +18,33 @@
     },
 
     "errors": {
+      "no_permission": "You don't have permission to use this command.",
       "interaction_not_author": "Only the person who used the command can interact with these buttons!",
       "no_guild": "This command can only be used within a server.",
+      "user_not_found": "The user could not be found.",
+      "invalid_parameter": "Invalid parameter.",
       "generic": "An error occurred: {error}"
     }
   },
 
   "commands": {
+    "debug": {
+      "common": {
+        "invalid_url": "Invalid URL!",
+        "empty_category": "Category is required!",
+        "category_not_found": "Category **{category}** not found!",
+        "image_not_found": "Image not found!"
+      },
+      "add-image": {
+        "success": "Image added!",
+        "duplicate_image": "This image already existis in database!\nuse **/find-image-by** to find it!"
+      },
+      "delete-image": {
+        "success": "Image deleted!",
+        "deleted_per": "🚫Deleted per: {user}"
+      }
+    },
+
     "fun": {
       "list-images": {
         "author_text": "📤 Send by {user}",
@@ -36,6 +59,32 @@
         "description": "Displaying page **{page}** of **{total}** (Total: {totalComandos} commands)",
         "footer_text": "Use /help <comando> to more details • Page {page}/{total}"
       }
+    },
+
+    "moderation": {
+      "common": {
+        "action_name": "Moderation action",
+        "moderator_id": "Moderator ID: {id}"
+      },
+      "ban-member": {
+        "title": "🚫Baniment"
+      },
+      "unban-member": {
+        "title": "🔓Unban"
+      },
+      "kick-member": {
+        "title": "👟 Kick"
+      },
+      "list-bans": {
+        "title": "👥 Banned users",
+        "footer_text": "Page {currentPage}/{totalPages}"
+      }
+    }
+  },
+
+  "prisma": {
+    "errors": {
+      "invalid_reference": "Invalid reference passed!"
     }
   }
 }

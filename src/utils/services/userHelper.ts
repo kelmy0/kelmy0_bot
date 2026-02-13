@@ -6,7 +6,7 @@ export function extractDiscordUserInfo(interaction: Interaction): DiscordUserInf
   const user = interaction.user || interaction.member?.user;
 
   if (!user) {
-    throw new Error("Não foi possível obter informações do usuário do Discord");
+    throw new Error("Discord user information not available");
   }
 
   return {
@@ -27,13 +27,13 @@ export async function getOrRegisterUser(
     const result = await userService.upsertUser(discordInfo);
 
     if (!result.success || !result.data) {
-      console.warn(`Falha ao upsert usuário: ${result.message}`);
+      console.warn(`Failed to upsert user: ${result.message}`);
       return { id: discordInfo.id, username: discordInfo.username };
     }
 
     return { username: result.data.username, id: result.data.id };
   } catch (error) {
-    console.error("Erro crítico em getOrRegisterUser:", error);
+    console.error("Critical error in getOrRegisterUser:", error);
     const discordInfo = extractDiscordUserInfo(interaction);
     return { id: discordInfo.id, username: discordInfo.username };
   }

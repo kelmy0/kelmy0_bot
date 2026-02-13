@@ -9,17 +9,18 @@ export class BanEmbedHelper {
     title: string,
     reason: string,
     member: string,
+    t: Translator,
   ) {
     const embed = EmbedHelpers.createEmbed({
       title: title,
       thumbnail: interaction.guild?.iconURL(),
       author: {
-        name: `Ação de Moderação`,
+        name: t("commands.moderation.common.action_name"),
         iconURL: interaction.guild?.iconURL() || undefined,
       },
       color: /unban/i.test(title) ? "#2ecc71" : "#e74c3c",
       footer: {
-        text: `ID do Executor: ${interaction.user.id}`,
+        text: t("commands.moderation.common.moderator_id", { id: interaction.user.id }),
         iconURL: interaction.user.displayAvatarURL(),
       },
       timestamp: true,
@@ -27,17 +28,17 @@ export class BanEmbedHelper {
 
     embed.addFields(
       {
-        name: "👤 Usuário Atigido",
+        name: t("common.words.user_target"),
         value: `\`${member}\``,
         inline: true,
       },
       {
-        name: "🛡️ Moderador Responsável",
+        name: t("common.words.moderator"),
         value: `${interaction.user}`,
         inline: true,
       },
       {
-        name: "📝 Motivo",
+        name: t("common.words.reason"),
         value: `\`\`\`${reason}\`\`\``,
         inline: false,
       },
@@ -55,7 +56,7 @@ export class BanEmbedHelper {
       interaction,
       users,
       (currentUsers, page, total) => {
-        return this.createBanListEmbed(interaction, page, total, currentUsers);
+        return this.createBanListEmbed(interaction, page, total, currentUsers, t);
       },
       20,
       t,
@@ -67,14 +68,17 @@ export class BanEmbedHelper {
     currentPage: number,
     totalPages: number,
     users: User[],
+    t: Translator,
   ): EmbedBuilder {
     const embed = EmbedHelpers.createEmbed({
-      title: "👥 Banned users",
-      description: "",
+      title: t("commands.moderation.list-bans.title"),
       thumbnail: interaction.guild?.iconURL(),
       color: "#692904",
       footer: {
-        text: `Página ${currentPage + 1}/${totalPages}`,
+        text: t("commands.moderation.list-bans.footer_text", {
+          currentPage: currentPage + 1,
+          totalPages: totalPages,
+        }),
         iconURL: interaction.client.user.displayAvatarURL(),
       },
       timestamp: true,

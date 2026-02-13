@@ -1,7 +1,6 @@
 import { ChatInputCommandInteraction, PermissionFlagsBits, SlashCommandBuilder, User } from "discord.js";
-import { Command } from "../../../types/Command.js";
-import { handleCommandError } from "../../../utils/discord/commandHelpers.js";
-import { BanEmbedHelper } from "../../../utils/discord/embeds/banEmbedHelper.js";
+import { Command, Translator } from "../../../types/Command.js";
+import { handleCommandError, BanEmbedHelper } from "../../../utils/index.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -32,29 +31,35 @@ export default {
     production: true,
   },
 
-  async execute(interaction: ChatInputCommandInteraction): Promise<void> {
+  async execute(interaction: ChatInputCommandInteraction, t: Translator): Promise<void> {
     await interaction.deferReply();
 
     const memberBanned = interaction.options.getUser("user", true) as User;
     const reason = interaction.options.getString("reason", true);
     try {
       if (!interaction.memberPermissions?.has(PermissionFlagsBits.BanMembers)) {
-        throw new Error("Você não tem permissão para banir membros.");
+        throw new Error(t("common.errors.no_permission"));
       }
 
       if (!interaction.guild) {
-        throw new Error("Não foi possivel achar o servidor!");
+        throw new Error(t("common.errors.no_guild"));
       }
 
       const member = await interaction.guild.members.fetch(memberBanned.id).catch(() => null);
       if (!member) {
-        throw new Error("Não encontrei esse usuário no servidor.");
+        throw new Error(t("common.errors.user_not_found"));
       }
 
       await member.ban({ reason });
-      await BanEmbedHelper.createSingleBanEmbed(interaction, "🚫Banimento", reason, member.user.tag);
+      await BanEmbedHelper.createSingleBanEmbed(
+        interaction,
+        t("commands.moderation.ban-member.title"),
+        reason,
+        member.user.tag,
+        t,
+      );
     } catch (error) {
-      await handleCommandError(interaction, "ban-member", error);
+      await handleCommandError(interaction, "ban-member", error, t);
     }
   },
 } satisfies Command;
