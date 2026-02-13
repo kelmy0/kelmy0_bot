@@ -8,6 +8,7 @@ import {
   normalizeString,
   handlePrismaError,
   PrismaErrorHandlers,
+  QueryHelpers,
 } from "../utils/index.js";
 
 export interface ImageInfo {
@@ -166,10 +167,17 @@ export default class ImageService extends BaseService {
   public async listImages(options: {
     limit: number;
     category: string | null;
-    orderBy: "asc" | "desc";
+    orderBy: string;
   }): Promise<ServiceResponse<ImageResponse[]>> {
     try {
-      const { limit = 1, category, orderBy } = options || {};
+      const category = normalizeString(options.category, {
+        toLowerCase: true,
+        trim: true,
+        normalizeDiacritics: true,
+        replaceSpaces: true,
+      });
+      const limit = QueryHelpers.safeLimit(options.limit, 20);
+      const orderBy = QueryHelpers.normalizeOrderBy(options.orderBy);
 
       const where = category ? { category: { name: category } } : {};
 

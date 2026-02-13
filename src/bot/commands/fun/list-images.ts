@@ -56,17 +56,15 @@ export default {
 
   async execute(interaction: ChatInputCommandInteraction, t: Translator, prisma?: PrismaClient) {
     await interaction.deferReply();
-    const rawCategory = interaction.options.getString("category");
-    const limit = interaction.options.getInteger("limit") || 10;
-    const rawOrderby = interaction.options.getString("orderby");
+    const category = interaction.options.getString("category");
+    const limit = interaction.options.getInteger("limit") ?? 10;
+    const orderBy = interaction.options.getString("orderby") ?? "desc";
     const db = requirePrisma(prisma);
     const imageService = new ImageService(db);
 
     try {
-      const orderBy = (rawOrderby && rawOrderby === "asc") || rawOrderby === "desc" ? rawOrderby : "desc";
-
       const result = await imageService.listImages({
-        category: rawCategory || null,
+        category: category,
         limit: limit,
         orderBy: orderBy,
       });

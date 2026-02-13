@@ -20,6 +20,7 @@ export * from "./discord/embeds/paginationHelper.js";
 /* ===== PRISMA HELPERS ===== */
 export * from "./prisma/errorHandler.js";
 export * from "./prisma/prismaRequire.js";
+export * from "./prisma/queryHelpers.js";
 
 /* ===== SERVICES HELPERS ===== */
 export * from "./services/categoryHelper.js";
