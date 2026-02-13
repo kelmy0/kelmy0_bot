@@ -7,7 +7,7 @@ export class t {
    * @param vars Vars to texts
    */
   static get(
-    key: TranslationPath, // Aqui a mágica acontece
+    key: TranslationPath,
     locale: string,
     vars: Record<string, string | number> = {},
   ): string {
@@ -20,7 +20,7 @@ export class t {
     Object.entries(vars).forEach(([k, v]) => {
       const replacement = v ?? "";
 
-      text = (text as string).replace(new RegExp(`{${k}}`, "g"), String(replacement));
+      text = (text as string).replaceAll(`{${k}}`, String(replacement));
     });
 
     return text;
