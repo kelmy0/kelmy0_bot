@@ -7,7 +7,7 @@ config();
 
 async function deployCommands() {
   try {
-    console.log("🚀 Iniciando deploy de comandos...");
+    console.log("🚀 Starting command deployment...");
 
     const { token, clientId, guildTesterId, isProduction } = validateScriptEnv();
 
@@ -16,72 +16,69 @@ async function deployCommands() {
     });
 
     console.log(
-      `📦 ${commands.size} comando(s) para deploy em ${isProduction ? "produção" : "desenvolvimento"}`,
+      `📦 ${commands.size} commands to deploy in ${isProduction ? "produção" : "desenvolvimento"}`,
     );
 
     if (commands.size === 0) {
-      console.log("ℹ️  Nenhum comando para registrar");
+      console.log("ℹ️ No command to register");
       return;
     }
 
-    // Converte Map para array para o Discord API
+    // Converts Map to array for the Discord API
     const commandData = Array.from(commands.values()).map((cmd) => cmd.data.toJSON());
 
-    // Criar cliente apenas para deploy
     const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
     client.once("clientReady", async (readyClient) => {
-      console.log(`🤖 Conectado como ${readyClient.user.tag}`);
+      console.log(`🤖 Connected as ${readyClient.user.tag}`);
 
       if (isProduction) {
-        // PRODUÇÃO: Registra globalmente e limpa guild de teste
+        // PRODUCTION: Register globally and clean up the testing guild
         await readyClient.application.commands.set(commandData);
-        console.log(`✅ ${commandData.length} comandos registrados GLOBALMENTE`);
+        console.log(`✅ ${commandData.length} commands registered globally`);
 
         if (guildTesterId) {
-          // Limpa apenas comandos da guild de teste
+          // Clears only commands from the test guild
           await readyClient.guilds.cache.get(guildTesterId)?.commands.set([]);
-          console.log(`🧹 Comandos removidos da guild de teste (${guildTesterId})`);
+          console.log(`🧹 Commands removed from the test guild. (${guildTesterId})`);
         }
       } else {
-        // DESENVOLVIMENTO: Registra apenas na guild de teste
+        // DEVELOPMENT: Register only in the test guild
         if (!guildTesterId) {
-          throw new Error("GUILD_TESTER_ID é necessário em desenvolvimento");
+          throw new Error("GUILD_TESTER_ID is required in development.");
         }
 
         const guild = readyClient.guilds.cache.get(guildTesterId);
         if (!guild) {
-          throw new Error(`Guild de teste não encontrada: ${guildTesterId}`);
+          throw new Error(`Test guild not found: ${guildTesterId}`);
         }
 
         await guild.commands.set(commandData);
-        console.log(`✅ ${commandData.length} comandos registrados na guild de teste`);
+        console.log(`✅ ${commandData.length} commands registered in the test guild`);
         console.log(`📌 Guild: ${guild.name} (${guild.id})`);
       }
 
-      console.log("🎉 Deploy concluído!");
+      console.log("🎉 Deploy complete!");
       readyClient.destroy();
       process.exit(0);
     });
 
-    // Tratamento de erros
     client.on("error", (error) => {
-      console.error("❌ Erro no cliente Discord:", error);
+      console.error("❌ Error in the Discord client:", error);
       process.exit(1);
     });
 
     // Login
     await client.login(token);
   } catch (error) {
-    console.error("❌ Erro no deploy:", error);
+    console.error("❌ Error in deploying:", error);
     process.exit(1);
   }
 }
 
-// Timeout de segurança (5 minutos)
 setTimeout(
   () => {
-    console.error("⏰ Timeout excedido");
+    console.error("⏰Timeout exceeded (5 minutes)");
     process.exit(1);
   },
   5 * 60 * 1000,

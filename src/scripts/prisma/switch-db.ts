@@ -15,7 +15,7 @@ async function syncSchema() {
   const provider = process.env.DB_PROVIDER?.toLowerCase();
 
   if (!provider || !SUPPORTED_PROVIDERS.includes(provider)) {
-    console.error(`❌ Erro: DB_PROVIDER "${provider}" inválido.`);
+    console.error(`❌ Error: DB_PROVIDER "${provider}" invalid.`);
     process.exit(1);
   }
 
@@ -26,7 +26,7 @@ async function syncSchema() {
     const match = schemaContent.match(datasourceRegex);
 
     if (!match) {
-      console.error("❌ Erro: Bloco 'datasource db' não encontrado.");
+      console.error("❌ Error: Block 'datasource db' not found.");
       process.exit(1);
     }
 
@@ -40,13 +40,13 @@ async function syncSchema() {
     const updatedSchema = schemaContent.replace(datasourceBlock, updatedDatasourceBlock);
 
     if (schemaContent === updatedSchema) {
-      console.log(`ℹ️  O datasource já está configurado para "${provider}".`);
+      console.log(`ℹ️  The datasource is already configured for "${provider}".`);
     } else {
       fs.writeFileSync(schemaPath, updatedSchema);
-      console.log(`✅ [Sync] Provider do datasource atualizado para: ${provider}`);
+      console.log(`✅ [Sync] Updated datasource provider to: ${provider}`);
     }
   } catch (error) {
-    console.error("❌ Erro ao processar o schema:", error);
+    console.error("❌ Error processing schema:", error);
     process.exit(1);
   }
 }

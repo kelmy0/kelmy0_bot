@@ -1,6 +1,6 @@
 import { PrismaClient, User } from "@prisma/client";
 import { ServiceResponse } from "../types/ServiceResponse.js";
-import { handlePrismaError, PrismaErrorHandlers } from "../utils/prisma/errorHandler.js";
+import { handlePrismaError, PrismaErrorHandlers } from "../utils/index.js";
 import { BaseService } from "./base/BaseService.js";
 
 export interface DiscordUserInfo {

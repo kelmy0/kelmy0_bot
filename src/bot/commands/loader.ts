@@ -15,7 +15,6 @@ function findCommandFiles(directory: string, fileList: string[] = []): string[] 
       const fileStat = statSync(filePath);
 
       if (fileStat.isDirectory()) {
-        // Busca recursivamente APENAS dentro de commands/
         findCommandFiles(filePath, fileList);
       } else if (
         (file.endsWith(".ts") || file.endsWith(".js")) &&
@@ -27,9 +26,9 @@ function findCommandFiles(directory: string, fileList: string[] = []): string[] 
       }
     } catch (error) {
       if (error instanceof Error) {
-        console.warn(`⚠️  Erro ao acessar ${filePath}:`, error.message);
+        console.warn(`⚠️  Error to access ${filePath}:`, error.message);
       } else {
-        console.warn(`⚠️  Erro desconhecido ao acessar ${filePath}:`, error);
+        console.warn(`⚠️  Unknown error when accessing ${filePath}:`, error);
       }
     }
   }
@@ -41,13 +40,13 @@ export async function loadCommands(): Promise<Map<string, Command>> {
   const commands = new Map<string, Command>();
   const commandsPath = join(__dirname, ".");
 
-  console.log(`📁 Buscando comandos em: ${commandsPath}`);
+  console.log(`📁 Searching for commands in: ${commandsPath}`);
 
-  // Encontra arquivos recursivamente
+  // Search files recursively
   const commandFiles = findCommandFiles(commandsPath);
-  console.log(`🔍 Encontrados ${commandFiles.length} arquivos de comando`);
+  console.log(`🔍 Found ${commandFiles.length} commands files`);
 
-  // Contadores por categoria
+  // Count per category
   const categoryCount: Record<string, number> = {};
 
   for (const filePath of commandFiles) {
@@ -59,19 +58,19 @@ export async function loadCommands(): Promise<Map<string, Command>> {
         const command: Command = commandModule.default;
         const commandName = command.data.name;
 
-        // VALIDAÇÃO: Verifica se tem metadata
+        // VALIDATION
         if (!command.metadata) {
-          console.warn(`⚠️  Comando sem metadata: ${commandName} (${filePath})`);
-          // Define metadata padrão
+          console.warn(`⚠️  Command without metadata: ${commandName} (${filePath})`);
+          // Default metadata
           command.metadata = {
             category: "debug",
-            production: false, // Por segurança não vai para produção
+            production: false,
           };
         }
 
-        // Verifica duplicação
+        // Duplication
         if (commands.has(commandName)) {
-          console.warn(`⚠️  Comando duplicado: ${commandName}`);
+          console.warn(`⚠️ Duplicate command: ${commandName}`);
           continue;
         }
 
@@ -81,7 +80,7 @@ export async function loadCommands(): Promise<Map<string, Command>> {
 
         commands.set(commandName, command);
 
-        // Log colorido por categoria
+        // Log per category
         const categoryColors: Record<string, string> = {
           debug: "🛠️",
           admin: "👑",
@@ -98,22 +97,22 @@ export async function loadCommands(): Promise<Map<string, Command>> {
       }
     } catch (error) {
       if (error instanceof Error) {
-        console.error(`❌ Erro ao carregar ${filePath}:`, error.message);
+        console.error(`❌ Error loading ${filePath}:`, error.message);
       } else {
-        console.error(`❌ Erro desconhecido ao carregar ${filePath}:`, error);
+        console.error(`❌ Unknown error to loading ${filePath}:`, error);
       }
     }
   }
 
-  // Resumo
-  console.log("\n📊 Resumo por categoria:");
+  // Resume
+  console.log("\n📊 Resume per category:");
   Object.entries(categoryCount).forEach(([category, count]) => {
-    console.log(`  ${category}: ${count} comando(s)`);
+    console.log(`  ${category}: ${count} commands`);
   });
 
   const totalForProduction = Array.from(commands.values()).filter((cmd) => cmd.metadata.production).length;
 
-  console.log(`\n🎯 Total: ${commands.size} comandos (${totalForProduction} para produção)`);
+  console.log(`\n🎯 Total: ${commands.size} commands (${totalForProduction} to production)`);
 
   return commands;
 }
@@ -129,17 +128,17 @@ export function filterCommands(
   const filtered = new Map<string, Command>();
 
   for (const [name, command] of commands) {
-    // Filtro por ambiente (produção)
+    // Filter per environment (production)
     if (options.environment === "production" && !command.metadata.production) {
       continue;
     }
 
-    // Filtro por categorias incluídas
+    // Filter per category included
     if (options.categories && !options.categories.includes(command.metadata.category)) {
       continue;
     }
 
-    // Filtro por categorias excluídas
+    // Filter per category excluded
     if (options.excludeCategories && options.excludeCategories.includes(command.metadata.category)) {
       continue;
     }
@@ -150,7 +149,7 @@ export function filterCommands(
   return filtered;
 }
 
-// Cache global
+// Global cache
 let commandCache: Map<string, Command> | null = null;
 
 export async function getCommands(

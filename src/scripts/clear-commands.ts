@@ -6,33 +6,33 @@ config();
 
 async function clearTestCommands() {
   try {
-    console.log("🧹 Iniciando limpeza de comandos de teste...");
+    console.log("🧹Starting test command cleanup...");
 
-    // Validar ambiente (não permite produção sem guild de teste)
+    // Validate environment (production is not allowed without a test guild)
     const { token, guildTesterId, isProduction } = validateScriptEnv();
 
     if (isProduction) {
-      console.log("⚠️  Em produção, só limpa comandos da guild de teste");
-      console.log("⚠️  Comandos GLOBAIS NÃO SERÃO AFETADOS");
+      console.log("⚠️ In production, it only clears commands from the test guild.");
+      console.log("⚠️ Global commands will not be affected.");
     }
 
     if (!guildTesterId) {
-      throw new Error("GUILD_TESTER_ID é necessário para limpar comandos");
+      throw new Error("GUILD_TESTER_ID is required to clear commands.");
     }
 
     const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
     client.once("ready", async (readyClient) => {
-      console.log(`🤖 Conectado como ${readyClient.user.tag}`);
+      console.log(`🤖 Conected as ${readyClient.user.tag}`);
 
       const guild = readyClient.guilds.cache.get(guildTesterId);
       if (!guild) {
-        throw new Error(`Guild de teste não encontrada: ${guildTesterId}`);
+        throw new Error(`Test guild not found: ${guildTesterId}`);
       }
 
-      // Obtém comandos atuais para mostrar no log
+      // Gets current commands to show in the log
       const existingCommands = await guild.commands.fetch();
-      console.log(`📊 Comandos atuais na guild: ${existingCommands.size}`);
+      console.log(`📊 Current commands in the guild: ${existingCommands.size}`);
 
       if (existingCommands.size > 0) {
         existingCommands.forEach((cmd) => {
@@ -40,9 +40,8 @@ async function clearTestCommands() {
         });
       }
 
-      // Remove todos os comandos da guild de teste
       await guild.commands.set([]);
-      console.log(`✅ Todos os comandos removidos da guild de teste`);
+      console.log(`✅ All commands removed from the test guild.`);
       console.log(`📌 Guild: ${guild.name} (${guild.id})`);
 
       readyClient.destroy();
@@ -50,20 +49,20 @@ async function clearTestCommands() {
     });
 
     client.on("error", (error) => {
-      console.error("❌ Erro no cliente Discord:", error);
+      console.error("❌ Error in the Discord client:", error);
       process.exit(1);
     });
 
     await client.login(token);
   } catch (error) {
-    console.error("❌ Erro ao limpar comandos:", error);
+    console.error("❌ Error clearing commands:", error);
     process.exit(1);
   }
 }
 
 setTimeout(
   () => {
-    console.error("⏰ Timeout excedido");
+    console.error("⏰ Timeout exceeded");
     process.exit(1);
   },
   2 * 60 * 1000,

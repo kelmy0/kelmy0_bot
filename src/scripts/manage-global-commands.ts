@@ -15,30 +15,29 @@ function question(query: string): Promise<string> {
 
 async function manageGlobalCommands() {
   try {
-    console.log("⚠️  ⚠️  ⚠️  GERENCIAMENTO DE COMANDOS GLOBAIS ⚠️  ⚠️  ⚠️");
-    console.log("Esta ação afeta TODOS os servidores onde o bot está!");
-    console.log("");
+    console.log("⚠️  ⚠️  ⚠️  GLOBAL COMMANDS MANAGEMENT ⚠️  ⚠️  ⚠️");
+    console.log("This action affects ALL servers where the bot is located!\n");
 
     // 1. Validação básica
     if (!process.env.TOKEN || !process.env.CLIENT_ID) {
-      throw new Error("TOKEN e CLIENT_ID são obrigatórios");
+      throw new Error("TOKEN and CLIENT_ID are required!");
     }
 
     // 2. Lista opções
-    console.log("Opções:");
-    console.log("1. 📋 Listar comandos globais atuais");
-    console.log("2. 🗑️  Remover UM comando específico (por nome ou ID)");
-    console.log("3. 🧹 Remover TODOS os comandos globais (PERIGOSO!)");
-    console.log("4. ❌ Sair");
+    console.log("Options:");
+    console.log("1. 📋 List all globals commands now:");
+    console.log("2. 🗑️  Remove a specific command (by name or ID)");
+    console.log("3. 🧹 Remove ALL global commands (DANGEROUS!)");
+    console.log("4. ❌ Exit");
 
-    const option = await question("\nEscolha uma opção (1-4): ");
+    const option = await question("\nChoose a option (1-4): ");
 
     const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
     await client.login(process.env.TOKEN);
 
     client.once("ready", async (readyClient) => {
-      console.log(`\n🤖 Conectado como ${readyClient.user.tag}`);
+      console.log(`\n🤖 Connected as ${readyClient.user.tag}`);
 
       const appCommands = readyClient.application.commands;
 
@@ -56,11 +55,11 @@ async function manageGlobalCommands() {
           break;
 
         case "4":
-          console.log("👋 Saindo...");
+          console.log("👋 Exiting...");
           break;
 
         default:
-          console.log("❌ Opção inválida");
+          console.log("❌ Invalid option");
       }
 
       readyClient.destroy();
@@ -68,7 +67,7 @@ async function manageGlobalCommands() {
       process.exit(0);
     });
   } catch (error) {
-    console.error("❌ Erro:", error);
+    console.error("❌ Error:", error);
     rl.close();
     process.exit(1);
   }
@@ -77,13 +76,13 @@ async function manageGlobalCommands() {
 async function listGlobalCommands(appCommands: any) {
   const commands = await appCommands.fetch();
 
-  console.log(`\n📋 ${commands.size} Comando(s) Global(is):`);
+  console.log(`\n📋 ${commands.size} Globals commands:`);
   console.log("─".repeat(50));
 
   commands.forEach((cmd: ApplicationCommand) => {
     console.log(`├─ ${cmd.name} (ID: ${cmd.id})`);
-    console.log(`│  Descrição: ${cmd.description}`);
-    console.log(`│  Criado em: ${cmd.createdAt.toLocaleDateString()}`);
+    console.log(`│  Description: ${cmd.description}`);
+    console.log(`│  Created in: ${cmd.createdAt.toLocaleDateString()}`);
     console.log("├" + "─".repeat(48));
   });
 }
@@ -92,37 +91,36 @@ async function deleteSingleCommand(appCommands: any) {
   const commands = await appCommands.fetch();
 
   if (commands.size === 0) {
-    console.log("ℹ️  Nenhum comando global para remover");
+    console.log("ℹ️  No global command to remove.");
     return;
   }
 
-  console.log("\nComandos disponíveis para remoção:");
+  console.log("\nAvailable commands for removal:");
   commands.forEach((cmd: ApplicationCommand, index: number) => {
     console.log(`${index + 1}. ${cmd.name} (ID: ${cmd.id})`);
   });
 
-  const choice = await question("\nDigite o NOME ou ID do comando a remover: ");
+  const choice = await question("\nEnter the NAME or ID of the command to remove:");
 
-  // Tenta encontrar por ID ou nome
   const commandToDelete = commands.find(
     (cmd: ApplicationCommand) => cmd.id === choice || cmd.name.toLowerCase() === choice.toLowerCase(),
   );
 
   if (!commandToDelete) {
-    console.log("❌ Comando não encontrado");
+    console.log("❌ Command not found");
     return;
   }
 
-  console.log(`\n⚠️  Você está prestes a remover: ${commandToDelete.name} (${commandToDelete.id})`);
-  console.log("Este comando será removido de TODOS os servidores!");
+  console.log(`\n⚠️  You are about to remove: ${commandToDelete.name} (${commandToDelete.id})`);
+  console.log("This command will be removed from ALL servers!");
 
-  const confirm = await question('Digite "SIM" para confirmar: ');
+  const confirm = await question('Type "YES" to confirm: ');
 
-  if (confirm.toUpperCase() === "SIM") {
+  if (confirm.toUpperCase() === "YES") {
     await commandToDelete.delete();
-    console.log(`✅ Comando "${commandToDelete.name}" removido globalmente`);
+    console.log(`✅ Command "${commandToDelete.name}" removed globally`);
   } else {
-    console.log("❌ Operação cancelada");
+    console.log("❌ Operation cancelled");
   }
 }
 
@@ -130,53 +128,53 @@ async function deleteAllGlobalCommands(appCommands: any) {
   const commands = await appCommands.fetch();
 
   if (commands.size === 0) {
-    console.log("ℹ️  Nenhum comando global para remover");
+    console.log("ℹ️ No global command to remove.");
     return;
   }
 
-  console.log(`\n⚠️  ⚠️  ⚠️  ALERTA CRÍTICO! ⚠️  ⚠️  ⚠️`);
-  console.log(`Você está prestes a remover ${commands.size} comando(s) GLOBALMENTE:`);
+  console.log(`\n⚠️  ⚠️  ⚠️ CRITICAL ALERT! ⚠️  ⚠️  ⚠️`);
+  console.log(`You are about to remove ${commands.size} commands GLOBALLY:`);
 
   commands.forEach((cmd: ApplicationCommand) => {
     console.log(`  • ${cmd.name} (${cmd.id})`);
   });
 
-  console.log("\n❗ Esta ação NÃO PODE ser desfeita!");
-  console.log("❗ Todos os servidores perderão acesso a esses comandos");
-  console.log("❗ Pode levar até 1 hora para as mudanças propagarem");
+  console.log("\n❗This action CANNOT be undone!");
+  console.log("❗All servers will lose access to these commands.");
+  console.log("❗It can take up to 1 hour for the changes to spread.");
 
-  const confirm1 = await question('\nDigite "CONFIRMAR" para continuar: ');
-  if (confirm1.toUpperCase() !== "CONFIRMAR") {
-    console.log("❌ Operação cancelada (primeira confirmação)");
+  const confirm1 = await question('\nType "CONFIRM" to continue: ');
+  if (confirm1.toUpperCase() !== "CONFIRM") {
+    console.log("❌ Operation cancelled (first confirmation)");
     return;
   }
 
-  const confirm2 = await question('Digite "SIM EU TENHO CERTEZA": ');
-  if (confirm2.toUpperCase() !== "SIM EU TENHO CERTEZA") {
-    console.log("❌ Operação cancelada (segunda confirmação)");
+  const confirm2 = await question('Type "YES I AM SURE": ');
+  if (confirm2.toUpperCase() !== "YES I AM SURE") {
+    console.log("❌ Operation cancelled (second confirmation)");
     return;
   }
 
-  console.log("\n🧹 Removendo comandos globais...");
+  console.log("\n🧹 Removing global commands...");
 
   // Remove um por um com delay para evitar rate limits
   for (const cmd of commands.values()) {
     try {
       await cmd.delete();
-      console.log(`✅ Removido: ${cmd.name}`);
+      console.log(`✅ Removed: ${cmd.name}`);
       await new Promise((resolve) => setTimeout(resolve, 500)); // 500ms delay
     } catch (error) {
-      console.error(`❌ Erro ao remover ${cmd.name}:`, error);
+      console.error(`❌ Error removing ${cmd.name}:`, error);
     }
   }
 
-  console.log("🎉 Todos os comandos globais foram removidos");
+  console.log("🎉 All global commands have been removed.");
 }
 
 // Timeout de segurança
 setTimeout(
   () => {
-    console.error("⏰ Timeout excedido (5 minutos)");
+    console.error("⏰ Timeout exceeded (5 minutes)");
     rl.close();
     process.exit(1);
   },
