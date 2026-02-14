@@ -15,9 +15,7 @@ async function deployCommands() {
       environment: isProduction ? "production" : "development",
     });
 
-    console.log(
-      `📦 ${commands.size} commands to deploy in ${isProduction ? "produção" : "desenvolvimento"}`,
-    );
+    console.log(`📦 ${commands.size} commands to deploy in ${isProduction ? "produção" : "desenvolvimento"}`);
 
     if (commands.size === 0) {
       console.log("ℹ️ No command to register");
@@ -25,7 +23,16 @@ async function deployCommands() {
     }
 
     // Converts Map to array for the Discord API
-    const commandData = Array.from(commands.values()).map((cmd) => cmd.data.toJSON());
+    const commandData: any[] = [];
+
+    for (const [name, cmd] of commands.entries()) {
+      try {
+        const json = cmd.data.toJSON();
+        commandData.push(json);
+      } catch (err) {
+        console.error(`❌ Error serializing command "${name}":`, err);
+      }
+    }
 
     const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
