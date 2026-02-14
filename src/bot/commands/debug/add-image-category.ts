@@ -14,7 +14,7 @@ export default {
     .setName("add-image-category")
     .setNameLocalizations({ "pt-BR": "adicionar-categoria-imagem" })
 
-    .setDescription("Add a category for images in develop environment")
+    .setDescription("Add a category for images from develop environment")
     .setDescriptionLocalizations({
       "pt-BR": "Adicione uma categoria para as imagens no ambiente de desenvolvimento",
     })
