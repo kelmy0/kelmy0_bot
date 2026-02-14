@@ -5,9 +5,9 @@ import { Translator } from "../../../types/Command.js";
 export default {
   data: new SlashCommandBuilder()
     .setName("get-miside-picture")
-    .setNameLocalization("pt-BR", "pegar-imagem-miside")
+    .setNameLocalizations({ "pt-BR": "pegar-imagem-miside" })
     .setDescription("Send a random Miside picture")
-    .setDescriptionLocalization("pt-BR", "Envia uma foto aleatória de Miside"),
+    .setDescriptionLocalizations({ "pt-BR": "Envia uma foto aleatória de Miside" }),
   metadata: {
     category: "fun",
     production: true,

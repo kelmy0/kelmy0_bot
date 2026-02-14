@@ -7,9 +7,9 @@ import { Translator } from "../../../types/Command.js";
 export default {
   data: new SlashCommandBuilder()
     .setName("list-commands-debug")
-    .setNameLocalization("pt-BR", "listar-comandos-debug")
+    .setNameLocalizations({ "pt-BR": "listar-comandos-debug" })
     .setDescription("List all commands per category (DEBUG)")
-    .setDescriptionLocalization("pt-BR", "Lista todos os comandos por categoria (DEBUG)"),
+    .setDescriptionLocalizations({ "pt-BR": "Lista todos os comandos por categoria (DEBUG)" }),
 
   async execute(interaction: ChatInputCommandInteraction, t: Translator) {
     await interaction.deferReply();

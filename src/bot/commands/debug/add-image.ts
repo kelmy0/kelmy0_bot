@@ -12,51 +12,48 @@ import {
 export default {
   data: new SlashCommandBuilder()
     .setName("add-image")
-    .setNameLocalization("pt-BR", "adicionar-imagem")
+    .setNameLocalizations({ "pt-BR": "adicionar-imagem" })
 
     .setDescription("Send image URL to development environment database")
-    .setDescriptionLocalization(
-      "pt-BR",
-      "Envia URL de imagem ao banco de dados do ambiente de desenvolvimento",
-    )
+    .setDescriptionLocalizations({ "pt-BR": "Envia URL de imagem ao banco de dados do ambiente de desenvolvimento" })
 
     .addStringOption((option) =>
       option
         .setName("url")
         .setDescription("Image URL")
-        .setDescriptionLocalization("pt-BR", "URL da imagem")
+        .setDescriptionLocalizations({ "pt-BR": "URL da imagem" })
         .setRequired(true),
     )
     .addStringOption((option) =>
       option
         .setName("title")
-        .setNameLocalization("pt-BR", "titulo")
+        .setNameLocalizations({ "pt-BR": "titulo" })
         .setDescription("Image title")
-        .setDescriptionLocalization("pt-BR", "Titulo da imagem")
+        .setDescriptionLocalizations({ "pt-BR": "Titulo da imagem" })
         .setRequired(true)
         .setMaxLength(50),
     )
     .addStringOption((option) =>
       option
         .setName("category")
-        .setNameLocalization("pt-BR", "categoria")
+        .setNameLocalizations({ "pt-BR": "categoria" })
         .setDescription("Image category")
-        .setDescriptionLocalization("pt-BR", "Categoria da imagem")
+        .setDescriptionLocalizations({ "pt-BR": "Categoria da imagem" })
         .setRequired(true),
     )
     .addStringOption((option) =>
       option
         .setName("tags")
         .setDescription("Tags to identify the image, separated by commas")
-        .setDescriptionLocalization("pt-BR", "Tags para identificar a imagem, separe por virgulas")
+        .setDescriptionLocalizations({ "pt-BR": "Tags para identificar a imagem, separe por virgulas" })
         .setRequired(false),
     )
     .addStringOption((option) =>
       option
         .setName("description")
-        .setNameLocalization("pt-BR", "descricao")
+        .setNameLocalizations({ "pt-BR": "descricao" })
         .setDescription("Image description")
-        .setDescriptionLocalization("pt-BR", "Descrição da imagem")
+        .setDescriptionLocalizations({ "pt-BR": "Descrição da imagem" })
         .setMaxLength(255)
         .setRequired(false),
     )

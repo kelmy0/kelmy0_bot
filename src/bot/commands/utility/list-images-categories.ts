@@ -14,16 +14,16 @@ export default {
     .setName("list-images-categories")
     .setDescription("List all categories of images")
 
-    .setNameLocalization("pt-BR", "listar-categorias-imagens")
-    .setDescriptionLocalization("pt-BR", "Listar todas as categorías das imagens")
+    .setNameLocalizations({ "pt-BR": "listar-categorias-imagens" })
+    .setDescriptionLocalizations({ "pt-BR": "Listar todas as categorías das imagens" })
 
     .addStringOption((option) =>
       option
         .setName("order-by")
-        .setNameLocalization("pt-BR", "ordem-de-busca")
+        .setNameLocalizations({ "pt-BR": "ordem-de-busca" })
 
         .setDescription("Order categories by creation date")
-        .setDescriptionLocalization("pt-BR", "Ordenar categorias pela data de criação")
+        .setDescriptionLocalizations({ "pt-BR": "Ordenar categorias pela data de criação" })
 
         .addChoices(
           { name: "newer-older", value: "desc", name_localizations: { "pt-BR": "novo-antigo" } },
@@ -33,9 +33,9 @@ export default {
     .addIntegerOption((option) =>
       option
         .setName("limit")
-        .setNameLocalization("pt-BR", "limite")
+        .setNameLocalizations({ "pt-BR": "limite" })
         .setDescription("Query limit")
-        .setDescriptionLocalization("pt-BR", "Limite de busca")
+        .setDescriptionLocalizations({ "pt-BR": "Limite de busca" })
         .setMinValue(1)
         .setMaxValue(50),
     ),

@@ -5,23 +5,23 @@ import { handleCommandError, BanEmbedHelper } from "../../../utils/index.js";
 export default {
   data: new SlashCommandBuilder()
     .setName("kick-member")
-    .setNameLocalization("pt-BR", "expulsar-membro")
+    .setNameLocalizations({ "pt-BR": "expulsar-membro" })
     .setDescription("Kick a member")
-    .setDescriptionLocalization("pt-BR", "Expulsa um membro")
+    .setDescriptionLocalizations({ "pt-BR": "Expulsa um membro" })
     .addUserOption((option) =>
       option
         .setName("user")
-        .setNameLocalization("pt-BR", "usuario")
+        .setNameLocalizations({ "pt-BR": "usuario" })
         .setDescription("User to be kicked")
-        .setDescriptionLocalization("pt-BR", "Usuário a ser expulso")
+        .setDescriptionLocalizations({ "pt-BR": "Usuário a ser expulso" })
         .setRequired(true),
     )
     .addStringOption((option) =>
       option
         .setName("reason")
-        .setNameLocalization("pt-BR", "motivo")
+        .setNameLocalizations({ "pt-BR": "motivo" })
         .setDescription("Kick reason")
-        .setDescriptionLocalization("pt-BR", "Motivo da expulsão")
+        .setDescriptionLocalizations({ "pt-BR": "Motivo da expulsão" })
         .setRequired(true),
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers),

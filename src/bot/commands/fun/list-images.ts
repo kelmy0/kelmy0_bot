@@ -12,25 +12,25 @@ import {
 export default {
   data: new SlashCommandBuilder()
     .setName("list-images")
-    .setNameLocalization("pt-BR", "listar-imagens")
+    .setNameLocalizations({ "pt-BR": "listar-imagens" })
 
     .setDescription("List random images")
-    .setDescriptionLocalization("pt-BR", "Lista imagens aleatorias")
+    .setDescriptionLocalizations({ "pt-BR": "Lista imagens aleatorias" })
 
     .addStringOption((option) =>
       option
         .setName("category")
-        .setNameLocalization("pt-BR", "categoria")
+        .setNameLocalizations({ "pt-BR": "categoria" })
         .setDescription("Search in a specific category")
-        .setDescriptionLocalization("pt-BR", "Busca em uma categoria específica"),
+        .setDescriptionLocalizations({ "pt-BR": "Busca em uma categoria específica" }),
     )
     .addStringOption((option) =>
       option
         .setName("orderby")
-        .setNameLocalization("pt-BR", "ordem")
+        .setNameLocalizations({ "pt-BR": "ordem" })
 
         .setDescription("Search order")
-        .setDescriptionLocalization("pt-BR", "Ordem de busca")
+        .setDescriptionLocalizations({ "pt-BR": "Ordem de busca" })
 
         .addChoices(
           { name: "Older-Newer", name_localizations: { "pt-BR": "Antigo-novo" }, value: "asc" },
@@ -40,10 +40,10 @@ export default {
     .addIntegerOption((option) =>
       option
         .setName("limit")
-        .setNameLocalization("pt-BR", "limite")
+        .setNameLocalizations({ "pt-BR": "limite" })
 
         .setDescription("Amount of images")
-        .setDescriptionLocalization("pt-BR", "Quantidade de imagens")
+        .setDescriptionLocalizations({ "pt-BR": "Quantidade de imagens" })
 
         .setMinValue(1)
         .setMaxValue(20),

@@ -14,17 +14,17 @@ import {
 export default {
   data: new SlashCommandBuilder()
     .setName("image-category-debug")
-    .setNameLocalization("pt-BR", "categoria-imagem-debug")
+    .setNameLocalizations({ "pt-BR": "categoria-imagem-debug" })
 
     .setDescription("Managing image categories in development environment.")
-    .setDescriptionLocalization("pt-BR", "Gerenciar as categorias das imagens em ambiente de desenvolvimento")
+    .setDescriptionLocalizations({ "pt-BR": "Gerenciar as categorias das imagens em ambiente de desenvolvimento" })
 
     .addStringOption((option) =>
       option
         .setName("action")
-        .setNameLocalization("pt-BR", "ação")
+        .setNameLocalizations({ "pt-BR": "ação" })
         .setDescription("Select what you want to manage in the categories")
-        .setDescriptionLocalization("pt-BR", "Selecione o que você quer gerenciar nas categorias")
+        .setDescriptionLocalizations({ "pt-BR": "Selecione o que você quer gerenciar nas categorias" })
         .addChoices(
           { name: "Create category", name_localizations: { "pt-BR": "Criar categoria" }, value: "create" },
           { name: "Delete category", name_localizations: { "pt-BR": "Deletar categoria" }, value: "delete" },
@@ -34,17 +34,17 @@ export default {
     .addStringOption((option) =>
       option
         .setName("name")
-        .setNameLocalization("pt-BR", "nome")
+        .setNameLocalizations({ "pt-BR": "nome" })
         .setDescription("Category name")
-        .setDescriptionLocalization("pt-BR", "Nome da categoria")
+        .setDescriptionLocalizations({ "pt-BR": "Nome da categoria" })
         .setRequired(false),
     )
     .addNumberOption((option) =>
       option
         .setName("limit")
-        .setNameLocalization("pt-BR", "limite")
+        .setNameLocalizations({ "pt-BR": "limite" })
         .setDescription("Limit of number of categories listed")
-        .setDescriptionLocalization("pt-BR", "Limite do número de categorias listadas")
+        .setDescriptionLocalizations({ "pt-BR": "Limite do número de categorias listadas" })
         .setRequired(false)
         .setMinValue(1)
         .setMaxValue(50),
