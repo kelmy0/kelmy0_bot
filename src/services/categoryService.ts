@@ -1,6 +1,11 @@
 import { ImagesCategory, PrismaClient } from "@prisma/client";
-import { ServiceResponse } from "../types/ServiceResponse.js";
-import { handlePrismaError, PrismaErrorHandlers, normalizeCategoryName } from "../utils/index.js";
+import { ServiceResponse, Translator } from "../types/index.js";
+import {
+  handlePrismaError,
+  PrismaErrorHandlers,
+  normalizeCategoryName,
+  QueryHelpers,
+} from "../utils/index.js";
 import { BaseService } from "./base/BaseService.js";
 
 export interface CategoryInfo {
@@ -62,12 +67,16 @@ export default class CategoryService extends BaseService {
     }
   }
 
-  public async listCategories(options?: {
-    limit?: number;
-    orderBy?: "asc" | "desc";
-  }): Promise<ServiceResponse<Array<CategoryResponse>>> {
+  public async listCategories(
+    options: {
+      limit: number;
+      orderBy: string;
+    },
+    t: Translator,
+  ): Promise<ServiceResponse<Array<CategoryResponse>>> {
     try {
-      const { limit = 20, orderBy = "asc" } = options || {};
+      const limit = QueryHelpers.safeLimit(options.limit, 50);
+      const orderBy = QueryHelpers.normalizeOrderBy(options.orderBy);
 
       const categories = await this.prisma.imagesCategory.findMany({
         orderBy: { name: orderBy },
@@ -82,15 +91,15 @@ export default class CategoryService extends BaseService {
       });
 
       if (categories.length === 0) {
-        return this.success("📭 Nenhuma categoria encontrada.", []);
+        return this.success(t("common.placeholders.no_data"), []);
       }
 
       return this.success(
-        `Categorias encontradas: ${categories.length}`,
+        t("commands.utility.list-images-categories.success", { categories: categories.length }),
         categories.map((cat) => this.mapToResponse<ImagesCategory, CategoryResponse>(cat)),
       );
     } catch (error) {
-      return this.error("Erro ao listar categorias", "DATABASE_ERROR");
+      return this.error(t("prisma.errors.database"), "DATABASE_ERROR");
     }
   }
 

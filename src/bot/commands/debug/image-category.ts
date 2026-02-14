@@ -26,7 +26,6 @@ export default {
         .setDescription("Select what you want to manage in the categories")
         .setDescriptionLocalization("pt-BR", "Selecione o que você quer gerenciar nas categorias")
         .addChoices(
-          { name: "List categories", name_localizations: { "pt-BR": "Listar categorias" }, value: "list" },
           { name: "Create category", name_localizations: { "pt-BR": "Criar categoria" }, value: "create" },
           { name: "Delete category", name_localizations: { "pt-BR": "Deletar categoria" }, value: "delete" },
         )
@@ -88,21 +87,6 @@ export default {
 
           const result = await categoryService.deleteCategory(name);
           await handleServiceResponse(interaction, result);
-          break;
-        }
-
-        case "list":
-        default: {
-          const result = await categoryService.listCategories({
-            limit: limit || undefined,
-          });
-
-          if (!result.success || !result.data) {
-            await handleServiceResponse(interaction, result);
-            return;
-          }
-
-          CategoryEmbedHelper.createPaginatedCategoryembed(interaction, result.data, t);
           break;
         }
       }

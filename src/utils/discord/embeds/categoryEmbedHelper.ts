@@ -14,9 +14,9 @@ export class CategoryEmbedHelper {
       interaction,
       categories,
       (currentItems, page, total) => {
-        return this.createCategoryEmbed(interaction, currentItems, page, total, categories.length);
+        return this.createCategoryEmbed(interaction, currentItems, page, total, categories.length, t);
       },
-      10, //10 categorias por pagina
+      20, //20 categories per page
       t,
     );
   }
@@ -27,14 +27,18 @@ export class CategoryEmbedHelper {
     currentPage: number,
     totalPages: number,
     totalCategories: number,
+    t: Translator,
   ): EmbedBuilder {
     const embed = EmbedHelpers.createEmbed({
-      title: "📚 **CATEGORIAS DISPONÍVEIS**",
+      title: t("commands.utility.list-images-categories.title"),
       color: "#0f178d",
       thumbnail: interaction.guild?.iconURL() ?? interaction.client.user.displayAvatarURL(),
-      description: `**Total:** ${totalCategories} categorias\nSelecione uma categoria para ver as imagens:`,
+      description: t("commands.utility.list-images-categories.description", { total: totalCategories }),
       footer: {
-        text: `Página ${currentPage + 1}/${totalPages} • Use /list-images categoria <nome>`,
+        text: t("commands.utility.list-images-categories.footer_text", {
+          currentPage: currentPage + 1,
+          totalPages: totalPages,
+        }),
         iconURL: interaction.client.user.displayAvatarURL(),
       },
       timestamp: true,
@@ -42,13 +46,13 @@ export class CategoryEmbedHelper {
 
     const categoryList = categories
       .map((cat) => {
-        return `**${cat.name}** • X imagens`;
+        return t("commands.utility.list-images-categories.list", { name: cat.name });
       })
       .join("\n");
 
     embed.addFields({
-      name: "📂 **Lista de Categorias**",
-      value: categoryList || "Nenhuma categoria encontrada",
+      name: t("commands.utility.list-images-categories.field_name"),
+      value: categoryList || t("common.placeholders.no_data"),
     });
 
     return embed;

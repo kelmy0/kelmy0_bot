@@ -58,6 +58,14 @@
         "title": "📋 Available commands",
         "description": "Displaying page **{page}** of **{total}** (Total: {totalComandos} commands)",
         "footer_text": "Use /help <comando> to more details • Page {page}/{total}"
+      },
+      "list-images-categories": {
+        "success": "Categories founded: {categories}",
+        "title": "📚 **Available Categories**",
+        "description": "**Total:** {total} categories\nSelect a category in `/list-images` to see it images:",
+        "footer_text": "Use /list-images category <name> • Page {currentPage}/{totalPages}",
+        "list": "**{name}** • X images",
+        "field_name": "📂 **Categories list**"
       }
     },
 
@@ -84,6 +92,7 @@
 
   "prisma": {
     "errors": {
+      "database": "Database error",
       "invalid_reference": "Invalid reference passed!"
     }
   }

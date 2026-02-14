@@ -57,6 +57,14 @@
         "title": "📋 Comandos Disponíveis",
         "description": "Exibindo página **{page}** de **{total}** (Total: {totalComandos} comandos)",
         "footer_text": "Use /help <comando> para mais detalhes • Página {page}/{total}"
+      },
+      "list-images-categories": {
+        "success": "Categorias achadas: {categories}",
+        "title": "📚 **Categorias disponiveis**",
+        "description": "**Total:** {total} categorias\nSelecione uma categoria em `/listar-imagens` para ver imagens dela:",
+        "footer_text": "Use /listar-imagens categoria <nome> • Página {currentPage}/{totalPages}",
+        "list": "**{name}** • X imagens",
+        "field_name": "📂 **Lista de categorias**"
       }
     },
 
@@ -83,6 +91,7 @@
 
   "prisma": {
     "errors": {
+      "database": "Erro no banco de dados",
       "invalid_reference": "Referência inválida passada!"
     }
   }
