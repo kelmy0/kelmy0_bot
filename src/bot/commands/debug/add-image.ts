@@ -30,7 +30,7 @@ export default {
     .addStringOption((option) =>
       option
         .setName("title")
-        .setNameLocalization("pt-BR", "Título")
+        .setNameLocalization("pt-BR", "titulo")
         .setDescription("Image title")
         .setDescriptionLocalization("pt-BR", "Titulo da imagem")
         .setRequired(true)
@@ -54,7 +54,7 @@ export default {
     .addStringOption((option) =>
       option
         .setName("description")
-        .setNameLocalization("pt-BR", "descrição")
+        .setNameLocalization("pt-BR", "descricao")
         .setDescription("Image description")
         .setDescriptionLocalization("pt-BR", "Descrição da imagem")
         .setMaxLength(255)
