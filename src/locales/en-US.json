@@ -21,6 +21,7 @@
       "no_permission": "You don't have permission to use this command.",
       "interaction_not_author": "Only the person who used the command can interact with these buttons!",
       "no_guild": "This command can only be used within a server.",
+      "no_channel": "This command can only be used within valid channel.",
       "user_not_found": "The user could not be found.",
       "invalid_parameter": "Invalid parameter.",
       "generic": "An error occurred: {error}"
