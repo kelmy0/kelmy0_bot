@@ -10,7 +10,6 @@ export default {
   metadata: {
     category: "utility",
     production: true,
-    cooldown: 5,
   },
   async execute(interaction: ChatInputCommandInteraction) {
     await interaction.reply("Pong! " + interaction.client.ws.ping + "ms.");
