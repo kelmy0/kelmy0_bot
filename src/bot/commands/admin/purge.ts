@@ -21,7 +21,7 @@ export default {
         .setMaxValue(100)
         .setRequired(true),
     )
-    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
 
   metadata: {
     category: "admin",
@@ -34,6 +34,10 @@ export default {
     const amount = Math.min(100, Math.max(1, rawAmount));
 
     try {
+      if (!interaction.memberPermissions?.has(PermissionFlagsBits.ManageMessages)) {
+        throw new Error(t("common.errors.no_permission"));
+      }
+
       if (!interaction.channel || interaction.channel.isDMBased()) {
         throw new Error(t("common.errors.no_channel"));
       }
