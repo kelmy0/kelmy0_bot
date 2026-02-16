@@ -22,7 +22,6 @@ export default {
         .setRequired(true),
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
-
   metadata: {
     category: "admin",
     production: true,
