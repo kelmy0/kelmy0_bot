@@ -25,7 +25,7 @@ export default {
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
     .setContexts(InteractionContextType.Guild)
-    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall),
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall),
 
   metadata: {
     production: true,

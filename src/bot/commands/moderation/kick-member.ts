@@ -33,7 +33,7 @@ export default {
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
     .setContexts(InteractionContextType.Guild)
-    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall),
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall),
 
   metadata: {
     category: "moderation",

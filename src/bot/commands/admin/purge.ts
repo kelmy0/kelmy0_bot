@@ -29,7 +29,7 @@ export default {
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
     .setContexts(InteractionContextType.Guild)
-    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall),
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall),
   metadata: {
     category: "admin",
     production: true,

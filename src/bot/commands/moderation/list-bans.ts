@@ -16,7 +16,7 @@ export default {
     .setDescriptionLocalizations({ "pt-BR": "Lista todos os membros banidos" })
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
     .setContexts(InteractionContextType.Guild)
-    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall),
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall),
 
   metadata: {
     category: "moderation",
