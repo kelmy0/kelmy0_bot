@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction } from "discord.js";
+import { SlashCommandBuilder, ChatInputCommandInteraction, ApplicationIntegrationType } from "discord.js";
 import { Command } from "../../../types/Command.js";
 import { Translator } from "../../../types/Command.js";
 
@@ -7,7 +7,8 @@ export default {
     .setName("get-miside-picture")
     .setNameLocalizations({ "pt-BR": "pegar-imagem-miside" })
     .setDescription("Send a random Miside picture")
-    .setDescriptionLocalizations({ "pt-BR": "Envia uma foto aleatória de Miside" }),
+    .setDescriptionLocalizations({ "pt-BR": "Envia uma foto aleatória de Miside" })
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall),
   metadata: {
     category: "fun",
     production: true,

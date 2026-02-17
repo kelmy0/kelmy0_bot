@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
+import { ApplicationIntegrationType, ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { Command, Translator } from "../../../types/Command.js";
 import { getCommands } from "../loader.js";
 import { CommandsEmbedHelper } from "../../../utils/index.js";
@@ -9,7 +9,8 @@ export default {
     .setNameLocalizations({ "pt-BR": "listar-comandos" })
 
     .setDescription("List all bot's commands per category")
-    .setDescriptionLocalizations({ "pt-BR": "Lista todos os comandos do bot por categoria" }),
+    .setDescriptionLocalizations({ "pt-BR": "Lista todos os comandos do bot por categoria" })
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall),
 
   metadata: {
     category: "utility",

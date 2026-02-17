@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
+import { ApplicationIntegrationType, ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { Command, Translator } from "../../../types/index.js";
 import {
   CategoryEmbedHelper,
@@ -38,7 +38,8 @@ export default {
         .setDescriptionLocalizations({ "pt-BR": "Limite de busca" })
         .setMinValue(1)
         .setMaxValue(50),
-    ),
+    )
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall),
 
   metadata: {
     production: true,

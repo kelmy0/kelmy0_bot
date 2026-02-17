@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
+import { ApplicationIntegrationType, ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { Command, Translator } from "../../../types/Command.js";
 import { PrismaClient } from "@prisma/client";
 import ImageService from "../../../services/imageService.js";
@@ -47,7 +47,8 @@ export default {
 
         .setMinValue(1)
         .setMaxValue(20),
-    ),
+    )
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall),
 
   metadata: {
     production: true,
