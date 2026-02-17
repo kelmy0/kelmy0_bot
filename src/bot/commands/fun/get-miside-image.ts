@@ -8,7 +8,7 @@ export default {
     .setNameLocalizations({ "pt-BR": "pegar-imagem-miside" })
     .setDescription("Send a random Miside picture")
     .setDescriptionLocalizations({ "pt-BR": "Envia uma foto aleatória de Miside" })
-    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall),
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall),
   metadata: {
     category: "fun",
     production: true,

@@ -10,7 +10,7 @@ export default {
 
     .setDescription("List all bot's commands per category")
     .setDescriptionLocalizations({ "pt-BR": "Lista todos os comandos do bot por categoria" })
-    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall),
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall),
 
   metadata: {
     category: "utility",

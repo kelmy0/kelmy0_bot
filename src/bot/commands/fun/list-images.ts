@@ -48,7 +48,7 @@ export default {
         .setMinValue(1)
         .setMaxValue(20),
     )
-    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall),
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall),
 
   metadata: {
     production: true,
