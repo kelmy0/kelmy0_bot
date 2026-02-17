@@ -1,4 +1,10 @@
-import { ChatInputCommandInteraction, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
+import {
+  ApplicationIntegrationType,
+  ChatInputCommandInteraction,
+  InteractionContextType,
+  PermissionFlagsBits,
+  SlashCommandBuilder,
+} from "discord.js";
 import { Command, Translator } from "../../../types/Command.js";
 import { handleCommandError } from "../../../utils/index.js";
 
@@ -17,7 +23,9 @@ export default {
         .setMinValue(0)
         .setMaxValue(21600),
     )
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
+    .setContexts(InteractionContextType.Guild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall),
 
   metadata: {
     production: true,
@@ -35,7 +43,7 @@ export default {
         throw new Error(t("common.errors.no_permission"));
       }
 
-      if (!interaction.channel || interaction.channel.isDMBased()) {
+      if (!interaction.channel || !("setRateLimitPerUser" in interaction.channel)) {
         throw new Error(t("common.errors.no_channel"));
       }
 

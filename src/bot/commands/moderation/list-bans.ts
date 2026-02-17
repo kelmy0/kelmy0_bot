@@ -1,4 +1,10 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction, PermissionFlagsBits } from "discord.js";
+import {
+  SlashCommandBuilder,
+  ChatInputCommandInteraction,
+  PermissionFlagsBits,
+  InteractionContextType,
+  ApplicationIntegrationType,
+} from "discord.js";
 import { Command, Translator } from "../../../types/Command.js";
 import { handleCommandError, BanEmbedHelper } from "../../../utils/index.js";
 
@@ -8,7 +14,9 @@ export default {
     .setNameLocalizations({ "pt-BR": "listar-banimentos" })
     .setDescription("List all banned members")
     .setDescriptionLocalizations({ "pt-BR": "Lista todos os membros banidos" })
-    .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
+    .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
+    .setContexts(InteractionContextType.Guild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall),
 
   metadata: {
     category: "moderation",

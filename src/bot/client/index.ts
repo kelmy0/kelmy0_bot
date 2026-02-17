@@ -1,10 +1,10 @@
 import { Client } from "discord.js";
-import { getIntents } from "./intents.js";
+import { getIntents, getPartials } from "./client-config.js";
 
 export function createDiscordClient(): Client {
   return new Client({
     intents: getIntents(),
-    partials: [],
+    partials: getPartials(),
   });
 }
 

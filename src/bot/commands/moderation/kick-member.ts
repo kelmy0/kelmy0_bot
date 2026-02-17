@@ -1,4 +1,11 @@
-import { ChatInputCommandInteraction, PermissionFlagsBits, SlashCommandBuilder, User } from "discord.js";
+import {
+  ApplicationIntegrationType,
+  ChatInputCommandInteraction,
+  InteractionContextType,
+  PermissionFlagsBits,
+  SlashCommandBuilder,
+  User,
+} from "discord.js";
 import { Command, Translator } from "../../../types/Command.js";
 import { handleCommandError, BanEmbedHelper } from "../../../utils/index.js";
 
@@ -24,7 +31,9 @@ export default {
         .setDescriptionLocalizations({ "pt-BR": "Motivo da expulsão" })
         .setRequired(true),
     )
-    .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers),
+    .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
+    .setContexts(InteractionContextType.Guild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall),
 
   metadata: {
     category: "moderation",

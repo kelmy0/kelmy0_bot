@@ -1,4 +1,10 @@
-import { ChatInputCommandInteraction, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
+import {
+  ApplicationIntegrationType,
+  ChatInputCommandInteraction,
+  InteractionContextType,
+  PermissionFlagsBits,
+  SlashCommandBuilder,
+} from "discord.js";
 import { Command, Translator } from "../../../types/index.js";
 import { handleCommandError } from "../../../utils/index.js";
 
@@ -21,7 +27,9 @@ export default {
         .setMaxValue(100)
         .setRequired(true),
     )
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
+    .setContexts(InteractionContextType.Guild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall),
   metadata: {
     category: "admin",
     production: true,
@@ -37,7 +45,7 @@ export default {
         throw new Error(t("common.errors.no_permission"));
       }
 
-      if (!interaction.channel || interaction.channel.isDMBased()) {
+      if (!interaction.channel || !("bulkDelete" in interaction.channel)) {
         throw new Error(t("common.errors.no_channel"));
       }
 
