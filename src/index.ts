@@ -11,7 +11,7 @@ async function bootstrap() {
     console.log("🚀 Initializing Discord bot...");
 
     // Validate environment
-    const env = validateEnvironment();
+    validateEnvironment();
     console.log("✅ Environment validated");
 
     // Initialize database
