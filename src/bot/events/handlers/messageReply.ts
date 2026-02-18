@@ -1,7 +1,9 @@
 import { Message } from "discord.js";
+import { BotEvent } from "../../../types/index.js";
 
 export default {
   name: "messageCreate",
+  once: false,
   async execute(message: Message) {
     if (message.author.bot) return;
 
@@ -12,4 +14,4 @@ export default {
       await message.reply(resposta);
     }
   },
-};
+} satisfies BotEvent;
