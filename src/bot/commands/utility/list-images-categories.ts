@@ -44,6 +44,7 @@ export default {
   metadata: {
     production: true,
     category: "utility",
+    cooldown: 10,
   },
 
   async execute(interaction: ChatInputCommandInteraction, t: Translator, prisma?: PrismaClient) {

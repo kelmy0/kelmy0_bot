@@ -15,6 +15,8 @@ export default {
   metadata: {
     category: "utility",
     production: true,
+    cooldown: 30,
+    silent: true,
   },
 
   async execute(interaction: ChatInputCommandInteraction, t: Translator) {

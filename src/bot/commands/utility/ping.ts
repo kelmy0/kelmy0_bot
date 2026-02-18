@@ -16,14 +16,10 @@ export default {
   metadata: {
     category: "utility",
     production: true,
+    cooldown: 2,
+    silent: true,
   },
   async execute(interaction: ChatInputCommandInteraction) {
-    const sent = await interaction.reply({ content: "⏳...", withResponse: true });
-    if (!sent.resource || !sent.resource.message) {
-      await interaction.editReply(`🏓 Pong! ${interaction.client.ws.ping}ms.`);
-      return;
-    }
-    const realLatency = sent.resource.message.createdTimestamp - interaction.createdTimestamp;
-    await interaction.editReply(`🏓 Pong! ${realLatency}ms.`);
+    await interaction.reply(`🏓 Pong! ${interaction.client.ws.ping}ms.`);
   },
 } satisfies Command;
