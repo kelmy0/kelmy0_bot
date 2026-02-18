@@ -10,7 +10,8 @@ export type Translator = (
 export interface CommandMetadata {
   category: "admin" | "moderation" | "utility" | "debug" | "config" | "fun";
   production: boolean;
-  cooldown?: number;
+  cooldown?: number; // Default is 3
+  silent?: boolean; // Default is false
 }
 
 export interface Command {

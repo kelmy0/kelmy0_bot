@@ -24,7 +24,8 @@
       "no_channel": "This command can only be used within valid channel.",
       "user_not_found": "The user could not be found.",
       "invalid_parameter": "Invalid parameter.",
-      "generic": "An error occurred: {error}"
+      "generic": "An error occurred: {error}.",
+      "too_many_requests": "Slow down! Wait for {time}s."
     }
   },
 

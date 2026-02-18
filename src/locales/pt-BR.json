@@ -24,7 +24,8 @@
       "no_channel": "Este comando só pode ser usado em um canal válido.",
       "user_not_found": "Não foi possivel achar o usuário.",
       "invalid_parameter": "Parametro inválido.",
-      "generic": "Ocorreu um erro: {error}"
+      "generic": "Ocorreu um erro: {error}.",
+      "too_many_requests": "Devagar! Espere por {time}s."
     }
   },
 
