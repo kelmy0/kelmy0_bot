@@ -15,15 +15,25 @@ class Database {
         if (provider === "sqlserver") {
           const { PrismaMssql } = await import("@prisma/adapter-mssql");
           options.adapter = new PrismaMssql(db_url);
+
           console.log("💾 Provider defined: SQL Server");
         } else if (provider === "postgresql") {
           const { PrismaPg } = await import("@prisma/adapter-pg");
           const { default: pg } = await import("pg"!);
           const pool = new pg.Pool({ connectionString: db_url });
           options.adapter = new PrismaPg(pool);
+
           console.log("🐘 Provider defined: PostgreSQL");
         } else if (provider === "mongodb") {
           console.log("🍃 Provider defined: MongoDB");
+        } else if (provider === "mysql" || provider === "mariadb") {
+          const { PrismaMariaDb } = await import("@prisma/adapter-mariadb");
+          const { default: mariadb } = await import("mariadb"!);
+          const pool = mariadb.createPool({ connectionString: db_url });
+          options.adapter = new PrismaMariaDb(pool);
+          console.log(`🐬 Provider defined: ${provider}`);
+        } else {
+          throw new Error("Provider not supported");
         }
 
         Database.instance = new PrismaClient(options);

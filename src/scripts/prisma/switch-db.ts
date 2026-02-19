@@ -9,7 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const schemaPath = path.resolve(__dirname, "../../../prisma/schema.prisma");
 
-const SUPPORTED_PROVIDERS = ["sqlserver", "postgresql", "mongodb"];
+const SUPPORTED_PROVIDERS = ["sqlserver", "postgresql", "mongodb", "mysql", "mariadb"];
 
 async function syncSchema() {
   const provider = process.env.DB_PROVIDER?.toLowerCase();
