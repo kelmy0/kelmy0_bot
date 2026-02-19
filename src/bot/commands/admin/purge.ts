@@ -35,11 +35,6 @@ export default {
     production: true,
   },
   async execute(interaction: ChatInputCommandInteraction, t: Translator) {
-    await interaction.deferReply({ flags: "Ephemeral" });
-
-    const rawAmount = interaction.options.getInteger("amount", true);
-    const amount = Math.min(100, Math.max(1, rawAmount));
-
     try {
       if (!interaction.memberPermissions?.has(PermissionFlagsBits.ManageMessages)) {
         throw new Error(t("common.errors.no_permission"));
@@ -48,6 +43,11 @@ export default {
       if (!interaction.channel || !("bulkDelete" in interaction.channel)) {
         throw new Error(t("common.errors.no_channel"));
       }
+
+      const rawAmount = interaction.options.getInteger("amount", true);
+      const amount = Math.min(100, Math.max(1, rawAmount));
+
+      await interaction.deferReply({ flags: "Ephemeral" });
 
       await interaction.channel.bulkDelete(amount, true);
       await interaction.editReply("🧹✅");

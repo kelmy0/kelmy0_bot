@@ -11,14 +11,13 @@ export default {
     .setDescription("List all commands per category (DEBUG)")
     .setDescriptionLocalizations({ "pt-BR": "Lista todos os comandos por categoria (DEBUG)" }),
 
-  async execute(interaction: ChatInputCommandInteraction, t: Translator) {
-    await interaction.deferReply();
-    const commands = await getCommands();
-    CommandsEmbedHelper.createPaginatedCommandEmbed(interaction, commands, t);
-  },
-
   metadata: {
     category: "debug",
     production: false,
+  },
+
+  async execute(interaction: ChatInputCommandInteraction, t: Translator) {
+    const commands = await getCommands();
+    await CommandsEmbedHelper.createPaginatedCommandEmbed(interaction, commands, t);
   },
 } satisfies Command;

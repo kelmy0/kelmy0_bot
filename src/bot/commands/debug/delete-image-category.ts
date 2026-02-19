@@ -43,7 +43,7 @@ export default {
       const db = requirePrisma(prisma);
       const categoryService = new CategoryService(db);
 
-      const user = await getOrRegisterUser(db, interaction);
+      await getOrRegisterUser(db, interaction);
 
       const result = await categoryService.deleteCategory(category);
 
