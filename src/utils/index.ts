@@ -1,6 +1,7 @@
 /* ===== HELPERS ===== */
 export * from "./i18nHelper.js";
 export * from "./shutdown.js";
+export * from "./cache-executor.js";
 
 /* ===== DISCORD HELPERS ===== */
 export * from "./discord/collectors.js";

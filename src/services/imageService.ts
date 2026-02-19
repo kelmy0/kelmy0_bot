@@ -165,9 +165,9 @@ export default class ImageService extends BaseService {
   }
 
   public async listImages(options: {
-    limit: number;
+    limit: number | null;
     category: string | null;
-    orderBy: string;
+    orderBy: string | null;
   }): Promise<ServiceResponse<ImageResponse[]>> {
     try {
       const category = normalizeString(options.category, {
@@ -176,8 +176,8 @@ export default class ImageService extends BaseService {
         normalizeDiacritics: true,
         replaceSpaces: true,
       });
-      const limit = QueryHelpers.safeLimit(options.limit, 20);
-      const orderBy = QueryHelpers.normalizeOrderBy(options.orderBy);
+      const limit = QueryHelpers.safeLimit(options.limit || 10, 20);
+      const orderBy = QueryHelpers.normalizeOrderBy(options.orderBy || "desc");
 
       const where = category ? { category: { name: category } } : {};
 

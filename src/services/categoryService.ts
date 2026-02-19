@@ -69,14 +69,14 @@ export default class CategoryService extends BaseService {
 
   public async listCategories(
     options: {
-      limit: number;
-      orderBy: string;
+      limit: number | null;
+      orderBy: string | null;
     },
     t: Translator,
   ): Promise<ServiceResponse<Array<CategoryResponse>>> {
     try {
-      const limit = QueryHelpers.safeLimit(options.limit, 50);
-      const orderBy = QueryHelpers.normalizeOrderBy(options.orderBy);
+      const limit = QueryHelpers.safeLimit(options.limit || 20, 50);
+      const orderBy = QueryHelpers.normalizeOrderBy(options.orderBy || "desc");
 
       const categories = await this.prisma.imagesCategory.findMany({
         orderBy: { name: orderBy },
