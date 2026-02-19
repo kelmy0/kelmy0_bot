@@ -12,9 +12,15 @@ export async function handleCommandError(
 
   const errorMessage = error instanceof Error ? error.message : t("common.words.unknown");
 
-  await interaction.editReply({
-    content: t("common.errors.generic", { error: errorMessage }),
-  });
+  if (interaction.deferred || interaction.replied) {
+    await interaction.editReply({
+      content: t("common.errors.generic", { error: errorMessage }),
+    });
+  } else {
+    await interaction.reply({
+      content: t("common.errors.generic", { error: errorMessage }),
+    });
+  }
 }
 
 export async function sendPaginatedResponse(

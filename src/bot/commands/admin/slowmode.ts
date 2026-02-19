@@ -33,8 +33,6 @@ export default {
   },
 
   async execute(interaction: ChatInputCommandInteraction, t: Translator) {
-    await interaction.deferReply({ flags: "Ephemeral" });
-
     const rawSeconds = interaction.options.getInteger("seconds") ?? 0;
     const seconds = Math.max(0, Math.min(rawSeconds, 21600));
 
@@ -49,7 +47,7 @@ export default {
 
       await interaction.channel.setRateLimitPerUser(seconds);
 
-      await interaction.editReply("⏱️🐢✅");
+      await interaction.reply("✅");
     } catch (error) {
       await handleCommandError(interaction, "slowmode", error, t);
     }
