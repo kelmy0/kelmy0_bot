@@ -51,10 +51,18 @@ export class PaginationHelper {
       totalPages,
     );
 
-    const message = await interaction.editReply({
+    const payload = {
       embeds: [initialEmbed],
       components: totalPages > 1 ? [getRow(currentPage)] : [],
-    });
+    };
+
+    let message;
+
+    if (interaction.deferred || interaction.replied) {
+      message = await interaction.editReply(payload);
+    } else {
+      message = await interaction.reply(payload);
+    }
 
     if (totalPages <= 1) return;
 

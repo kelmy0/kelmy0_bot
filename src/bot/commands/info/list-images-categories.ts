@@ -43,8 +43,8 @@ export default {
 
   metadata: {
     production: true,
-    category: "utility",
-    cooldown: 10,
+    category: "info",
+    cooldown: 30,
   },
 
   async execute(interaction: ChatInputCommandInteraction, t: Translator, prisma?: PrismaClient) {
@@ -64,7 +64,7 @@ export default {
         return;
       }
 
-      await CategoryEmbedHelper.createPaginatedCategoryembed(interaction, result.data, t);
+      CategoryEmbedHelper.createPaginatedCategoryembed(interaction, result.data, t);
     } catch (error) {
       await handleCommandError(interaction, "list-images-categories", error, t);
     }

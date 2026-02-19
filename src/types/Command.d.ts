@@ -8,7 +8,7 @@ export type Translator = (
 ) => string;
 
 export interface CommandMetadata {
-  category: "admin" | "moderation" | "utility" | "debug" | "config" | "fun";
+  category: "admin" | "moderation" | "utility" | "debug" | "config" | "fun" | "info";
   production: boolean;
   cooldown?: number; // Default is 3
   silent?: boolean; // Default is false
