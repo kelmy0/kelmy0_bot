@@ -34,7 +34,7 @@ Before starting, make sure you meet the following requirements:
 
 - You have installed Node.js v24 or higher
 - You are on Windows (not yet tested on Linux or Mac)
-- You are using one of the following databases: Microsoft SQL Server, PostgreSQL, or MongoDB (more databases will be supported in the future)
+- You are using one of the following databases: Microsoft SQL Server, PostgreSQL, MongoDB, MySQL or MariaDb
 
 ## 🚀 Installing `<kelmy0_bot>`
 
