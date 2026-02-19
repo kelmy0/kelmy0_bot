@@ -76,7 +76,7 @@ export default {
         return;
       }
 
-      ImageEmbedHelper.createPaginatedImageEmbed(interaction, result.data, t);
+      await ImageEmbedHelper.createPaginatedImageEmbed(interaction, result.data, t);
     } catch (error) {
       await handleCommandError(interaction, "list-images", error, t);
     }
