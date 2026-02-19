@@ -1,0 +1,30 @@
+model Image {
+    id          String  @id @default(cuid())
+    url         String  @unique
+    title       String  @default("Sem titulo")
+    description String?
+
+    categoryId String         @map("category_id")
+    category   ImagesCategory @relation(fields: [categoryId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+
+    addedById String @map("added_by_id")
+    addedBy   User   @relation("AddedImages", fields: [addedById], references: [id], onUpdate: NoAction, onDelete: NoAction)
+
+    tags    String?
+    addedAt DateTime @default(now()) @map("added_at")
+
+    @@index([categoryId])
+    @@index([addedById])
+    @@map("images")
+}
+
+model ImagesCategory {
+    id        String   @id @default(cuid())
+    name      String   @unique
+    addedById String   @map("added_by_id")
+    addedBy   User     @relation(fields: [addedById], references: [id])
+    addedAt   DateTime @default(now()) @map("added_at")
+    images    Image[]
+
+    @@map("images_category")
+}

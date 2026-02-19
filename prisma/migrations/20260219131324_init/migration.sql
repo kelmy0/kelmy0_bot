@@ -3,22 +3,10 @@ BEGIN TRY
 BEGIN TRAN;
 
 -- CreateTable
-CREATE TABLE [dbo].[users] (
-    [discord_id] NVARCHAR(1000) NOT NULL,
-    [discord_username] NVARCHAR(1000) NOT NULL,
-    [discord_avatar] NVARCHAR(1000),
-    [discord_global_name] NVARCHAR(1000),
-    [discord_discriminator] NVARCHAR(1000),
-    [created_at] DATETIME2 NOT NULL CONSTRAINT [users_created_at_df] DEFAULT CURRENT_TIMESTAMP,
-    [updated_at] DATETIME2 NOT NULL,
-    CONSTRAINT [users_pkey] PRIMARY KEY CLUSTERED ([discord_id])
-);
-
--- CreateTable
 CREATE TABLE [dbo].[images] (
     [id] NVARCHAR(1000) NOT NULL,
     [url] NVARCHAR(1000) NOT NULL,
-    [title] NVARCHAR(1000),
+    [title] NVARCHAR(1000) NOT NULL CONSTRAINT [images_title_df] DEFAULT 'Sem titulo',
     [description] NVARCHAR(1000),
     [category_id] NVARCHAR(1000) NOT NULL,
     [added_by_id] NVARCHAR(1000) NOT NULL,
@@ -36,6 +24,17 @@ CREATE TABLE [dbo].[images_category] (
     [added_at] DATETIME2 NOT NULL CONSTRAINT [images_category_added_at_df] DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT [images_category_pkey] PRIMARY KEY CLUSTERED ([id]),
     CONSTRAINT [images_category_name_key] UNIQUE NONCLUSTERED ([name])
+);
+
+-- CreateTable
+CREATE TABLE [dbo].[users] (
+    [discord_id] NVARCHAR(1000) NOT NULL,
+    [discord_username] NVARCHAR(1000) NOT NULL,
+    [discord_avatar] NVARCHAR(1000) NOT NULL CONSTRAINT [users_discord_avatar_df] DEFAULT 'https://cdn.discordapp.com/embed/avatars/0.png',
+    [discord_global_name] NVARCHAR(1000),
+    [created_at] DATETIME2 NOT NULL CONSTRAINT [users_created_at_df] DEFAULT CURRENT_TIMESTAMP,
+    [updated_at] DATETIME2 NOT NULL,
+    CONSTRAINT [users_pkey] PRIMARY KEY CLUSTERED ([discord_id])
 );
 
 -- CreateIndex
