@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, EmbedBuilder, User } from "discord.js";
+import { ChatInputCommandInteraction, EmbedBuilder, Guild, GuildBan, GuildMember, User } from "discord.js";
 import { EmbedHelpers } from "./embedHelpers.js";
 import { PaginationHelper } from "./paginationHelper.js";
 import { Translator } from "../../../types/Command.js";
@@ -8,8 +8,9 @@ export class BanEmbedHelper {
     interaction: ChatInputCommandInteraction,
     title: string,
     reason: string,
-    member: string,
+    member: GuildMember | GuildBan,
     t: Translator,
+    dm: boolean = false,
   ) {
     const embed = EmbedHelpers.createEmbed({
       title: title,
@@ -32,7 +33,7 @@ export class BanEmbedHelper {
     embed.addFields(
       {
         name: t("common.words.user_target"),
-        value: `\`${member}\``,
+        value: `\`${member.user.tag}\``,
         inline: true,
       },
       {
@@ -51,6 +52,8 @@ export class BanEmbedHelper {
         inline: false,
       },
     );
+
+    if (dm && member instanceof GuildMember) await member.send({ embeds: [embed] }).catch(() => {});
 
     await interaction.editReply({ embeds: [embed] });
   }

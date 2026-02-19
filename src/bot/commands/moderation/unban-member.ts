@@ -40,10 +40,6 @@ export default {
   },
 
   async execute(interaction: ChatInputCommandInteraction, t: Translator) {
-    await interaction.deferReply();
-
-    const unbanId = interaction.options.getString("userid", true);
-    const reason = interaction.options.getString("reason", true);
     try {
       if (!interaction.memberPermissions?.has(PermissionFlagsBits.BanMembers)) {
         throw new Error(t("common.errors.no_permission"));
@@ -53,7 +49,12 @@ export default {
         throw new Error(t("common.errors.no_guild"));
       }
 
-      const unbanMember = (await interaction.guild.bans.fetch(unbanId)).user.tag;
+      const unbanId = interaction.options.getString("userid", true);
+      const reason = interaction.options.getString("reason", true);
+
+      await interaction.deferReply({ flags: "Ephemeral" });
+
+      const unbanMember = await interaction.guild.bans.fetch(unbanId);
 
       await interaction.guild.members.unban(unbanId, reason);
 

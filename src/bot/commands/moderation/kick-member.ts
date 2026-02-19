@@ -41,11 +41,6 @@ export default {
   },
 
   async execute(interaction: ChatInputCommandInteraction, t: Translator): Promise<void> {
-    await interaction.deferReply();
-
-    const memberKicked = interaction.options.getUser("user", true) as User;
-    const reason = interaction.options.getString("reason", true);
-
     try {
       if (!interaction.memberPermissions?.has(PermissionFlagsBits.KickMembers)) {
         throw new Error(t("common.errors.no_permission"));
@@ -55,20 +50,27 @@ export default {
         throw new Error(t("common.errors.no_guild"));
       }
 
+      const memberKicked = interaction.options.getUser("user", true) as User;
+      const reason = interaction.options.getString("reason", true);
+
+      await interaction.deferReply({ flags: "Ephemeral" });
+
       const member = await interaction.guild.members.fetch(memberKicked.id).catch(() => null);
 
       if (!member) {
         throw new Error(t("common.errors.user_not_found"));
       }
 
-      await member.kick(reason);
       await BanEmbedHelper.createSingleBanEmbed(
         interaction,
         t("commands.moderation.kick-member.title"),
         reason,
-        member.user.tag,
+        member,
         t,
+        true,
       );
+
+      await member.kick(reason);
     } catch (error) {
       await handleCommandError(interaction, "kick-member", error, t);
     }

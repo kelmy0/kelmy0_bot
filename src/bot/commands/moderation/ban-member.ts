@@ -41,10 +41,6 @@ export default {
   },
 
   async execute(interaction: ChatInputCommandInteraction, t: Translator): Promise<void> {
-    await interaction.deferReply();
-
-    const memberBanned = interaction.options.getUser("user", true) as User;
-    const reason = interaction.options.getString("reason", true);
     try {
       if (!interaction.memberPermissions?.has(PermissionFlagsBits.BanMembers)) {
         throw new Error(t("common.errors.no_permission"));
@@ -54,19 +50,26 @@ export default {
         throw new Error(t("common.errors.no_guild"));
       }
 
+      const memberBanned = interaction.options.getUser("user", true) as User;
+      const reason = interaction.options.getString("reason", true);
+
+      await interaction.deferReply({ flags: "Ephemeral" });
+
       const member = await interaction.guild.members.fetch(memberBanned.id).catch(() => null);
       if (!member) {
         throw new Error(t("common.errors.user_not_found"));
       }
 
-      await member.ban({ reason });
       await BanEmbedHelper.createSingleBanEmbed(
         interaction,
         t("commands.moderation.ban-member.title"),
         reason,
-        member.user.tag,
+        member,
         t,
+        true,
       );
+
+      await member.ban({ reason });
     } catch (error) {
       await handleCommandError(interaction, "ban-member", error, t);
     }

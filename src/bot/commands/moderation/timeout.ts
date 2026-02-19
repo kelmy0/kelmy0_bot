@@ -52,13 +52,6 @@ export default {
   },
 
   async execute(interaction: ChatInputCommandInteraction, t: Translator) {
-    await interaction.deferReply({ flags: "Ephemeral" });
-
-    const memberTimeouted = interaction.options.getUser("member", true) as User;
-    const rawTimeout = interaction.options.getInteger("time", true);
-    const timeout = Math.min(10080, Math.max(1, rawTimeout)) * 60000;
-    const reason = interaction.options.getString("reason", true);
-
     try {
       if (!interaction.memberPermissions?.has(PermissionFlagsBits.ModerateMembers)) {
         throw new Error(t("common.errors.no_permission"));
@@ -67,6 +60,13 @@ export default {
       if (!interaction.guild) {
         throw new Error(t("common.errors.no_guild"));
       }
+
+      const memberTimeouted = interaction.options.getUser("member", true) as User;
+      const rawTimeout = interaction.options.getInteger("time", true);
+      const timeout = Math.min(10080, Math.max(1, rawTimeout)) * 60000;
+      const reason = interaction.options.getString("reason", true);
+
+      await interaction.deferReply({ flags: "Ephemeral" });
 
       const member = await interaction.guild.members.fetch(memberTimeouted.id).catch(() => null);
       if (!member) {
@@ -77,8 +77,9 @@ export default {
         interaction,
         t("commands.moderation.timeout.title"),
         reason,
-        member.user.tag,
+        member,
         t,
+        true,
       );
 
       await member.timeout(timeout, reason);
