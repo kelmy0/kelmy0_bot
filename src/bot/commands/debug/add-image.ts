@@ -13,10 +13,10 @@ export default {
   data: new SlashCommandBuilder()
     .setName("add-image")
     .setNameLocalizations({ "pt-BR": "adicionar-imagem" })
-
     .setDescription("Send image URL to development environment database")
-    .setDescriptionLocalizations({ "pt-BR": "Envia URL de imagem ao banco de dados do ambiente de desenvolvimento" })
-
+    .setDescriptionLocalizations({
+      "pt-BR": "Envia URL de imagem ao banco de dados do ambiente de desenvolvimento",
+    })
     .addStringOption((option) =>
       option
         .setName("url")

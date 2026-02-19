@@ -7,7 +7,6 @@ export default {
   data: new SlashCommandBuilder()
     .setName("help")
     .setNameLocalizations({ "pt-BR": "ajuda" })
-
     .setDescription("List all bot's commands per category")
     .setDescriptionLocalizations({ "pt-BR": "Lista todos os comandos do bot por categoria" })
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall),

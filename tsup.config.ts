@@ -22,7 +22,7 @@ export default defineConfig({
 
       for (const file of files) {
         const content = fs.readFileSync(path.join(srcDir, file), "utf-8");
-        
+
         // Minify JSONs
         const minified = JSON.stringify(JSON.parse(content));
         fs.writeFileSync(path.join(distDir, file), minified);

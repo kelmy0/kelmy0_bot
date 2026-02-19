@@ -30,10 +30,7 @@ class Database {
         await Database.instance.$connect();
         console.log("✅ PrismaClient connected successfully");
       } catch (error) {
-        console.error(
-          "❌ Database connection failed:",
-          error instanceof Error ? error.message : error,
-        );
+        console.error("❌ Database connection failed:", error instanceof Error ? error.message : error);
         throw error;
       }
     }

@@ -13,7 +13,6 @@ export default {
   data: new SlashCommandBuilder()
     .setName("delete-image-category")
     .setNameLocalizations({ "pt-BR": "deletar-categoria-imagem" })
-
     .setDescription("Delete a category for images from develop environment")
     .setDescriptionLocalizations({
       "pt-BR": "Delete uma categoria para as imagens no ambiente de desenvolvimento",
@@ -22,7 +21,6 @@ export default {
       option
         .setName("category")
         .setNameLocalizations({ "pt-BR": "categoria" })
-
         .setDescription("Category name")
         .setDescriptionLocalizations({ "pt-BR": "Nome da categoria" })
         .setMaxLength(50)
