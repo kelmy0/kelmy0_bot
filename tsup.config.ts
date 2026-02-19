@@ -11,7 +11,7 @@ export default defineConfig({
   clean: true,
   bundle: false,
   shims: true,
-  external: ["**/prisma/**", "@prisma/client"],
+  external: ["**/prisma/**", "node_modules"],
   async onSuccess() {
     const srcDir = path.join(process.cwd(), "src", "locales");
     const distDir = path.join(process.cwd(), "dist", "locales");
