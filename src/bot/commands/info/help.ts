@@ -20,6 +20,6 @@ export default {
 
   async execute(interaction: ChatInputCommandInteraction, t: Translator) {
     const commands = await getCommands({ environment: "production", excludeCategories: ["debug"] });
-    CommandsEmbedHelper.createPaginatedCommandEmbed(interaction, commands, t);
+    await CommandsEmbedHelper.createPaginatedCommandEmbed(interaction, commands, t);
   },
 } satisfies Command;

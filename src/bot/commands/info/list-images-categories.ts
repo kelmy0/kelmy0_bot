@@ -64,7 +64,7 @@ export default {
         return;
       }
 
-      CategoryEmbedHelper.createPaginatedCategoryembed(interaction, result.data, t);
+      await CategoryEmbedHelper.createPaginatedCategoryembed(interaction, result.data, t);
     } catch (error) {
       await handleCommandError(interaction, "list-images-categories", error, t);
     }
