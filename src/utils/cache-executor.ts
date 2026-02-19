@@ -10,6 +10,7 @@ interface CacheOptions<T> {
   renderSuccess: (data: T) => Promise<void>;
   handleError: (error: unknown) => Promise<void>;
   ttl?: number;
+  ephemeral?: boolean;
 }
 
 export async function executeWithCache<T>({
@@ -19,6 +20,7 @@ export async function executeWithCache<T>({
   renderSuccess,
   handleError,
   ttl = 60,
+  ephemeral = false,
 }: CacheOptions<T>) {
   if (cacheKey) {
     //Verify cache
@@ -29,7 +31,7 @@ export async function executeWithCache<T>({
   }
 
   try {
-    await interaction.deferReply();
+    ephemeral ? await interaction.deferReply({ flags: "Ephemeral" }) : await interaction.deferReply();
     const result = await executeService();
 
     if (!result.success || !result.data) {

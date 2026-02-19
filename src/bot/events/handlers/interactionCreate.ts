@@ -1,5 +1,5 @@
 import { Collection, Interaction } from "discord.js";
-import { getCommands } from "../../commands/loader.js";
+import { commandMap } from "../../commands/loader.js";
 import { PrismaClient } from "@prisma/client";
 import { Translator, BotEvent } from "../../../types/index.js";
 import { t } from "../../../utils/i18nHelper.js";
@@ -17,8 +17,7 @@ export default {
     if (!interaction.isChatInputCommand()) return;
 
     // Search command in cache
-    const commands = await getCommands();
-    const command = commands.get(interaction.commandName);
+    const command = commandMap.get(interaction.commandName);
     if (!command) {
       console.warn(`⚠️ Command not found: ${interaction.commandName}`);
       return;
@@ -76,7 +75,7 @@ export default {
     try {
       console.log(`▶️  Running: /${interaction.commandName} by ${interaction.user.tag}`);
 
-      await command.execute(interaction, translate, prisma);
+      await command.execute(interaction, translate, prisma, commandMap);
     } catch (error) {
       console.error(`❌ Error in /${interaction.commandName}:`, error);
 

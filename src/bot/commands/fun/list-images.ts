@@ -4,9 +4,9 @@ import { PrismaClient } from "@prisma/client";
 import ImageService from "../../../services/imageService.js";
 import {
   ImageEmbedHelper,
-  handleServiceResponse,
   requirePrisma,
   handleCommandError,
+  executeWithCache,
 } from "../../../utils/index.js";
 
 export default {
@@ -53,32 +53,24 @@ export default {
   metadata: {
     production: true,
     category: "fun",
-    cooldown: 30,
+    cooldown: 5,
   },
 
   async execute(interaction: ChatInputCommandInteraction, t: Translator, prisma?: PrismaClient) {
-    await interaction.deferReply();
     const category = interaction.options.getString("category");
-    const limit = interaction.options.getInteger("limit") ?? 10;
-    const orderBy = interaction.options.getString("orderby") ?? "desc";
+    const limit = interaction.options.getInteger("limit");
+    const orderBy = interaction.options.getString("orderby");
+
+    const isDefault = !category && !limit && !orderBy;
     const db = requirePrisma(prisma);
     const imageService = new ImageService(db);
 
-    try {
-      const result = await imageService.listImages({
-        category: category,
-        limit: limit,
-        orderBy: orderBy,
-      });
-
-      if (!result.success || !result.data) {
-        await handleServiceResponse(interaction, result);
-        return;
-      }
-
-      await ImageEmbedHelper.createPaginatedImageEmbed(interaction, result.data, t);
-    } catch (error) {
-      await handleCommandError(interaction, "list-images", error, t);
-    }
+    await executeWithCache({
+      interaction: interaction,
+      cacheKey: isDefault ? "img:list:default" : null,
+      executeService: () => imageService.listImages({ category, limit, orderBy }),
+      renderSuccess: (data) => ImageEmbedHelper.createPaginatedImageEmbed(interaction, data, t),
+      handleError: (err) => handleCommandError(interaction, "list-images", err, t),
+    });
   },
 } satisfies Command;

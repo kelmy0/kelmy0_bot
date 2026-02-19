@@ -3,11 +3,13 @@ import { ApplicationIntegrationType, ChatInputCommandInteraction, SlashCommandBu
 import { Command, Translator } from "../../../types/index.js";
 import {
   CategoryEmbedHelper,
+  executeWithCache,
   handleCommandError,
   handleServiceResponse,
   requirePrisma,
 } from "../../../utils/index.js";
-import CategoryService from "../../../services/categoryService.js";
+import CategoryService, { CategoryResponse } from "../../../services/categoryService.js";
+import cache from "../../../lib/cache.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -44,29 +46,23 @@ export default {
   metadata: {
     production: true,
     category: "info",
-    cooldown: 30,
+    cooldown: 5,
   },
 
   async execute(interaction: ChatInputCommandInteraction, t: Translator, prisma?: PrismaClient) {
-    await interaction.deferReply();
+    const orderBy = interaction.options.getString("order-by");
+    const limit = interaction.options.getInteger("limit");
 
-    const orderBy = interaction.options.getString("order-by") ?? "desc";
-    const limit = interaction.options.getInteger("limit") ?? 20;
+    const isDefaultQuery = !limit && !orderBy;
+    const db = requirePrisma(prisma);
+    const categoryService = new CategoryService(db);
 
-    try {
-      const db = requirePrisma(prisma);
-      const service = new CategoryService(db);
-
-      const result = await service.listCategories({ orderBy: orderBy, limit }, t);
-
-      if (!result.success || !result.data) {
-        await handleServiceResponse(interaction, result);
-        return;
-      }
-
-      await CategoryEmbedHelper.createPaginatedCategoryembed(interaction, result.data, t);
-    } catch (error) {
-      await handleCommandError(interaction, "list-images-categories", error, t);
-    }
+    await executeWithCache({
+      interaction: interaction,
+      cacheKey: isDefaultQuery ? "img:list:categories:default" : null,
+      executeService: () => categoryService.listCategories({ orderBy: orderBy, limit: limit }, t),
+      renderSuccess: (data) => CategoryEmbedHelper.createPaginatedCategoryembed(interaction, data, t),
+      handleError: (err) => handleCommandError(interaction, "list-images-categories", err, t),
+    });
   },
 } satisfies Command;

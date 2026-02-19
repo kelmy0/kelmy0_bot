@@ -47,7 +47,7 @@ export default {
 
       await interaction.channel.setRateLimitPerUser(seconds);
 
-      await interaction.reply("✅");
+      await interaction.reply({ content: "✅", flags: "Ephemeral" });
     } catch (error) {
       await handleCommandError(interaction, "slowmode", error, t);
     }

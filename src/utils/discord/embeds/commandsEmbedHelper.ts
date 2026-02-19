@@ -1,21 +1,19 @@
 import { ChatInputCommandInteraction } from "discord.js";
 import { EmbedHelpers } from "./embedHelpers.js";
-import { Command, Translator } from "../../../types/Command.js";
+import { CommandInfo, Translator } from "../../../types/Command.js";
 import { PaginationHelper } from "./paginationHelper.js";
 
 export class CommandsEmbedHelper {
   static async createPaginatedCommandEmbed(
     interaction: ChatInputCommandInteraction,
-    commands: Map<string, Command>,
+    commands: CommandInfo[],
     t: Translator,
   ) {
-    const commandArray = Array.from(commands.values());
-
     await PaginationHelper.createPagination(
       interaction,
-      commandArray,
+      commands,
       (currentItems, page, total) => {
-        return this.createCommandEmbed(interaction, currentItems, page, total, commandArray.length, t);
+        return this.createCommandEmbed(interaction, currentItems, page, total, commands.length, t);
       },
       10,
       t,
@@ -24,7 +22,7 @@ export class CommandsEmbedHelper {
 
   private static createCommandEmbed(
     interaction: ChatInputCommandInteraction,
-    pageCommands: Command[],
+    pageCommands: CommandInfo[],
     page: number,
     total: number,
     totalComandos: number,
@@ -45,12 +43,12 @@ export class CommandsEmbedHelper {
       timestamp: true,
     });
 
-    const categoriesInPage = new Set(pageCommands.map((c) => c.metadata.category));
+    const categoriesInPage = new Set(pageCommands.map((c) => c.category));
 
     categoriesInPage.forEach((cat) => {
       const catCommands = pageCommands
-        .filter((c) => c.metadata.category === cat)
-        .map((c) => `\`/${c.data.name}\` ${c.data.description}`)
+        .filter((c) => c.category === cat)
+        .map((c) => `\`/${c.name}\` ${c.description}`)
         .join("\n");
 
       embed.addFields({

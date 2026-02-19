@@ -4,6 +4,13 @@ import { fileURLToPath, pathToFileURL } from "url";
 import type { Command } from "../../types/Command.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+export const commandMap = await loadCommands();
+
+interface FilterOptions {
+  environment?: "development" | "production";
+  categories?: string[];
+  excludeCategories?: string[];
+}
 
 function findCommandFiles(directory: string, fileList: string[] = []): string[] {
   const files = readdirSync(directory);
@@ -20,7 +27,9 @@ function findCommandFiles(directory: string, fileList: string[] = []): string[] 
         (file.endsWith(".ts") || file.endsWith(".js")) &&
         !file.endsWith(".d.ts") &&
         !file.includes(".test.") &&
-        !file.includes(".spec.")
+        !file.includes(".spec.") &&
+        file !== "loader.ts" &&
+        file !== "loader.js"
       ) {
         fileList.push(filePath);
       }
@@ -117,51 +126,14 @@ export async function loadCommands(): Promise<Map<string, Command>> {
   return commands;
 }
 
-export function filterCommands(
-  commands: Map<string, Command>,
-  options: {
-    environment?: "development" | "production";
-    categories?: string[];
-    excludeCategories?: string[];
-  } = {},
-): Map<string, Command> {
-  const filtered = new Map<string, Command>();
+export function getFilteredCommands(options: FilterOptions = {}): Command[] {
+  const allCommands = Array.from(commandMap.values());
 
-  for (const [name, command] of commands) {
-    // Filter per environment (production)
-    if (options.environment === "production" && !command.metadata.production) {
-      continue;
-    }
-
-    // Filter per category included
-    if (options.categories && !options.categories.includes(command.metadata.category)) {
-      continue;
-    }
-
-    // Filter per category excluded
-    if (options.excludeCategories && options.excludeCategories.includes(command.metadata.category)) {
-      continue;
-    }
-
-    filtered.set(name, command);
-  }
-
-  return filtered;
-}
-
-// Global cache
-let commandCache: Map<string, Command> | null = null;
-
-export async function getCommands(
-  filterOptions?: Parameters<typeof filterCommands>[1],
-): Promise<Map<string, Command>> {
-  if (!commandCache) {
-    commandCache = await loadCommands();
-  }
-
-  if (filterOptions) {
-    return filterCommands(commandCache, filterOptions);
-  }
-
-  return commandCache;
+  return allCommands.filter((command) => {
+    if (options.environment === "production" && !command.metadata.production) return false;
+    if (options.categories && !options.categories.includes(command.metadata.category)) return false;
+    if (options.excludeCategories && options.excludeCategories.includes(command.metadata.category))
+      return false;
+    return true;
+  });
 }

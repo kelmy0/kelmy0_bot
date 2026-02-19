@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, EmbedBuilder, Guild, GuildBan, GuildMember, User } from "discord.js";
+import { ChatInputCommandInteraction, EmbedBuilder, GuildBan, GuildMember, User } from "discord.js";
 import { EmbedHelpers } from "./embedHelpers.js";
 import { PaginationHelper } from "./paginationHelper.js";
 import { Translator } from "../../../types/Command.js";
@@ -63,7 +63,7 @@ export class BanEmbedHelper {
     users: User[],
     t: Translator,
   ) {
-    return PaginationHelper.createPagination(
+    await PaginationHelper.createPagination(
       interaction,
       users,
       (currentUsers, page, total) => {

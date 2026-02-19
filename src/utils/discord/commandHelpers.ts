@@ -1,4 +1,9 @@
-import { ChatInputCommandInteraction } from "discord.js";
+import {
+  ChatInputCommandInteraction,
+  InteractionEditReplyOptions,
+  InteractionReplyOptions,
+  MessagePayload,
+} from "discord.js";
 import { splitMessage } from "../index.js";
 import { Translator } from "../../types/Command.js";
 
@@ -12,15 +17,21 @@ export async function handleCommandError(
 
   const errorMessage = error instanceof Error ? error.message : t("common.words.unknown");
 
+  await smartReply(interaction, t("common.errors.generic", { error: errorMessage }));
+}
+
+export async function smartReply(
+  interaction: ChatInputCommandInteraction,
+  options: string | MessagePayload | InteractionReplyOptions | InteractionEditReplyOptions,
+) {
+  const payload = typeof options === "string" ? { content: options } : options;
+
   if (interaction.deferred || interaction.replied) {
-    await interaction.editReply({
-      content: t("common.errors.generic", { error: errorMessage }),
-    });
-  } else {
-    await interaction.reply({
-      content: t("common.errors.generic", { error: errorMessage }),
-    });
+    const { flags: _, ...editPayload } = payload as any;
+    return await interaction.editReply(editPayload);
   }
+
+  return await interaction.reply(payload as InteractionReplyOptions);
 }
 
 export async function sendPaginatedResponse(

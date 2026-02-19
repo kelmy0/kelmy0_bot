@@ -8,6 +8,7 @@ import {
   getOrRegisterUser,
   handleServiceResponse,
 } from "../../../utils/index.js";
+import cache from "../../../lib/cache.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -91,6 +92,7 @@ export default {
         t,
       );
 
+      cache.del("img:list:categories:default");
       await handleServiceResponse(interaction, result);
     } catch (error) {
       await handleCommandError(interaction, "add-image", error, t);

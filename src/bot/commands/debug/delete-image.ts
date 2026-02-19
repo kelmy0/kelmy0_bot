@@ -9,6 +9,7 @@ import {
   handleServiceResponse,
   ImageEmbedHelper,
 } from "../../../utils/index.js";
+import cache from "../../../lib/cache.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -52,6 +53,7 @@ export default {
         return;
       }
 
+      cache.del("img:list:categories:default");
       ImageEmbedHelper.createSingleImageEmbed(
         interaction,
         result.data,

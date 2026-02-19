@@ -9,6 +9,7 @@ import {
 import { EmbedHelpers } from "./embedHelpers.js";
 import { registerCollector } from "../collectors.js";
 import { Translator } from "../../../types/Command.js";
+import { smartReply } from "../commandHelpers.js";
 
 export class PaginationHelper {
   static async createPagination<T>(
@@ -19,7 +20,9 @@ export class PaginationHelper {
     t: Translator,
   ) {
     if (items.length === 0) {
-      return EmbedHelpers.createEmptyEmbed(t("common.placeholders.no_data"), interaction);
+      const embed = EmbedHelpers.createEmptyEmbed(t("common.placeholders.no_data"));
+      await smartReply(interaction, { embeds: [embed], flags: "Ephemeral" });
+      return;
     }
 
     let currentPage = 0;
@@ -56,13 +59,7 @@ export class PaginationHelper {
       components: totalPages > 1 ? [getRow(currentPage)] : [],
     };
 
-    let message;
-
-    if (interaction.deferred || interaction.replied) {
-      message = await interaction.editReply(payload);
-    } else {
-      message = await interaction.reply(payload);
-    }
+    const message = await smartReply(interaction, payload);
 
     if (totalPages <= 1) return;
 

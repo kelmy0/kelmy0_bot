@@ -1,17 +1,8 @@
-import { ChatInputCommandInteraction, ColorResolvable, EmbedBuilder } from "discord.js";
+import { ColorResolvable, EmbedBuilder } from "discord.js";
 
 export class EmbedHelpers {
-  static async createEmptyEmbed(
-    text: string,
-    interaction?: ChatInputCommandInteraction,
-  ): Promise<void | EmbedBuilder> {
-    const embed = new EmbedBuilder().setTitle(text).setColor("#0566b4");
-    if (interaction) {
-      await interaction.editReply({ embeds: [embed] });
-      return;
-    }
-
-    return embed;
+  static createEmptyEmbed(text: string): EmbedBuilder {
+    return new EmbedBuilder().setTitle(text).setColor("#0566b4");
   }
 
   static createEmbed(options: EmbedInfo): EmbedBuilder {

@@ -19,6 +19,17 @@ export interface Command {
     | SlashCommandBuilder
     | Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup">
     | SlashCommandOptionsOnlyBuilder;
-  execute: (interaction: ChatInputCommandInteraction, t: Translator, prisma?: PrismaClient) => Promise<void>;
+  execute: (
+    interaction: ChatInputCommandInteraction,
+    t: Translator,
+    prisma?: PrismaClient,
+    commands?: Map<string, Command>,
+  ) => Promise<void>;
   metadata: CommandMetadata;
+}
+
+export interface CommandInfo {
+  name: string;
+  description: string;
+  category: string;
 }
