@@ -24,7 +24,6 @@ export default {
   },
 
   async execute(interaction: ChatInputCommandInteraction, t: Translator): Promise<void> {
-    await interaction.deferReply();
     try {
       if (!interaction.memberPermissions?.has(PermissionFlagsBits.BanMembers)) {
         throw new Error(t("common.errors.no_permission"));
@@ -33,6 +32,8 @@ export default {
       if (!interaction.guild) {
         throw new Error(t("common.errors.no_guild"));
       }
+
+      await interaction.deferReply({ flags: "Ephemeral" });
 
       const fetched = await interaction.guild.bans.fetch({ limit: 20 });
       const users = fetched.map((u) => u.user);
