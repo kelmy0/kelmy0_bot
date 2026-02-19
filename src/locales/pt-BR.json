@@ -7,7 +7,8 @@
       "empty": "Vazio",
       "user_target": "👤 Usuário alvo",
       "reason": "📝 Motivo",
-      "moderator": "🛡️ Moderador"
+      "moderator": "🛡️ Moderador",
+      "guild": "🌐 Servidor"
     },
 
     "placeholders": {
@@ -70,10 +71,12 @@
       }
     },
 
+    "info": {},
+
     "moderation": {
       "common": {
         "action_name": "Ação de Moderação",
-        "moderator_id": "ID do Moderador: {id}"
+        "footer": "Moderador: {name} • {guild}"
       },
       "ban-member": {
         "title": "🚫Banimento"
@@ -87,6 +90,9 @@
       "list-bans": {
         "title": "👥 Usuários banidos",
         "footer_text": "Página {currentPage}/{totalPages}"
+      },
+      "timeout": {
+        "title": "🛑⌛ Castigo"
       }
     }
   },

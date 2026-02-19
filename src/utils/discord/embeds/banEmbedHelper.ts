@@ -20,7 +20,10 @@ export class BanEmbedHelper {
       },
       color: /unban/i.test(title) ? "#2ecc71" : "#e74c3c",
       footer: {
-        text: t("commands.moderation.common.moderator_id", { id: interaction.user.id }),
+        text: t("commands.moderation.common.footer", {
+          name: interaction.user.tag,
+          guild: interaction.guild?.name,
+        }),
         iconURL: interaction.user.displayAvatarURL(),
       },
       timestamp: true,
@@ -36,6 +39,11 @@ export class BanEmbedHelper {
         name: t("common.words.moderator"),
         value: `${interaction.user}`,
         inline: true,
+      },
+      {
+        name: t("common.words.guild"),
+        value: `${interaction.guild?.name}`,
+        inline: false,
       },
       {
         name: t("common.words.reason"),

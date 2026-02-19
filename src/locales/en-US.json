@@ -7,7 +7,8 @@
       "empty": "Empty",
       "user_target": "👤 User target",
       "reason": "📝 Reason",
-      "moderator": "🛡️ Moderator"
+      "moderator": "🛡️ Moderator",
+      "guild": "🌐 Guild"
     },
 
     "placeholders": {
@@ -71,10 +72,12 @@
       }
     },
 
+    "info": {},
+
     "moderation": {
       "common": {
         "action_name": "Moderation action",
-        "moderator_id": "Moderator ID: {id}"
+        "footer": "Moderator: {name} • {guild}"
       },
       "ban-member": {
         "title": "🚫Baniment"
@@ -88,6 +91,9 @@
       "list-bans": {
         "title": "👥 Banned users",
         "footer_text": "Page {currentPage}/{totalPages}"
+      },
+      "timeout": {
+        "title": "🛑⌛ Timeout"
       }
     }
   },
